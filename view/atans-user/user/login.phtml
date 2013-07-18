@@ -1,0 +1,17 @@
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('user/login'));
+
+?>
+<?php echo $this->form()->openTag($form) ?>
+
+<?php foreach ($form as $element): ?>
+    <div>
+    <?php echo $this->formRow($element) ?>
+    </div>
+
+<?php endforeach ?>
+
+<button type="submit"><?php echo $this->translate('submit') ?></button>
+
+<?php echo $this->form()->closeTag() ?>

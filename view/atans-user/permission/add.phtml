@@ -1,0 +1,55 @@
+<?php
+$title = $this->translate('新增權限');
+$this->headTitle($title);
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('atansuser/permission/add'));
+$form->prepare();
+?>
+
+<h3>
+    <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+        <i class="icon-chevron-left"></i>
+    </a>
+    <?php echo $this->escapeHtml($title) ?>
+</h3>
+
+<hr>
+
+<?php echo $this->form()->openTag($form) ?>
+    <?php echo $this->formHidden($form->get('id')) ?>
+
+    <div class="control-group">
+        <div class="control-label">
+            <?php echo $this->translate('名稱') ?>
+        </div>
+        <div class="controls">
+            <?php echo $this->formInput($form->get('name')) ?>
+            <div class="help-block">
+                <?php echo $this->formElementErrors($form->get('name')) ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="control-label">
+            <?php echo $this->translate('描述') ?>
+        </div>
+        <div class="controls">
+            <?php echo $this->formInput($form->get('description')) ?>
+            <div class="help-block">
+                <?php echo $this->formElementErrors($form->get('description')) ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+            <?php echo $this->translate('提交') ?>
+        </button>
+        <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+            <?php echo $this->translate('取消') ?>
+        </a>
+    </div>
+
+<?php echo $this->form()->closeTag() ?>

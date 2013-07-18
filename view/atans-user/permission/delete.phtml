@@ -1,0 +1,33 @@
+<?php
+$title = $this->translate('刪除權限');
+$this->headTitle($title);
+?>
+
+<h3>
+    <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+        <i class="icon-chevron-left"></i>
+    </a>
+    <?php echo $this->escapeHtml($title) ?>
+</h3>
+
+<hr>
+
+<form action="<?php echo $this->url('atansuser/permission/delete', array('id' => $permission->getId())) ?>" method="post">
+
+    <input name="delete" type="hidden" value="Yes">
+
+    <p>
+        <span class="label label-important">
+            <?php echo sprintf($this->translate("確定要刪除權限 '%s' ?"), $permission->getName())?>
+        </span>
+    </p>
+
+    <div class="form-actions">
+        <button class="btn btn-danger" type="submit">
+            <?php echo $this->translate('提交') ?>
+        </button>
+        <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+            <?php echo $this->translate('取消') ?>
+        </a>
+    </div>
+</form>
