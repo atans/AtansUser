@@ -4,7 +4,7 @@ $this->headTitle($title);
 ?>
 
 <h3>
-    <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+    <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
         <i class="icon-chevron-left"></i>
     </a>
     <?php echo $this->escapeHtml($title) ?>
@@ -12,7 +12,7 @@ $this->headTitle($title);
 
 <hr>
 
-<form action="<?php echo $this->url('atansuser/permission/delete', array('id' => $permission->getId())) ?>" method="post">
+<form action="<?php echo $this->url('zfcadmin/user/permission/delete', array('id' => $permission->getId())) ?>" method="post">
 
     <input name="delete" type="hidden" value="Yes">
 
@@ -26,7 +26,7 @@ $this->headTitle($title);
         <button class="btn btn-danger" type="submit">
             <?php echo $this->translate('提交') ?>
         </button>
-        <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+        <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
             <?php echo $this->translate('取消') ?>
         </a>
     </div>

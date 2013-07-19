@@ -74,7 +74,7 @@ class PermissionController extends AbstractActionController
                         $permission->getName()
                     ));
 
-                return $this->redirect()->toRoute('atansuser/permission');
+                return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
         }
 
@@ -99,7 +99,7 @@ class PermissionController extends AbstractActionController
                      $id
                   ));
 
-            return $this->redirect()->toRoute('atansuser/permission');
+            return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
 
         $form = $this->getPermissionEditForm();
@@ -121,7 +121,7 @@ class PermissionController extends AbstractActionController
                             $permission->getName()
                         ));
 
-                    return $this->redirect()->toRoute('atansuser/permission');
+                    return $this->redirect()->toRoute('zfcadmin/user/permission');
                 } else {
                     $form->get('name')->setMessages(array(sprintf(
                         $translator->translate("權限'%s'已存在"),
@@ -153,7 +153,7 @@ class PermissionController extends AbstractActionController
                     $id
                 ));
 
-            return $this->redirect()->toRoute('atansuser/permission');
+            return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
 
         $request = $this->getRequest();
@@ -170,7 +170,7 @@ class PermissionController extends AbstractActionController
                         $permission->getName()
                     ));
 
-                return $this->redirect()->toRoute('atansuser/permission');
+                return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
         }
 

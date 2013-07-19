@@ -15,6 +15,9 @@ class RoleController extends AbstractActionController
      */
     protected $entityManager;
 
+    /**
+     * @var array
+     */
     protected $entities = array(
         'Role' => 'AtansUser\Entity\Role',
     );
@@ -72,7 +75,7 @@ class RoleController extends AbstractActionController
                         $role->getName()
                     ));
 
-                return $this->redirect()->toRoute('atansuser/role');
+                return $this->redirect()->toRoute('zfcadmin/user/role');
             }
         }
 
@@ -97,7 +100,7 @@ class RoleController extends AbstractActionController
                     $id
                 ));
 
-            return $this->redirect()->toRoute('atansuser/role');
+            return $this->redirect()->toRoute('zfcadmin/user/role');
         }
 
         $form = $this->getRoleEditForm();
@@ -123,7 +126,7 @@ class RoleController extends AbstractActionController
                             $role->getName()
                         ));
 
-                    return $this->redirect()->toRoute('atansuser/role');
+                    return $this->redirect()->toRoute('zfcadmin/user/role');
                 } else {
                     $form->get('name')->setMessages(array(sprintf(
                         $translator->translate("角色'%s'已存在"),
@@ -155,7 +158,7 @@ class RoleController extends AbstractActionController
                     $id
                 ));
 
-            return $this->redirect()->toRoute('atansuser/role');
+            return $this->redirect()->toRoute('zfcadmin/user/role');
         }
 
         $request = $this->getRequest();
@@ -172,7 +175,7 @@ class RoleController extends AbstractActionController
                         $role->getName()
                     ));
 
-                return $this->redirect()->toRoute('atansuser/role');
+                return $this->redirect()->toRoute('zfcadmin/user/role');
             }
         }
 

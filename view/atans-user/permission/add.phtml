@@ -3,12 +3,12 @@ $title = $this->translate('新增權限');
 $this->headTitle($title);
 
 $form = $this->form;
-$form->setAttribute('action', $this->url('atansuser/permission/add'));
+$form->setAttribute('action', $this->url('zfcadmin/user/permission/add'));
 $form->prepare();
 ?>
 
 <h3>
-    <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+    <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
         <i class="icon-chevron-left"></i>
     </a>
     <?php echo $this->escapeHtml($title) ?>
@@ -47,7 +47,7 @@ $form->prepare();
         <button class="btn btn-primary" type="submit">
             <?php echo $this->translate('提交') ?>
         </button>
-        <a class="btn" href="<?php echo $this->url('atansuser/permission') ?>">
+        <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
             <?php echo $this->translate('取消') ?>
         </a>
     </div>
