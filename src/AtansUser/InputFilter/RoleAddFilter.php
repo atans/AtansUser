@@ -6,6 +6,9 @@ use Zend\ServiceManager\ServiceManager;
 
 class RoleAddFilter extends RoleEditFilter
 {
+    /**
+     * @var array
+     */
     protected $entities = array(
         'Role' => 'AtansUser\Entity\Role',
     );

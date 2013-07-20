@@ -1,0 +1,49 @@
+<?php
+$title = $this->translate('用戶管理');
+$this->headTitle($title);
+?>
+
+<?php if ($flashMessages): ?>
+    <div class="alert alert-info">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <ul>
+            <?php foreach ($flashMessages as $flashMessage): ?>
+                <li><?php echo $this->escapeHtml($flashMessage) ?></li>
+            <?php endforeach ?>
+        </ul>
+    </div>
+<?php endif ?>
+
+    <h3><?php echo $this->escapeHtml($title) ?></h3>
+
+    <p>
+        <a class="btn" href="<?php echo $this->url('zfcadmin/user/add') ?>">
+            <i class="icon-plus-sign"></i>
+            <?php echo $this->translate('新增') ?>
+        </a>
+    </p>
+
+<?php if (count($users) > 0) : ?>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="span1">#</th>
+            <th class="span3"><?php echo $this->translate('用戶') ?></th>
+            <th class="span2"><?php echo $this->translate('狀態') ?></th>
+            <th class="span5"><?php echo $this->translate('角色') ?></th>
+            <th class="span1"><?php echo $this->translate('操作') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach ($users as $user) {
+            echo $this->partial('atans-user/user-admin/partial', array('user' => $user));
+        }
+        ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <div class="alert">
+        <h4><?php echo $this->translate('找不到任何用戶') ?></h4>
+    </div>
+<?php endif ?>

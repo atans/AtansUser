@@ -8,7 +8,12 @@ use Zend\Mvc\Controller\AbstractActionController;
 
 class RoleController extends AbstractActionController
 {
-    const FLASH_MESSENGER_NAMESPACE = 'atansuser-role-index';
+    /**
+     * Flash messenger namespace
+     *
+     * @var string
+     */
+    const FM_NS = 'atansuser-role-admin-index';
 
     /**
      * @var EntityManager
@@ -32,7 +37,6 @@ class RoleController extends AbstractActionController
      */
     protected $roleEditForm;
 
-
     public function indexAction()
     {
         $entityManager = $this->getEntityManager();
@@ -42,7 +46,7 @@ class RoleController extends AbstractActionController
             'flashMessages' => null,
         );
 
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FLASH_MESSENGER_NAMESPACE);
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
         if ($flashMessages = $flashMessenger->getMessages()) {
             $returns['flashMessages'] = $flashMessages;
         }
@@ -69,13 +73,13 @@ class RoleController extends AbstractActionController
                 $entityManager->flush();
 
                 $this->flashMessenger()
-                    ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                    ->setNamespace(self::FM_NS)
                     ->addMessage(sprintf(
                         $translator->translate("新增角色成功 '%s'"),
                         $role->getName()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/user/role');
+                return $this->redirect()->toRoute('zfcadmin/role');
             }
         }
 
@@ -94,13 +98,13 @@ class RoleController extends AbstractActionController
         $role = $entityManager->find($this->entities['Role'], $id);
         if (!$role) {
             $this->flashMessenger()
-                 ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                 ->setNamespace(self::FM_NS)
                  ->addMessage(sprintf(
                     $translator->translate("找不到角色 '%d'"),
                     $id
                 ));
 
-            return $this->redirect()->toRoute('zfcadmin/user/role');
+            return $this->redirect()->toRoute('zfcadmin/role');
         }
 
         $form = $this->getRoleEditForm();
@@ -120,13 +124,13 @@ class RoleController extends AbstractActionController
                     $entityManager->flush();
 
                     $this->flashMessenger()
-                        ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                        ->setNamespace(self::FM_NS)
                         ->addMessage(sprintf(
                             $translator->translate("修改角色成功 '%s'"),
                             $role->getName()
                         ));
 
-                    return $this->redirect()->toRoute('zfcadmin/user/role');
+                    return $this->redirect()->toRoute('zfcadmin/role');
                 } else {
                     $form->get('name')->setMessages(array(sprintf(
                         $translator->translate("角色'%s'已存在"),
@@ -152,13 +156,13 @@ class RoleController extends AbstractActionController
         $role = $this->getEntityManager()->find($this->entities['Role'], $id);
         if (!$role) {
             $this->flashMessenger()
-                ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                ->setNamespace(self::FM_NS)
                 ->addMessage(sprintf(
                     $translator->translate("找不到角色 '%d'"),
                     $id
                 ));
 
-            return $this->redirect()->toRoute('zfcadmin/user/role');
+            return $this->redirect()->toRoute('zfcadmin/role');
         }
 
         $request = $this->getRequest();
@@ -169,13 +173,13 @@ class RoleController extends AbstractActionController
                 $entityManager->flush();
 
                 $this->flashMessenger()
-                    ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                    ->setNamespace(self::FM_NS)
                     ->addMessage(sprintf(
                         $translator->translate("刪除角色成功 '%s'"),
                         $role->getName()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/user/role');
+                return $this->redirect()->toRoute('zfcadmin/role');
             }
         }
 

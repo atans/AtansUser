@@ -1,14 +1,14 @@
 <?php
-$title = $this->translate('新增權限');
+$title = $this->translate('修改權限');
 $this->headTitle($title);
 
 $form = $this->form;
-$form->setAttribute('action', $this->url('zfcadmin/user/permission/add'));
+$form->setAttribute('action', $this->url('zfcadmin/permission/edit', array('id' => $permission->getId())));
 $form->prepare();
 ?>
 
 <h3>
-    <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
+    <a class="btn" href="<?php echo $this->url('zfcadmin/permission') ?>">
         <i class="icon-chevron-left"></i>
     </a>
     <?php echo $this->escapeHtml($title) ?>
@@ -18,6 +18,7 @@ $form->prepare();
 
 <?php echo $this->form()->openTag($form) ?>
     <?php echo $this->formHidden($form->get('id')) ?>
+
 
     <div class="control-group">
         <div class="control-label">
@@ -47,7 +48,7 @@ $form->prepare();
         <button class="btn btn-primary" type="submit">
             <?php echo $this->translate('提交') ?>
         </button>
-        <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
+        <a class="btn" href="<?php echo $this->url('zfcadmin/permission') ?>">
             <?php echo $this->translate('取消') ?>
         </a>
     </div>

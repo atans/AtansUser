@@ -1,6 +1,6 @@
 {
     "name": "atans/atans-user",
-    "description" : "An sample user module for Zend Framework 2",
+    "description" : "A RBAC user module for Zend Framework 2",
     "type" : "library",
     "keywords" : ["user"],
     "homepage": "https://github.com/atans/AtansUser",

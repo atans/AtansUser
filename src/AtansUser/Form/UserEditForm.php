@@ -3,10 +3,10 @@ namespace AtansUser\Form;
 
 use AtansUser\Entity\User;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
-class UserForm extends ProvidesEventsForm implements InputFilterProviderInterface
+class UserEditForm extends ProvidesEventsForm
 {
     public function __construct(ServiceManager $serviceManager)
     {
@@ -15,8 +15,8 @@ class UserForm extends ProvidesEventsForm implements InputFilterProviderInterfac
         $this->setAttribute('class', 'form-horizontal');
 
         $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
-        $this->setHydrator(new DoctrineObject($serviceManager))
-             ->setObject(new User());
+        $this->setHydrator(new DoctrineObject($entityManager))
+            ->setObject(new User());
 
         $this->add(array(
             'name' => 'id',
@@ -27,18 +27,22 @@ class UserForm extends ProvidesEventsForm implements InputFilterProviderInterfac
         ));
 
         $this->add(array(
-            'name' => 'password',
+            'name' => 'email',
+        ));
+
+        $this->add(array(
+            'name' => 'newPassword',
         ));
 
         $this->add(array(
             'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
-            'name' => 'roles',
+            'name' => 'userRoles',
             'options' => array(
                 'label_attributes' => array(
                     'class' => 'checkbox'
                 ),
                 'object_manager' => $entityManager,
-                'target_class'   => 'AtansUser\Entity\Roles',
+                'target_class'   => 'AtansUser\Entity\Role',
                 'property'       => 'name',
                 'is_method'      => true,
                 'find_method'    => array(
@@ -48,38 +52,18 @@ class UserForm extends ProvidesEventsForm implements InputFilterProviderInterfac
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
+            'type' => 'Zend\Form\Element\Radio',
             'name' => 'status',
             'options' => array(
-                'use_hidden_element' => true,
-                'checked_value'      => User::STATUS_ACTIVE,
-                'unchecked_value'    => User::STATUS_DISABLED,
+                'label_attributes' => array(
+                    'class' => 'radio inline',
+                ),
+                'value_options' => array(
+                    User::STATUS_ACTIVE   => '有效',
+                    User::STATUS_INACTIVE => '失效',
+                    User::STATUS_DELETED  => '已刪除',
+                ),
             ),
         ));
-    }
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return array(
-            'id' => array(
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'Int'),
-                ),
-            ),
-            'password' => array(
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-            ),
-        );
     }
 }

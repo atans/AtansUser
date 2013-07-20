@@ -8,7 +8,12 @@ use Zend\Mvc\Controller\AbstractActionController;
 
 class PermissionController extends AbstractActionController
 {
-    const FLASH_MESSENGER_NAMESPACE = 'atansuser-permission-index';
+    /**
+     * Flash messenger name space
+     *
+     * @var string
+     */
+    const FM_NS = 'atansuser-permission-admin-index';
 
     /**
      * @var EntityManager
@@ -41,7 +46,7 @@ class PermissionController extends AbstractActionController
             'flashMessages' => null,
         );
 
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FLASH_MESSENGER_NAMESPACE);
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
         if ($flashMessages = $flashMessenger->getMessages()) {
             $returns['flashMessages'] = $flashMessages;
         }
@@ -68,13 +73,13 @@ class PermissionController extends AbstractActionController
                 $entityManager->flush();
 
                 $this->flashMessenger()
-                    ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                    ->setNamespace(self::FM_NS)
                     ->addMessage(sprintf(
                         $translator->translate("新增權限成功 '%s'"),
                         $permission->getName()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/user/permission');
+                return $this->redirect()->toRoute('zfcadmin/permission');
             }
         }
 
@@ -93,13 +98,13 @@ class PermissionController extends AbstractActionController
         $permission = $permissionRepository->find($id);
         if (!$permission) {
             $this->flashMessenger()
-                 ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                 ->setNamespace(self::FM_NS)
                  ->addMessage(sprintf(
                      $translator->translate("找不到權限 '%d'"),
                      $id
                   ));
 
-            return $this->redirect()->toRoute('zfcadmin/user/permission');
+            return $this->redirect()->toRoute('zfcadmin/permission');
         }
 
         $form = $this->getPermissionEditForm();
@@ -115,13 +120,13 @@ class PermissionController extends AbstractActionController
                     $entityManager->flush();
 
                     $this->flashMessenger()
-                        ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
+                        ->setNamespace(self::FM_NS)
                         ->addMessage(sprintf(
                             $translator->translate("修改權限成功 '%s'"),
                             $permission->getName()
                         ));
 
-                    return $this->redirect()->toRoute('zfcadmin/user/permission');
+                    return $this->redirect()->toRoute('zfcadmin/permission');
                 } else {
                     $form->get('name')->setMessages(array(sprintf(
                         $translator->translate("權限'%s'已存在"),
@@ -147,13 +152,13 @@ class PermissionController extends AbstractActionController
         $permission = $this->getEntityManager()->find($this->entities['Permission'], $id);
         if (!$permission) {
             $this->flashMessenger()
-                ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
-                ->addMessage(sprintf(
-                    $translator->translate("找不到權限 '%d'"),
-                    $id
-                ));
+                 ->setNamespace(self::FM_NS)
+                 ->addMessage(sprintf(
+                     $translator->translate("找不到權限 '%d'"),
+                     $id
+                 ));
 
-            return $this->redirect()->toRoute('zfcadmin/user/permission');
+            return $this->redirect()->toRoute('zfcadmin/permission');
         }
 
         $request = $this->getRequest();
@@ -164,13 +169,13 @@ class PermissionController extends AbstractActionController
                 $entityManager->flush();
 
                 $this->flashMessenger()
-                    ->setNamespace(self::FLASH_MESSENGER_NAMESPACE)
-                    ->addMessage(sprintf(
-                        $translator->translate("刪除權限成功 '%s'"),
-                        $permission->getName()
-                    ));
+                     ->setNamespace(self::FM_NS)
+                     ->addMessage(sprintf(
+                         $translator->translate("刪除權限成功 '%s'"),
+                         $permission->getName()
+                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/user/permission');
+                return $this->redirect()->toRoute('zfcadmin/permission');
             }
         }
 

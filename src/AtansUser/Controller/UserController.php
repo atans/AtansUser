@@ -2,7 +2,7 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\User;
-use DateTime;
+use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
@@ -10,7 +10,12 @@ use Zend\Mvc\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
-    const FLASH_MESSENGER_NAME_SPACE = 'atansuser-user-index';
+    /**
+     * Flash messenger name space
+     *
+     * @var string
+     */
+    const FM_NS = 'atansuser-user-index';
 
     /**
      * @var AuthenticationService
@@ -26,68 +31,43 @@ class UserController extends AbstractActionController
      * @var array
      */
     protected $entities = array(
-        'User' => 'User\Entity\User',
-        'Role' => 'User\Entity\Role',
+        'User' => 'AtansUser\Entity\User',
     );
 
     /**
      * @var Form
      */
-    protected $userAddForm;
+    protected $loginForm;
+
+    /**
+     * @var From
+     */
+    protected $registerForm;
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     public function indexAction()
     {
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['user']);
+        $userRepository = $this->getEntityManager()->getRepository($this->entities['User']);
         $returns = array(
             'users'         => $userRepository->findAll(),
             'flashMessages' => null,
         );
+        if ($flashMessages = $this->flashMessenger()->setNamespace(self::FM_NS)->getMessages()) {
+            $returns['flashMessages'] = $flashMessages;
+        }
 
         return $returns;
     }
-
-    public function addAction()
-    {
-        $entityManager = $this->getEntityManager();
-        $form          = $this->getUserAddForm();
-        $request       = $this->getRequest();
-        $translator    = $this->getServiceLocator()->get('Translator');
-
-        $user = new User();
-        $form->bind($user);
-        if ($request->isPost()) {
-            $form->setData($request->getData());
-            if ($form->isValid()) {
-                $datTime = new DateTime();
-                $user->setCreated($datTime);
-                $user->setModified($datTime);
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                $this->flashMessenger()
-                     ->setNamespace(self::FLASH_MESSENGER_NAME_SPACE)
-                     ->addMessage(sprintf(
-                        $translator->translate("新增用戶成功"),
-                        $user->getUsername()
-                    ));
-
-                return $this->redirect()->toRoute('atansuser/user');
-            }
-        }
-
-        return array(
-            'form' => $form,
-        );
-    }
-
 
     public function loginAction()
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost();
-            // TODO 用户已停用
 
             $authService = $this->getAuthenticationService();
             $adapter = $authService->getAdapter();
@@ -103,7 +83,6 @@ class UserController extends AbstractActionController
         return array(
             'form' => new \User\Form\LoginForm(),
         );
-
     }
 
     /**
@@ -157,27 +136,27 @@ class UserController extends AbstractActionController
     }
 
     /**
-     * Get userAddForm
+     * Get options
      *
-     * @return Form
+     * @return ModuleOptions
      */
-    public function getUserAddForm()
+    public function getOptions()
     {
-        if (!$this->userAddForm instanceof Form) {
-            $this->setUserAddForm($this->getServiceLocator()->get('atansuser_user_add_form'));
+        if (!$this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
         }
-        return $this->userAddForm;
+        return $this->options;
     }
 
     /**
-     * Set userAddForm
+     * Set options
      *
-     * @param  Form $userAddForm
-     * @return UserController
+     * @param ModuleOptions $options
+     * @return $this
      */
-    public function setUserAddForm(Form $userAddForm)
+    public function setOptions(ModuleOptions $options)
     {
-        $this->userAddForm = $userAddForm;
+        $this->options = $options;
         return $this;
     }
 }

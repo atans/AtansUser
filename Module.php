@@ -23,6 +23,10 @@ class Module {
     {
         return array(
             'factories' => array(
+                'atansuser_module_options' => function ($sm) {
+                    $config = $sm->get('config');
+                    return new Options\ModuleOptions(isset($config['atansuser']) ? $config['atansuser'] : array());
+                },
                 'atansuser_permission_add_form' => function ($sm) {
                     $form = new Form\PermissionForm($sm);
                     $form->setInputFilter(new InputFilter\PermissionAddFilter($sm));
@@ -44,7 +48,13 @@ class Module {
                     return $form;
                 },
                 'atansuser_user_add_form' => function ($sm) {
-                    $form = new Form\UserForm($sm);
+                    $form = new Form\UserAddForm($sm);
+                    $form->setInputFIlter(new InputFilter\UserAddFilter($sm));
+                    return $form;
+                },
+                'atansuser_user_edit_form' => function ($sm) {
+                    $form = new Form\UserEditForm($sm);
+                    $form->setInputFIlter(new InputFilter\UserEditFilter($sm));
                     return $form;
                 },
                 'Zend\Authentication\AuthenticationService' => function ($sm) {

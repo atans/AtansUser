@@ -6,6 +6,9 @@ use Zend\ServiceManager\ServiceManager;
 
 class PermissionAddFilter extends PermissionEditFilter
 {
+    /**
+     * @var array
+     */
     protected $entities = array(
         'Permission' => 'AtansUser\Entity\Permission',
     );

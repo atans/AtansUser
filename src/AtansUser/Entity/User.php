@@ -3,6 +3,7 @@ namespace AtansUser\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ZfcRbac\Identity\IdentityInterface;
 
@@ -10,12 +11,20 @@ use ZfcRbac\Identity\IdentityInterface;
  * User
  *
  * @ORM\Entity
- * @ORM\Table(name="user", options={"collate"="utf8_general_ci"})
+ * @ORM\Table(
+ *  name="user",
+ *  options={"collate"="utf8_general_ci"},
+ *  indexes={
+ *    @ORM\Index(name="username", columns={"username"}),
+ *    @ORM\Index(name="email", columns={"email"})
+ *  }
+ * )
  */
 class User implements IdentityInterface
 {
     const STATUS_ACTIVE   = 'active';
-    const STATUS_INACTIVE = 'disabled';
+    const STATUS_DELETED  = 'deleted';
+    const STATUS_INACTIVE = 'inactive';
 
     /**
      * @ORM\Id
@@ -26,19 +35,26 @@ class User implements IdentityInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=255)
      * @var string
      */
     protected $username;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255)
+     * @var string
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(type="string", length=128)
      * @var string
      */
     protected $password;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(
      *  name="user_role",
      *  joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -46,7 +62,7 @@ class User implements IdentityInterface
      * )
      * @var Role[]
      */
-    protected $roles;
+    protected $userRoles;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -60,15 +76,9 @@ class User implements IdentityInterface
      */
     protected $created;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @var DateTime
-     */
-    protected $modified;
-
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
     }
 
     /**
@@ -90,28 +100,6 @@ class User implements IdentityInterface
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set password
-     *
-     * @param  string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
         return $this;
     }
 
@@ -138,17 +126,101 @@ class User implements IdentityInterface
     }
 
     /**
-     * Get roles
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set email
+     *
+     * @param  string $email
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set password
+     *
+     * @param  string $password
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * Get roles for RBAC
      *
      * @return array
      */
     public function getRoles()
     {
         $roles = array();
-        foreach ($this->roles as $role) {
-            $roles[] = $role->getName();
+        if (count($this->userRoles) > 0) {
+            foreach ($this->userRoles as $userRole) {
+                $roles[] = $userRole->getName();
+            }
         }
         return $roles;
+    }
+
+    /**
+     * Add user roles
+     *
+     * @param  Collection $userRoles
+     * @return User
+     */
+    public function addUserRoles(Collection $userRoles)
+    {
+        foreach ($userRoles as $userRole) {
+            $this->userRoles->add($userRole);
+        }
+        return $this;
+    }
+
+    /**
+     * Get user roles
+     *
+     * @return Role[]|ArrayCollection
+     */
+    public function getUserRoles()
+    {
+        return $this->userRoles;
+    }
+
+    /**
+     * Remove user roles
+     *
+     * @param  Collection $userRoles
+     * @return $this
+     */
+    public function removeUserRoles(Collection $userRoles)
+    {
+        foreach ($userRoles as $userRole) {
+            $this->userRoles->removeElement($userRole);
+        }
+        return $this;
     }
 
     /**
@@ -159,16 +231,6 @@ class User implements IdentityInterface
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Get created
-     *
-     * @return DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
     }
 
     /**
@@ -184,6 +246,16 @@ class User implements IdentityInterface
     }
 
     /**
+     * Get created
+     *
+     * @return DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
      * Set created
      *
      * @param  DateTime $created
@@ -192,28 +264,6 @@ class User implements IdentityInterface
     public function setCreated(DateTime $created)
     {
         $this->created = $created;
-        return $this;
-    }
-
-    /**
-     * Get modified
-     *
-     * @return DateTime
-     */
-    public function getModified()
-    {
-        return $this->modified;
-    }
-
-    /**
-     * Set modified
-     *
-     * @param  DateTime $modified
-     * @return User
-     */
-    public function setModified(DateTime $modified)
-    {
-        $this->modified = $modified;
         return $this;
     }
 }

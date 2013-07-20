@@ -26,6 +26,22 @@ return array(
             ),
         ),
     ),
+    'navigation' => array(
+        'admin' => array(
+             array(
+                'label' => '用戶',
+                'route' => 'zfcadmin/user',
+            ),
+            array(
+                'label' => '權限',
+                'route' => 'zfcadmin/permission',
+            ),
+            array(
+                'label' => '角色',
+                'route' => 'zfcadmin/role',
+            ),
+        ),
+    ),
     'router' => array(
         'routes' => array(
             'atansuser' => array(
@@ -38,6 +54,15 @@ return array(
                     ),
                 ),
                 'may_terminate' => true,
+                'login' => array(
+                    'type' => 'segment',
+                    'options' => array(
+                        'route' => 'login[/]',
+                        'defaults' => array(
+                            'action' => 'login',
+                        ),
+                    ),
+                ),
             ),
             'zfcadmin' => array(
                 'child_routes' => array(
@@ -46,7 +71,7 @@ return array(
                         'options' => array(
                             'route' => '/login[/]',
                             'defaults' => array(
-                                'controller' => 'AtansUser\Controller\User',
+                                'controller' => 'AtansUser\Controller\UserAdmin',
                                 'action' => 'login',
                             ),
                         ),
@@ -54,99 +79,136 @@ return array(
                     'user' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => '/user[/]'
+                            'route' => '/user[/]',
+                            'defaults' => array(
+                                'controller' => 'AtansUser\Controller\UserAdmin',
+                                'action' => 'index',
+                            ),
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'permission' => array(
+                            'add' => array(
                                 'type' => 'segment',
                                 'options' => array(
-                                    'route' => 'permission[/]',
+                                    'route' => 'add[/]',
                                     'defaults' => array(
-                                        'controller' => 'AtansUser\Controller\Permission',
-                                        'action' => 'index',
-                                    ),
-                                ),
-                                'may_terminate' => true,
-                                'child_routes' => array(
-                                    'add' => array(
-                                        'type' => 'segment',
-                                        'options' => array(
-                                            'route' => 'add[/]',
-                                            'defaults' => array(
-                                                'action' => 'add',
-                                            ),
-                                        ),
-                                    ),
-                                    'edit' => array(
-                                        'type' => 'segment',
-                                        'options' => array(
-                                            'route' => 'edit/:id[/]',
-                                            'constraints' => array(
-                                                'id' => '[0-9]+',
-                                            ),
-                                            'defaults' => array(
-                                                'action' => 'edit',
-                                            ),
-                                        ),
-                                    ),
-                                    'delete' => array(
-                                        'type' => 'segment',
-                                        'options' => array(
-                                            'route' => 'delete/:id[/]',
-                                            'constraints' => array(
-                                                'id' => '[0-9]+',
-                                            ),
-                                            'defaults' => array(
-                                                'action' => 'delete',
-                                            ),
-                                        ),
+                                        'action' => 'add',
                                     ),
                                 ),
                             ),
-                            'role' => array(
+                            'edit' => array(
                                 'type' => 'segment',
                                 'options' => array(
-                                    'route' => 'role[/]',
+                                    'route' => 'edit/:id[/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
+                                    ),
                                     'defaults' => array(
-                                        'controller' => 'AtansUser\Controller\Role',
-                                        'action'     => 'index',
+                                        'action' => 'edit',
                                     ),
                                 ),
-                                'may_terminate' => true,
-                                'child_routes' => array(
-                                    'add' => array(
-                                        'type' => 'segment',
-                                        'options' => array(
-                                            'route' => 'add[/]',
-                                            'defaults' => array(
-                                                'action' => 'add',
-                                            ),
-                                        ),
+                            ),
+                            'delete' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'delete/:id[/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
                                     ),
-                                    'edit' => array(
-                                        'type' => 'segment',
-                                        'options' => array(
-                                            'route' => 'edit/:id[/]',
-                                            'constraints' => array(
-                                                'id' => '[0-9]+',
-                                            ),
-                                            'defaults' => array(
-                                                'action' => 'edit',
-                                            ),
-                                        ),
+                                    'defaults' => array(
+                                        'action' => 'delete',
                                     ),
-                                    'delete' => array(
-                                        'type' => 'segment',
-                                        'options' => array(
-                                            'route' => 'delete/:id[/]',
-                                            'constraints' => array(
-                                                'id' => '[0-9]+',
-                                            ),
-                                            'defaults' => array(
-                                                'action' => 'delete',
-                                            ),
-                                        ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    'permission' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => 'permission[/]',
+                            'defaults' => array(
+                                'controller' => 'AtansUser\Controller\PermissionAdmin',
+                                'action' => 'index',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'add' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'add[/]',
+                                    'defaults' => array(
+                                        'action' => 'add',
+                                    ),
+                                ),
+                            ),
+                            'edit' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'edit/:id[/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'edit',
+                                    ),
+                                ),
+                            ),
+                            'delete' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'delete/:id[/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'delete',
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    'role' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => 'role[/]',
+                            'defaults' => array(
+                                'controller' => 'AtansUser\Controller\RoleAdmin',
+                                'action'     => 'index',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'add' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'add[/]',
+                                    'defaults' => array(
+                                        'action' => 'add',
+                                    ),
+                                ),
+                            ),
+                            'edit' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'edit/:id[/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'edit',
+                                    ),
+                                ),
+                            ),
+                            'delete' => array(
+                                'type' => 'segment',
+                                'options' => array(
+                                    'route' => 'delete/:id[/]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]+',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'delete',
                                     ),
                                 ),
                             ),
@@ -158,9 +220,10 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'AtansUser\Controller\User'       => 'AtansUser\Controller\UserController',
-            'AtansUser\Controller\Permission' => 'AtansUser\Controller\PermissionController',
-            'AtansUser\Controller\Role'       => 'AtansUser\Controller\RoleController',
+            'AtansUser\Controller\PermissionAdmin' => 'AtansUser\Controller\PermissionAdminController',
+            'AtansUser\Controller\RoleAdmin'       => 'AtansUser\Controller\RoleAdminController',
+            'AtansUser\Controller\User'            => 'AtansUser\Controller\UserController',
+            'AtansUser\Controller\UserAdmin'       => 'AtansUser\Controller\UserAdminController',
         ),
     ),
     'view_manager' => array(

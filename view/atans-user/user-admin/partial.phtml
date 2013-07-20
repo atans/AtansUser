@@ -1,0 +1,57 @@
+<?php
+use AtansUser\Entity\User;
+
+switch ($user->getStatus()) {
+    case User::STATUS_ACTIVE :
+        $status = $this->translate('有效');
+        $statusClass = ' label-success';
+        break;
+    case User::STATUS_INACTIVE :
+        $status = $this->translate('已失效');
+        $statusClass = ' label-warning';
+        break;
+    case User::STATUS_DELETED :
+        $status = $this->translate('已刪除');
+        $statusClass = ' label-important';
+        break;
+    default :
+        $status = sprintf($this->translate("未知狀態 '%s'"), $user->getStatus());
+        $statusClass = '';
+}
+?>
+<tr id="user-<?php echo $this->escapeHtmlAttr($user->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($user->getId()) ?>">
+    <td>
+        <?php echo $this->escapeHtml($user->getId()) ?>
+    </td>
+    <td>
+        <span class="label<?php echo $statusClass?>">
+            <?php echo $this->escapeHtml($status) ?>
+        </span>
+    </td>
+    <td>
+        <?php echo $this->escapeHtml($user->getUserName()) ?>
+    </td>
+    <td>
+        <?php if ($roles = $user->getRoles()): ?>
+            <ul class="unstyled">
+                <?php foreach ($roles as $roleName) :?>
+                    <li><?php echo $this->escapeHtml($roleName) ?></li>
+                <?php endforeach ?>
+            </ul>
+        <?php else: ?>
+            <span class="label label-warning">
+                <?php echo $this->translate('暫無角色') ?>
+            </span>
+        <?php endif ?>
+    </td>
+    <td>
+        <div class="btn-group">
+            <a class="btn" href="<?php echo $this->url('zfcadmin/user/edit', array('id' => $user->getId())) ?>">
+                <i class="icon-edit"></i>
+            </a>
+            <a class="btn" href="<?php echo $this->url('zfcadmin/user/delete', array('id' => $user->getId())) ?>">
+                <i class="icon-remove"></i>
+            </a>
+        </div>
+    </td>
+</tr>
