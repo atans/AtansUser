@@ -1,0 +1,30 @@
+<?php
+$title = $this->translate('用戶首頁');
+$this->headTitle($title);
+?>
+
+<h3><?php echo $this->translate($title) ?></h3>
+<hr>
+
+<?php if ($user = $this->identity()) :?>
+    <h3>
+    <strong>
+        <?php echo sprintf($this->translate('你好，%s'), $user->getUsername()) ?>
+    </strong>
+    </h3>
+    <p>
+        <a class="btn btn-small" href="<?php echo $this->url('atansuser/logout') ?>">
+            <?php echo $this->translate('登出') ?>
+        </a>
+
+        <?php echo $this->translate('用戶組') ?>
+        <label class="label">
+            <?php echo implode('</label>, <label class="label">', $user->getRoles())?>
+        </label>
+    </p>
+
+<?php else: ?>
+    <a href="<?php echo $this->url('atansuser/login') ?>">
+        <?php echo $this->translate('登入') ?>
+    </a>
+<?php endif ?>

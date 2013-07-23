@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class PermissionController extends AbstractActionController
+class PermissionAdminController extends AbstractActionController
 {
     /**
      * Flash messenger name space

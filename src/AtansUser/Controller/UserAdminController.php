@@ -102,7 +102,7 @@ class UserAdminController extends AbstractActionController
                         $user->getUsername()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/user/user');
+                return $this->redirect()->toRoute('zfcadmin/user');
             }
         }
 
@@ -123,7 +123,7 @@ class UserAdminController extends AbstractActionController
                 ->setNamespace(self::FM_NS)
                 ->addMessage(sprintf($translator->translate("找不到用戶 '%d'"), $id));
 
-            return $this->redirect()->toRoute('zfcadmin/user/user');
+            return $this->redirect()->toRoute('zfcadmin/user');
         }
 
         $form = $this->getUserEditForm();
@@ -140,7 +140,7 @@ class UserAdminController extends AbstractActionController
                     ->setNamespace(self::FM_NS)
                     ->addMessage(sprintf($translator->translate("修改用戶成功 '%d'"), $id));
 
-                return $this->redirect()->toRoute('zfcadmin/user/user');
+                return $this->redirect()->toRoute('zfcadmin/user');
             }
         }
 
@@ -148,11 +148,6 @@ class UserAdminController extends AbstractActionController
             'form' => $form,
             'user' => $user,
         );
-
-    }
-
-    public function deleteAction()
-    {
 
     }
 

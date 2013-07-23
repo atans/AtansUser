@@ -36,7 +36,7 @@ $this->headTitle($title);
         <tbody>
         <?php
         foreach ($permissions as $permission) {
-            echo $this->partial('atans-user/permission/partial', array('permission' => $permission));
+            echo $this->partial('atans-user/permission-admin/partial', array('permission' => $permission));
         }
         ?>
         </tbody>

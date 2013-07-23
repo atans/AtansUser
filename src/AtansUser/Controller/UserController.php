@@ -7,9 +7,13 @@ use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 class UserController extends AbstractActionController
 {
+    const ROUTE_LOGIN  = 'atansuser/login';
+    const ROUTE_LOGOUT = 'atansuser/logout';
+
     /**
      * Flash messenger name space
      *
@@ -51,38 +55,67 @@ class UserController extends AbstractActionController
 
     public function indexAction()
     {
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['User']);
-        $returns = array(
-            'users'         => $userRepository->findAll(),
-            'flashMessages' => null,
-        );
-        if ($flashMessages = $this->flashMessenger()->setNamespace(self::FM_NS)->getMessages()) {
-            $returns['flashMessages'] = $flashMessages;
+        if (!$this->identity()) {
+            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
         }
 
-        return $returns;
+        $viewModel = new ViewModel(array(
+            'flashMessages' => null,
+        ));
+        if ($flashMessages = $this->flashMessenger()->setNamespace(self::FM_NS)->getMessages()) {
+            $viewModel->setVariable('flashMessages', $flashMessages);
+        }
+
+        $viewModel->setTemplate($this->getOptions()->getUserIndexTemplate());
+
+        return $viewModel;
     }
 
     public function loginAction()
     {
+        $error = null;
+        $form  = $this->getLoginForm();
+
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $data = $request->getPost();
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $data = $form->getData();
 
-            $authService = $this->getAuthenticationService();
-            $adapter = $authService->getAdapter();
-            $adapter->setIdentityValue($data['username']);
-            $adapter->setCredentialValue($data['password']);
-            $authResult = $authService->authenticate();
+                $authService = $this->getAuthenticationService();
+                $adapter = $authService->getAdapter();
+                $adapter->setIdentityValue($data['username']);
+                $adapter->setCredentialValue($data['password']);
+                $authResult = $authService->authenticate();
 
-            if ($authResult->isValid()) {
-                return $this->redirect()->toRoute('user');
+                if ($authResult->isValid()) {
+                    $user = $authService->getIdentity();
+                    if ($user->getStatus() !== User::STATUS_ACTIVE) {
+                        $translator = $this->getServiceLocator()->get('Translator');
+                        $authService->clearIdentity();
+                        $error = array(
+                            $translator->translate('帳號不能使用'),
+                        );
+                    } else {
+                        return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
+                    }
+                } else {
+                    $error = $authResult->getMessages();
+                }
+
             }
         }
 
         return array(
-            'form' => new \User\Form\LoginForm(),
+            'error' => $error,
+            'form'  => $form,
         );
+    }
+
+    public function logoutAction()
+    {
+        $this->getAuthenticationService()->clearIdentity();
+        return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
     }
 
     /**
@@ -132,6 +165,31 @@ class UserController extends AbstractActionController
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+        return $this;
+    }
+
+    /**
+     * Get loginForm
+     *
+     * @return Form
+     */
+    public function getLoginForm()
+    {
+        if (!$this->loginForm instanceof Form) {
+            $this->setLoginForm($this->getServiceLocator()->get('atansuser_login_form'));
+        }
+        return $this->loginForm;
+    }
+
+    /**
+     * Set loginForm
+     *
+     * @param  Form $loginForm
+     * @return UserController
+     */
+    public function setLoginForm(Form $loginForm)
+    {
+        $this->loginForm = $loginForm;
         return $this;
     }
 

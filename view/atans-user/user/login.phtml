@@ -1,17 +1,53 @@
 <?php
-$form = $this->form;
-$form->setAttribute('action', $this->url('user/login'));
+$title = $this->translate('用戶登入');
+$this->headTitle($title);
 
+$form = $this->form;
+$form->setAttribute('action', $this->url('atansuser/login'));
+$form->setAttribute('class', 'form-horizontal');
 ?>
+
+<?php if (!is_null($error)) : ?>
+    <div class="alert">
+        <?php echo $this->htmlList($error) ?>
+    </div>
+<?php endif ?>
+
+<h3><?php echo $this->escapeHtml($title) ?></h3>
+
+<hr>
+
 <?php echo $this->form()->openTag($form) ?>
 
-<?php foreach ($form as $element): ?>
-    <div>
-    <?php echo $this->formRow($element) ?>
+    <div class="control-group">
+        <div class="control-label">
+            <?php echo $this->translate('用戶') ?>
+        </div>
+        <div class="controls">
+            <?php echo $this->formInput($form->get('username')) ?>
+            <div class="help-block">
+                <?php echo $this->htmlList($form->get('username')->getMessages()) ?>
+            </div>
+        </div>
     </div>
 
-<?php endforeach ?>
+    <div class="control-group">
+        <div class="control-label">
+            <?php echo $this->translate('密碼') ?>
+        </div>
+        <div class="controls">
+            <?php echo $this->formPassword($form->get('password')) ?>
+            <div class="help-block">
+                <?php echo $this->htmlList($form->get('password')->getMessages()) ?>
+            </div>
+        </div>
+    </div>
 
-<button type="submit"><?php echo $this->translate('submit') ?></button>
+    <div class="form-actions">
+        <button class="btn btn-primary btn-large" type="submit">
+            <?php echo $this->translate('登入') ?>
+        </button>
+    </div>
+
 
 <?php echo $this->form()->closeTag() ?>

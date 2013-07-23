@@ -30,7 +30,7 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
     public function getInputFilterSpecification()
     {
         return array(
-            'name' => array(
+            'username' => array(
                 'requred' => true,
                 'filters' => array(
                     array('name' => 'StripTags'),

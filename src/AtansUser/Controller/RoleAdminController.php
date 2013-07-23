@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class RoleController extends AbstractActionController
+class RoleAdminController extends AbstractActionController
 {
     /**
      * Flash messenger namespace

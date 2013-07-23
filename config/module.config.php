@@ -54,12 +54,23 @@ return array(
                     ),
                 ),
                 'may_terminate' => true,
-                'login' => array(
-                    'type' => 'segment',
-                    'options' => array(
-                        'route' => 'login[/]',
-                        'defaults' => array(
-                            'action' => 'login',
+                'child_routes' => array(
+                    'login' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => 'login[/]',
+                            'defaults' => array(
+                                'action' => 'login',
+                            ),
+                        ),
+                    ),
+                    'logout' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => 'logout[/]',
+                            'defaults' => array(
+                                'action' => 'logout',
+                            ),
                         ),
                     ),
                 ),
@@ -125,7 +136,7 @@ return array(
                     'permission' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => 'permission[/]',
+                            'route' => '/permission[/]',
                             'defaults' => array(
                                 'controller' => 'AtansUser\Controller\PermissionAdmin',
                                 'action' => 'index',
@@ -171,7 +182,7 @@ return array(
                     'role' => array(
                         'type' => 'segment',
                         'options' => array(
-                            'route' => 'role[/]',
+                            'route' => '/role[/]',
                             'defaults' => array(
                                 'controller' => 'AtansUser\Controller\RoleAdmin',
                                 'action'     => 'index',
@@ -215,6 +226,13 @@ return array(
                         ),
                     ),
                 ),
+            ),
+        ),
+    ),
+    'zfcrbac' => array(
+        'firewalls' => array(
+            'ZfcRbac\Firewall\Route' => array(
+                array('route' => 'admin/*', 'roles' => 'admin'),
             ),
         ),
     ),

@@ -27,6 +27,9 @@ class Module {
                     $config = $sm->get('config');
                     return new Options\ModuleOptions(isset($config['atansuser']) ? $config['atansuser'] : array());
                 },
+                'atansuser_login_form' => function ($sm) {
+                    return new Form\LoginForm();
+                },
                 'atansuser_permission_add_form' => function ($sm) {
                     $form = new Form\PermissionForm($sm);
                     $form->setInputFilter(new InputFilter\PermissionAddFilter($sm));
