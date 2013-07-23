@@ -21,5 +21,10 @@ return array(
          * 登入重定向路由
          */
         // 'logout_redirect_route' => 'atansuser/login',
+
+        /**
+         * 用戶首頁模板
+         */
+        // 'user_index_template' => 'atans-user/user/index',
     ),
 );
