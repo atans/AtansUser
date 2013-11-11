@@ -2,7 +2,7 @@
     "name": "atans/atans-user",
     "description" : "A RBAC user module for Zend Framework 2",
     "type" : "library",
-    "keywords" : ["user", 'zf2'],
+    "keywords" : ["user", "zf2"],
     "homepage": "https://github.com/atans/AtansUser",
     "license": "MIT",
     "authors": [
