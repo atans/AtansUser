@@ -5,6 +5,7 @@ use AtansUser\Entity\User;
 use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Result;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -73,6 +74,7 @@ class UserController extends AbstractActionController
 
     public function loginAction()
     {
+        $translator = $this->getServiceLocator()->get('Translator');
         $error = null;
         $form  = $this->getLoginForm();
 
@@ -91,7 +93,6 @@ class UserController extends AbstractActionController
                 if ($authResult->isValid()) {
                     $user = $authService->getIdentity();
                     if ($user->getStatus() !== User::STATUS_ACTIVE) {
-                        $translator = $this->getServiceLocator()->get('Translator');
                         $authService->clearIdentity();
                         $error = array(
                             $translator->translate('帳號不能使用'),
@@ -99,8 +100,26 @@ class UserController extends AbstractActionController
                     } else {
                         return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
                     }
-                } else {
-                    $error = $authResult->getMessages();
+                }
+                switch ($authResult->getCode()) {
+                    case Result::FAILURE:
+                        $error = $translator->translate('失敗');
+                        break;
+                    case Result::FAILURE_IDENTITY_NOT_FOUND:
+                        $error = $translator->translate('帳號不存在.');
+                        break;
+                    case Result::FAILURE_IDENTITY_AMBIGUOUS:
+                        $error = $translator->translate('輸入的帳號匹配多個記錄.');
+                        break;
+                    case Result::FAILURE_CREDENTIAL_INVALID:
+                        $error = $translator->translate('密碼不正確.');
+                        break;
+                    case Result::FAILURE_UNCATEGORIZED:
+                        $error = $translator->translate('未知原因失敗.');
+                        break;
+                    case Result::SUCCESS:
+                        $error = $translator->translate('認證成功.');
+                        break;
                 }
 
             }

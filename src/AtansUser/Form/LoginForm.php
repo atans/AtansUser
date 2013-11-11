@@ -1,7 +1,6 @@
 <?php
 namespace AtansUser\Form;
 
-use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use ZfcBase\Form\ProvidesEventsForm;
 
@@ -14,10 +13,16 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
 
         $this->add(array(
             'name' => 'username',
+            'attributes' => array(
+                'class' => 'form-control',
+            ),
         ));
 
         $this->add(array(
             'name' => 'password',
+            'attributes' => array(
+                'class' => 'form-control',
+            ),
         ));
     }
 
@@ -31,14 +36,14 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
     {
         return array(
             'username' => array(
-                'requred' => true,
+                'required' => true,
                 'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
             ),
             'password' => array(
-                'requred' => true,
+                'required' => true,
                 'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
