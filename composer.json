@@ -2,7 +2,7 @@
     "name": "atans/atans-user",
     "description" : "A RBAC user module for Zend Framework 2",
     "type" : "library",
-    "keywords" : ["user"],
+    "keywords" : ["user", 'zf2'],
     "homepage": "https://github.com/atans/AtansUser",
     "license": "MIT",
     "authors": [
@@ -16,7 +16,6 @@
         "php": ">=5.3.3",
         "doctrine/doctrine-module": "0.8.x-dev",
         "doctrine/doctrine-orm-module": "0.8.*@dev",
-        "zf-commons/zfc-admin": "v0.1.1",
         "zf-commons/zfc-base": "0.1.*",
         "zf-commons/zfc-rbac": "0.2.*"
     },
