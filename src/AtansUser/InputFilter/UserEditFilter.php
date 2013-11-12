@@ -53,4 +53,12 @@ class UserEditFilter extends ProvidesEventsInputFilter
             'required' => true,
         ));
     }
+
+    public function callback($value)
+    {
+        if (is_null($value)) {
+            return array();
+        }
+        return $value;
+    }
 }

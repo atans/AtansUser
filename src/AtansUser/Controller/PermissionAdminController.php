@@ -39,19 +39,12 @@ class PermissionAdminController extends AbstractActionController
 
     public function indexAction()
     {
-        $permissionRepository = $this->getEntityManager()->getRepository($this->entities['Permission']);
+        $entityManager        = $this->getEntityManager();
+        $permissionRepository = $entityManager->getRepository($this->entities['Permission']);
 
-        $returns = array(
-            'permissions'   => $permissionRepository->findAll(),
-            'flashMessages' => null,
+        return array(
+            'permissions' => $permissionRepository->findAll()
         );
-
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
-        if ($flashMessages = $flashMessenger->getMessages()) {
-            $returns['flashMessages'] = $flashMessages;
-        }
-
-        return $returns;
     }
 
     public function addAction()
@@ -74,12 +67,12 @@ class PermissionAdminController extends AbstractActionController
 
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
-                    ->addMessage(sprintf(
-                        $translator->translate("新增權限成功 '%s'"),
+                    ->addSuccessMessage(sprintf(
+                        $translator->translate("Permission'%s' was successfully created."),
                         $permission->getName()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/permission');
+                return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
         }
 
@@ -100,11 +93,11 @@ class PermissionAdminController extends AbstractActionController
             $this->flashMessenger()
                  ->setNamespace(self::FM_NS)
                  ->addMessage(sprintf(
-                     $translator->translate("找不到權限 '%d'"),
+                     $translator->translate("Permission '%d' does not found."),
                      $id
                   ));
 
-            return $this->redirect()->toRoute('zfcadmin/permission');
+            return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
 
         $form = $this->getPermissionEditForm();
@@ -122,14 +115,14 @@ class PermissionAdminController extends AbstractActionController
                     $this->flashMessenger()
                         ->setNamespace(self::FM_NS)
                         ->addMessage(sprintf(
-                            $translator->translate("修改權限成功 '%s'"),
+                            $translator->translate("Permission '%s' was successfully updated"),
                             $permission->getName()
                         ));
 
-                    return $this->redirect()->toRoute('zfcadmin/permission');
+                    return $this->redirect()->toRoute('zfcadmin/user/permission');
                 } else {
                     $form->get('name')->setMessages(array(sprintf(
-                        $translator->translate("權限'%s'已存在"),
+                        $translator->translate("Permission'%s' does exist."),
                         $permission->getName()
                     )));
                 }
@@ -154,11 +147,11 @@ class PermissionAdminController extends AbstractActionController
             $this->flashMessenger()
                  ->setNamespace(self::FM_NS)
                  ->addMessage(sprintf(
-                     $translator->translate("找不到權限 '%d'"),
+                     $translator->translate("Permission '%d' does not found"),
                      $id
                  ));
 
-            return $this->redirect()->toRoute('zfcadmin/permission');
+            return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
 
         $request = $this->getRequest();
@@ -171,11 +164,11 @@ class PermissionAdminController extends AbstractActionController
                 $this->flashMessenger()
                      ->setNamespace(self::FM_NS)
                      ->addMessage(sprintf(
-                         $translator->translate("刪除權限成功 '%s'"),
+                         $translator->translate("Permission '%s' was successfully deleted"),
                          $permission->getName()
                      ));
 
-                return $this->redirect()->toRoute('zfcadmin/permission');
+                return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
         }
 

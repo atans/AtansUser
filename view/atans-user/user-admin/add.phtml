@@ -1,5 +1,5 @@
 <?php
-$title = $this->translate('新增用戶');
+$title = $this->translate('Add user');
 $this->headTitle($title);
 
 $form = $this->form;
@@ -7,84 +7,51 @@ $form->setAttribute('action', $this->url('zfcadmin/user/add'));
 $form->prepare();
 ?>
 
-<h3>
-    <a class="btn" href="<?php echo $this->url('zfcadmin/user') ?>">
-        <i class="icon-chevron-left"></i>
-    </a>
+<h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
-</h3>
-
-<hr>
+</h4>
 
 <?php echo $this->form()->openTag($form) ?>
-    <?php echo $this->formHidden($form->get('id')) ?>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <?php $inputFilter = $form->getInputFilter(); ?>
+            <?php foreach ($form as $element): ?>
+                <?php if ($element instanceof \Zend\Form\Element\Hidden): ?>
+                    <?php echo $this->formElement($element) ?>
+                <?php else: ?>
+                    <?php $elementMessages = $element->getMessages(); ?>
+                    <div class="form-group <?php echo ($elementMessages ? ' has-error':'')?>">
+                        <div class="control-label col-lg-3 col-md-3 col-sm-3">
+                            <?php if ($inputFilter->get($element->getName())->isRequired()): ?>
+                            <span class="text-danger">*</span>
+                            <?php endif ?>
 
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('用戶') ?>
+                            <?php echo $this->escapeHtml($element->getLabel()) ?>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <?php echo $this->formElement($element) ?>
+
+                            <?php if ($elementMessages): ?>
+                            <div class="help-block">
+                                <?php echo $this->htmlList($elementMessages, false, array('class' => 'list-inline')) ?>
+                            </div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                <?php endif ?>
+            <?php endforeach ?>
         </div>
-        <div class="controls">
-            <?php echo $this->formInput($form->get('username')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('username')) ?>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6">
+                    <button class="btn btn-primary" type="submit">
+                        <?php echo $this->translate('Submit') ?>
+                    </button>
+                    <a class="btn btn-link" href="<?php echo $this->url('zfcadmin/user') ?>">
+                        <?php echo $this->translate('Cancel') ?>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('電郵') ?>
-        </div>
-        <div class="controls">
-            <?php echo $this->formInput($form->get('email')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('email')) ?>
-            </div>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('密碼') ?>
-        </div>
-        <div class="controls">
-            <?php echo $this->formInput($form->get('password')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('password')) ?>
-            </div>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('角色') ?>
-        </div>
-        <div class="controls">
-            <?php echo $this->formMultiCheckbox($form->get('userRoles')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('userRoles')) ?>
-            </div>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('狀態') ?>
-        </div>
-        <div class="controls">
-            <?php echo $this->formRadio($form->get('status')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('status')) ?>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button class="btn btn-primary" type="submit">
-            <?php echo $this->translate('提交') ?>
-        </button>
-        <a class="btn" href="<?php echo $this->url('zfcadmin/user') ?>">
-            <?php echo $this->translate('取消') ?>
-        </a>
     </div>
 <?php echo $this->form()->closeTag() ?>

@@ -3,12 +3,12 @@ $title = $this->translate('修改角色');
 $this->headTitle($title);
 
 $form = $this->form;
-$form->setAttribute('action', $this->url('zfcadmin/role/edit', array('id' => $role->getId())));
+$form->setAttribute('action', $this->url('zfcadmin/user/role/edit', array('id' => $role->getId())));
 $form->prepare();
 ?>
 
 <h3>
-    <a class="btn" href="<?php echo $this->url('zfcadmin/role') ?>">
+    <a class="btn" href="<?php echo $this->url('zfcadmin/user/role') ?>">
         <i class="icon-chevron-left"></i>
     </a>
     <?php echo $this->escapeHtml($title) ?>
@@ -47,7 +47,7 @@ $form->prepare();
         <button class="btn btn-primary" type="submit">
             <?php echo $this->translate('提交') ?>
         </button>
-        <a class="btn" href="<?php echo $this->url('zfcadmin/role') ?>">
+        <a class="btn" href="<?php echo $this->url('zfcadmin/user/role') ?>">
             <?php echo $this->translate('取消') ?>
         </a>
     </div>

@@ -14,14 +14,16 @@ $this->headTitle($title);
 </div>
 <?php endif ?>
 
-<h3><?php echo $this->escapeHtml($title) ?></h3>
+<h4 class="page-header">
+    <?php echo $this->escapeHtml($title) ?>
+    <small class="pull-right">
+    </small>
+</h4>
 
-<p>
-    <a class="btn" href="<?php echo $this->url('zfcadmin/role/add') ?>">
-        <i class="icon-plus-sign"></i>
-        <?php echo $this->translate('新增') ?>
-    </a>
-</p>
+<a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role/add') ?>">
+    <i class="glyphicon glyphicon-plus"></i>
+    <?php echo $this->translate('Add Permission') ?>
+</a>
 
 <?php if (count($roles) > 0) : ?>
     <table class="table table-bordered table-hover">

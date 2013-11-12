@@ -1,5 +1,5 @@
 <?php
-$title = $this->translate('用戶登入');
+$title = $this->translate('User login');
 $this->headTitle($title);
 
 $form = $this->form;
@@ -14,53 +14,43 @@ $form->setAttribute('class', 'form-horizontal');
 </div>
 <?php endif ?>
 
-<h3><?php echo $this->escapeHtml($title) ?></h3>
-
-<hr>
-
 <?php echo $this->form()->openTag($form) ?>
 
-    <?php
-    $username = $form->get('username');
-    $usernameMessages = $username->getMessages();
-    ?>
-    <div class="form-group <?php echo ($usernameMessages ? ' has-error':'')?>">
-        <div class="control-label col-lg-3 col-md-3 col-sm-3">
-            <?php echo $this->translate('用戶') ?>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4">
-            <?php echo $this->formInput($username) ?>
-            <?php if ($usernameMessages): ?>
-            <div class="help-block">
-                <?php echo implode(', ', $usernameMessages) ?>
+    <div class="row">
+        <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-8 col-md-8 col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <?php echo $this->escapeHtml($title) ?>
+                </div>
+                <div class="panel-body">
+                    <?php foreach ($form as $element):
+                        $elementMessages = $element->getMessages();
+                     ?>
+                    <div class="form-group <?php echo ($elementMessages ? ' has-error':'')?>">
+                        <div class="control-label col-lg-3 col-md-3 col-sm-3">
+                            <?php echo $this->escapeHtml($element->getLabel()) ?>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <?php echo $this->formElement($element) ?>
+                            <?php if ($elementMessages): ?>
+                                <div class="help-block">
+                                    <?php echo $this->htmlList($elementMessages, false, array('class' => 'list-inline')) ?>
+                                </div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                    <?php endforeach ?>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6">
+                            <button class="btn btn-primary" type="submit">
+                                <?php echo $this->translate('Login') ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <?php endif ?>
-        </div>
-    </div>
-
-    <?php
-    $password = $form->get('password');
-    $passwordMessages = $password->getMessages();
-    ?>
-    <div class="form-group <?php echo ($usernameMessages ? ' has-error':'')?>">
-        <div class="control-label col-lg-3 col-md-3 col-sm-3">
-            <?php echo $this->translate('密碼') ?>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4">
-            <?php echo $this->formPassword($password) ?>
-            <?php if ($passwordMessages): ?>
-            <div class="help-block">
-                <?php echo implode(', ', $passwordMessages) ?>
-            </div>
-            <?php endif ?>
-        </div>
-    </div>
-    <hr>
-    <div class="form-group">
-        <div class="col-lg-offset-3 col-lg-4 col-md-offset-3 col-md-4 col-lg-sm-3 col-sm-4">
-            <button class="btn btn-primary btn-large" type="submit">
-                <?php echo $this->translate('登入') ?>
-            </button>
         </div>
     </div>
 

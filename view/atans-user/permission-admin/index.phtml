@@ -1,25 +1,21 @@
 <?php
-$title = $this->translate('權限管理');
+$title = $this->translate('Permission Management');
 $this->headTitle($title);
 
+echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-permission-admin-index'));
 ?>
-<?php if ($flashMessages): ?>
-    <div class="alert alert-info">
-        <a class="close" data-dismiss="alert" href="#">&times;</a>
-        <ul>
-            <?php foreach ($flashMessages as $flashMessage): ?>
-                <li><?php echo $this->escapeHtml($flashMessage) ?></li>
-            <?php endforeach ?>
-        </ul>
-    </div>
-<?php endif ?>
 
-    <h3><?php echo $this->escapeHtml($title) ?></h3>
+<h4 class="page-header">
+    <?php echo $this->escapeHtml($title) ?>
+    <small class="pull-right">
+        <a href="<?php echo $this->url('zfcadmin/user')?>"><?php echo $this->translate('User management') ?></a> &gt; <?php echo $this->escapeHtml($title) ?>
+    </small>
+</h4>
 
     <p>
-        <a class="btn" href="<?php echo $this->url('zfcadmin/permission/add') ?>">
-            <i class="icon-plus-sign"></i>
-            <?php echo $this->translate('新增') ?>
+        <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission/add') ?>">
+            <i class="glyphicon glyphicon-plus"></i>
+            <?php echo $this->translate('Add permission') ?>
         </a>
     </p>
 
@@ -28,9 +24,9 @@ $this->headTitle($title);
         <thead>
         <tr>
             <th class="span1">#</th>
-            <th class="span5"><?php echo $this->translate('權限') ?></th>
-            <th class="span5"><?php echo $this->translate('角色') ?></th>
-            <th class="span1"><?php echo $this->translate('操作') ?></th>
+            <th class="span5"><?php echo $this->translate('Permission name') ?></th>
+            <th class="span5"><?php echo $this->translate('Roles') ?></th>
+            <th class="span1"><?php echo $this->translate('Actions') ?></th>
         </tr>
         </thead>
         <tbody>
@@ -43,6 +39,6 @@ $this->headTitle($title);
     </table>
 <?php else: ?>
     <div class="alert">
-        <h4><?php echo $this->translate('找不到任何權限') ?></h4>
+        <h4><?php echo $this->translate('Could not find any permissions.') ?></h4>
     </div>
 <?php endif ?>

@@ -1,29 +1,25 @@
 <?php
 namespace AtansUser\Form;
 
+use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
-
     public function __construct()
     {
         parent::__construct('login-form');
 
-        $this->add(array(
-            'name' => 'username',
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
+        $username = new Element\Text('username');
+        $username->setLabel('Username')
+                 ->setAttribute('class', 'form-control');
+        $this->add($username);
 
-        $this->add(array(
-            'name' => 'password',
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
+        $password = new Element\Password('password');
+        $password->setLabel('Password')
+                 ->setAttribute('class', 'form-control');
+        $this->add($password);
     }
 
     /**

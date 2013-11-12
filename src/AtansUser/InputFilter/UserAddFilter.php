@@ -65,7 +65,7 @@ class UserAddFilter extends UserEditFilter
         // TODO password regex
         $this->add(array(
             'name' => 'password',
-            'required' => false,
+            'required' => true,
             'filters' => array(
                 array('name' => 'StringTrim'),
             ),

@@ -3,6 +3,7 @@ namespace AtansUser\Form;
 
 use AtansUser\Entity\Permission;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\Form\Element;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
@@ -18,22 +19,18 @@ class PermissionForm extends ProvidesEventsForm
         $this->setHydrator(new DoctrineHydrator($entityManager))
             ->setObject(new Permission());
 
-        $this->add(array(
-            'name' => 'id',
-        ));
+        $id = new Element\Hidden('id');
+        $this->add($id);
 
-        $this->add(array(
-            'name' => 'name',
-            'attributes' => array(
-                'class' => 'span3'
-            ),
-        ));
+        $name = new Element\Text('name');
+        $name->setLabel('Permission name')
+             ->setAttribute('class', 'form-control');
+        $this->add($name);
 
-        $this->add(array(
-            'name' => 'description',
-            'attributes' => array(
-                'class' => 'span3'
-            ),
-        ));
+
+        $description = new Element\Text('description');
+        $description->setLabel('Permission description')
+                    ->setAttribute('class', 'form-control');
+        $this->add($description);
     }
 }

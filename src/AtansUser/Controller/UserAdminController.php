@@ -75,18 +75,18 @@ class UserAdminController extends AbstractActionController
         $user = new User();
         $user->setStatus($this->getOptions()->getUserDefaultStatus());
 
-        // 轉換默認角色為id
-        $rolesValue = array();
-        $roleRepository = $entityManager->getRepository($this->entities['Role']);
-        foreach ($this->getOptions()->getUserDefaultRoles() as $roleName) {
-            $role = $roleRepository->findOneBy(array('name' => $roleName));
-            if ($role) {
-                $rolesValue[] = $role->getId();
-            }
-        }
+        // Role string to id
+//        $rolesValue = array();
+//        $roleRepository = $entityManager->getRepository($this->entities['Role']);
+//        foreach ($this->getOptions()->getUserDefaultRoles() as $roleName) {
+//            $role = $roleRepository->findOneBy(array('name' => $roleName));
+//            if ($role) {
+//                $rolesValue[] = $role->getId();
+//            }
+//        }
 
         $form->bind($user);
-        $form->get('userRoles')->setValue($rolesValue);
+        //$form->get('userRoles')->setValue($rolesValue);
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -97,8 +97,8 @@ class UserAdminController extends AbstractActionController
 
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
-                    ->addMessage(sprintf(
-                        $translator->translate("新增用戶成功 '%s'"),
+                    ->addSuccessMessage(sprintf(
+                        $translator->translate("User '%s' was successfully created."),
                         $user->getUsername()
                     ));
 
@@ -121,7 +121,7 @@ class UserAdminController extends AbstractActionController
         if (!$user) {
             $this->flashMessenger()
                 ->setNamespace(self::FM_NS)
-                ->addMessage(sprintf($translator->translate("找不到用戶 '%d'"), $id));
+                ->addMessage(sprintf($translator->translate("User '%d' does not found"), $id));
 
             return $this->redirect()->toRoute('zfcadmin/user');
         }
@@ -131,14 +131,21 @@ class UserAdminController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $postData = $request->getPost();
+            if (!isset($postData['userRoles'])) {
+                $postData['userRoles'] = array();
+            }
+            $form->setData($postData);
             if ($form->isValid()) {
                 $entityManager->persist($user);
                 $entityManager->flush();
 
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
-                    ->addMessage(sprintf($translator->translate("修改用戶成功 '%d'"), $id));
+                    ->addSuccessMessage(sprintf(
+                        $translator->translate("User '%s' was successfully updated."),
+                        $user->getUsername()
+                    ));
 
                 return $this->redirect()->toRoute('zfcadmin/user');
             }
@@ -148,7 +155,6 @@ class UserAdminController extends AbstractActionController
             'form' => $form,
             'user' => $user,
         );
-
     }
 
     public function loginAction()
@@ -169,7 +175,7 @@ class UserAdminController extends AbstractActionController
         }
 
         return array(
-            'form' => new \User\Form\LoginForm(),
+            'form' => new \AtansUser\Form\LoginForm(),
         );
     }
 

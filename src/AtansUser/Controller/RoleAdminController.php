@@ -79,7 +79,7 @@ class RoleAdminController extends AbstractActionController
                         $role->getName()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/role');
+                return $this->redirect()->toRoute('zfcadmin/user/role');
             }
         }
 
@@ -104,7 +104,7 @@ class RoleAdminController extends AbstractActionController
                     $id
                 ));
 
-            return $this->redirect()->toRoute('zfcadmin/role');
+            return $this->redirect()->toRoute('zfcadmin/user/role');
         }
 
         $form = $this->getRoleEditForm();
@@ -130,7 +130,7 @@ class RoleAdminController extends AbstractActionController
                             $role->getName()
                         ));
 
-                    return $this->redirect()->toRoute('zfcadmin/role');
+                    return $this->redirect()->toRoute('zfcadmin/user/role');
                 } else {
                     $form->get('name')->setMessages(array(sprintf(
                         $translator->translate("角色'%s'已存在"),
@@ -162,7 +162,7 @@ class RoleAdminController extends AbstractActionController
                     $id
                 ));
 
-            return $this->redirect()->toRoute('zfcadmin/role');
+            return $this->redirect()->toRoute('zfcadmin/user/role');
         }
 
         $request = $this->getRequest();
@@ -179,7 +179,7 @@ class RoleAdminController extends AbstractActionController
                         $role->getName()
                     ));
 
-                return $this->redirect()->toRoute('zfcadmin/role');
+                return $this->redirect()->toRoute('zfcadmin/user/role');
             }
         }
 

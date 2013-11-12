@@ -2,7 +2,9 @@
 namespace AtansUser\Form;
 
 use AtansUser\Entity\User;
+use DoctrineModule\Form\Element\ObjectMultiCheckbox;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use Zend\Form\Element;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
@@ -14,56 +16,57 @@ class UserAddForm extends ProvidesEventsForm
         $this->setAttribute('method', 'post');
         $this->setAttribute('class', 'form-horizontal');
 
+        $translator    = $serviceManager->get('translator');
         $entityManager = $serviceManager->get('doctrine.entitymanager.orm_default');
         $this->setHydrator(new DoctrineObject($entityManager))
              ->setObject(new User());
 
-        $this->add(array(
-            'name' => 'id',
-        ));
+        $id = new Element\Hidden('id');
+        $this->add($id);
 
-        $this->add(array(
-            'name' => 'username',
-        ));
+        $username = new Element\Text('username');
+        $username->setLabel('Username')
+                 ->setAttribute('class', 'form-control');
+        $this->add($username);
 
-        $this->add(array(
-            'name' => 'email',
-        ));
+        $email = new Element\Email('email');
+        $email->setLabel('Email')
+              ->setAttribute('class', 'form-control');
+        $this->add($email);
 
-        $this->add(array(
-            'name' => 'password',
-        ));
+        $password = new Element\Password('password');
+        $password->setLabel('Password')
+                 ->setAttribute('class', 'form-control');
+        $this->add($password);
 
-        $this->add(array(
-            'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
-            'name' => 'userRoles',
-            'options' => array(
-                'label_attributes' => array(
-                    'class' => 'checkbox'
-                ),
-                'object_manager' => $entityManager,
-                'target_class'   => 'AtansUser\Entity\Role',
-                'property'       => 'name',
-                'is_method'      => true,
-                'find_method'    => array(
-                    'name' => 'findAll',
-                ),
-            ),
-        ));
+        $userRoles = new ObjectMultiCheckbox('userRoles');
+        $userRoles->setLabel('Roles')
+                  ->setLabelAttributes(array(
+                      'class' => 'checkbox-inline'
+                  ))
+                  ->setOptions(array(
+                      'object_manager' => $entityManager,
+                      'target_class'   => 'AtansUser\Entity\Role',
+                      'property'       => 'name',
+                      'is_method'      => true,
+                      'find_method'    => array(
+                          'name' => 'findAll',
+                      ),
+                  ));
+        $this->add($userRoles);
 
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Radio',
-            'name' => 'status',
-            'options' => array(
-                'label_attributes' => array(
-                    'class' => 'radio inline',
-                ),
-                'value_options' => array(
-                    User::STATUS_ACTIVE   => '有效',
-                    User::STATUS_INACTIVE => '失效',
-                    User::STATUS_DELETED  => '已刪除',
-                ),
-            ),
-        ));
+        $status = new Element\Radio('status');
+        $status->setLabel('Status')
+               ->setLabelAttributes(array(
+                   'class' => 'radio-inline',
+               ))
+               ->setOptions(array(
+                   'value_options' => array(
+                       User::STATUS_ACTIVE   => $translator->translate('Active'),
+                       User::STATUS_INACTIVE => $translator->translate('Inactive'),
+                       User::STATUS_DELETED  => $translator->translate('Deleted'),
+                   ),
+               ));
+        $this->add($status);
     }
 }
