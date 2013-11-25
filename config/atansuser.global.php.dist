@@ -18,7 +18,6 @@ return array(
          */
         // 'user_default_status' => User::STATUS_ACTIVE,
 
-
         /**
          * Login after registration
          */

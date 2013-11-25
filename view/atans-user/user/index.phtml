@@ -18,9 +18,7 @@ echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-index
     </p>
     <p>
         <?php echo $this->translate('Roles', __NAMESPACE__) ?>:
-        <?php foreach ($user->getRoles() as $userRole): ?>
-            <?php echo $userRole ?>
-        <?php endforeach?>
+        <?php echo implode(', ', $user->getRoles()) ?>
     </p>
 
 <?php else: ?>

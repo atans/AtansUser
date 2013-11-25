@@ -24,23 +24,23 @@ $form->setAttribute('class', 'form-horizontal');
                     $elementMessages = $element->getMessages();
                     ?>
                     <?php if ($element instanceof Hidden): ?>
-                    <?php echo $this->formHidden($element) ?>
-                <?php else: ?>
-                    <div class="form-group <?php echo ($elementMessages ? ' has-error':'')?>">
-                        <div class="control-label col-lg-3 col-md-3 col-sm-3">
-                            <?php echo $this->escapeHtml($this->translate($element->getLabel(), __NAMESPACE__)) ?>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <?php echo $this->formElement($element) ?>
+                        <?php echo $this->formHidden($element) ?>
+                    <?php else: ?>
+                        <div class="form-group <?php echo ($elementMessages ? ' has-error':'')?>">
+                            <div class="control-label col-lg-3 col-md-3 col-sm-3">
+                                <?php echo $this->escapeHtml($this->translate($element->getLabel(), __NAMESPACE__)) ?>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <?php echo $this->formElement($element) ?>
 
-                            <?php if ($elementMessages): ?>
-                                <div class="help-block">
-                                    <?php echo $this->htmlList($elementMessages, false, array('class' => 'list-unstyled')) ?>
-                                </div>
-                            <?php endif ?>
+                                <?php if ($elementMessages): ?>
+                                    <div class="help-block">
+                                        <?php echo $this->htmlList($elementMessages, false, array('class' => 'list-unstyled')) ?>
+                                    </div>
+                                <?php endif ?>
+                            </div>
                         </div>
-                    </div>
-                <?php endif ?>
+                    <?php endif ?>
                 <?php endforeach ?>
             </div>
             <div class="panel-footer">

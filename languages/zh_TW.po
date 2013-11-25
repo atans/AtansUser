@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2013-11-25 15:18+0800\n"
-"PO-Revision-Date: 2013-11-25 15:19+0800\n"
+"POT-Creation-Date: 2013-11-25 16:14+0800\n"
+"PO-Revision-Date: 2013-11-25 16:15+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: zh_TW\n"
@@ -119,11 +119,11 @@ msgstr "認證未分類錯誤。"
 msgid "Unknown authentication code: %d"
 msgstr "未知認證碼: %d"
 
-#: ../src/AtansUser/Controller/UserController.php:261
-msgid "This account cannot be used."
-msgstr "帳號不能使用。"
+#: ../src/AtansUser/Controller/UserController.php:263
+msgid "Your account is not active."
+msgstr "您的帳戶處於非活動狀態。"
 
-#: ../src/AtansUser/Controller/UserController.php:315
+#: ../src/AtansUser/Controller/UserController.php:317
 msgid "Your current password was incorrectly typed."
 msgstr "你的舊密碼不正確。"
 
@@ -342,7 +342,7 @@ msgstr "用戶首頁"
 msgid "Hello，%s"
 msgstr "你好，%s"
 
-#: ../view/atans-user/user/index.phtml:28
+#: ../view/atans-user/user/index.phtml:26
 #: ../view/atans-user/user/login.phtml:55
 msgid "Login"
 msgstr "登入"
@@ -385,6 +385,9 @@ msgstr "找不到任何用戶。"
 #, php-format
 msgid "Unknown status '%s'"
 msgstr "未知狀態 '%s'"
+
+#~ msgid "This account cannot be used."
+#~ msgstr "帳號不能使用。"
 
 #, fuzzy
 #~ msgid "New Password"

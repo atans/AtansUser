@@ -81,7 +81,7 @@ class UserController extends AbstractActionController
     public function indexAction()
     {
         if (!$this->identity()) {
-            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+            return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
         }
 
         $viewModel = new ViewModel();
@@ -298,7 +298,7 @@ class UserController extends AbstractActionController
             return $prg;
         } elseif ($prg === false) {
             return array(
-                'form' => $form,
+                'form'  => $form,
             );
         }
 
@@ -306,7 +306,7 @@ class UserController extends AbstractActionController
 
         if (!$form->isValid()) {
             return array(
-                'form' => $form,
+                'form'  => $form,
             );
         }
 
@@ -314,14 +314,12 @@ class UserController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-password');
 
         if (!$this->getUserService()->changePassword($form->getData())) {
-            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.'));
+            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
 
-            return array(
-                'form' => $form,
-            );
+            return $this->redirect()->toRoute(static::ROUTE_CHANGE_PASSWORD);
         }
 
-        $flashMessenger->addSuccessMessage($translator->translate('Password changed successfully.'));
+        $flashMessenger->addSuccessMessage($translator->translate('Password changed successfully.', static::TRANSLATOR_TEXT_DOMAIN));
 
         return $this->redirect()->toRoute(static::ROUTE_CHANGE_PASSWORD);
     }
