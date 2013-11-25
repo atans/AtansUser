@@ -1,5 +1,7 @@
 <?php
-$title = $this->translate('User Management');
+namespace AtansUser;
+
+$title = $this->translate('User Management', __NAMESPACE__);
 $this->headTitle($title);
 ?>
 
@@ -15,47 +17,65 @@ $this->headTitle($title);
         <div class="btn-group btn-group-sm">
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/add') ?>">
                 <i class="glyphicon glyphicon-plus"></i>
-                <?php echo $this->translate('Add user') ?>
+                <?php echo $this->translate('Add user', __NAMESPACE__) ?>
             </a>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li>
-                    <a href="<?php echo $this->url('zfcadmin/user/role') ?>">
-                        <?php echo $this->escapeHtml($this->translate('Role Management')) ?>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo $this->url('zfcadmin/user/permission') ?>">
-                        <?php echo $this->escapeHtml($this->translate('Permission Management')) ?>
-                    </a>
-                </li>
-            </ul>
+        </div>
+
+        <div class="btn-group btn-group-sm pull-right">
+            <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role') ?>">
+                <?php echo $this->escapeHtml($this->translate('Role Management', __NAMESPACE__)) ?>
+            </a>
+            <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
+                <?php echo $this->escapeHtml($this->translate('Permission Management', __NAMESPACE__)) ?>
+            </a>
         </div>
     </div>
-    <?php if (count($users) > 0) : ?>
+    <div class="panel-body">
+        <?php echo $this->render('atans-user/user-admin/search-form', array('form' => $form)) ?>
+    </div>
+    <?php if (count($paginator) > 0) : ?>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Username') ?></th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Roles') ?></th>
-                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Status') ?></th>
-                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions') ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Username', __NAMESPACE__) ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Roles', __NAMESPACE__) ?></th>
+                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Status', __NAMESPACE__) ?></th>
+                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', __NAMESPACE__) ?></th>
             </tr>
         </thead>
         <?php
-        foreach ($users as $user) {
+        foreach ($paginator as $user) {
             echo $this->partial('atans-user/user-admin/partial', array('user' => $user));
         }
         ?>
     </table>
     <?php else: ?>
     <div class="panel-body">
+        <div class="panel-body">
+            <?php echo $this->render('atans-user/user-admin/search-form', array('form' => $form)) ?>
+        </div>
+        <br>
+
         <div class="alert alert-info">
-            <?php echo $this->translate('Could not find any users.') ?>
+            <?php echo $this->translate('Could not find any users.', __NAMESPACE__) ?>
         </div>
     </div>
     <?php endif ?>
 </div>
+
+<?php
+if (count($this->paginator)) {
+    echo $this->paginationControl(
+        $this->paginator,
+        'Sliding',
+        'pagination/query',
+        array(
+            'route' => 'zfcadmin/user',
+            'options' => array(
+                'query' => $form->getData(),
+            ),
+        )
+    );
+}
+?>

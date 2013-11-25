@@ -1,0 +1,361 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Atans User\n"
+"POT-Creation-Date: 2013-11-23 17:07+0800\n"
+"PO-Revision-Date: 2013-11-23 17:08+0800\n"
+"Last-Translator: atans <atans.chiu@gmail.com>\n"
+"Language-Team: atans <atans.chiu@gmail.com>\n"
+"Language: en-US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: translate;setLabel\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../Module.php:80 ../view/atans-user/user-admin/partial.phtml:8
+msgid "Active"
+msgstr ""
+
+#: ../Module.php:81 ../view/atans-user/user-admin/partial.phtml:12
+msgid "Inactive"
+msgstr ""
+
+#: ../Module.php:82 ../view/atans-user/user-admin/partial.phtml:16
+msgid "Deleted"
+msgstr ""
+
+#: ../src/AtansUser/Controller/PermissionAdminController.php:71
+#, php-format
+msgid "Permission '%s' was successfully created."
+msgstr ""
+
+#: ../src/AtansUser/Controller/PermissionAdminController.php:96
+#: ../src/AtansUser/Controller/PermissionAdminController.php:142
+#, php-format
+msgid "Permission does not found. '#%d'"
+msgstr ""
+
+#: ../src/AtansUser/Controller/PermissionAdminController.php:117
+#, php-format
+msgid "Permission '%s' was successfully updated."
+msgstr ""
+
+#: ../src/AtansUser/Controller/PermissionAdminController.php:159
+#, php-format
+msgid "Permission '%s' was successfully deleted."
+msgstr ""
+
+#: ../src/AtansUser/Controller/RoleAdminController.php:78
+#, php-format
+msgid "Role '%s' was successfully created."
+msgstr ""
+
+#: ../src/AtansUser/Controller/RoleAdminController.php:103
+#: ../src/AtansUser/Controller/RoleAdminController.php:148
+#, php-format
+msgid "Role does not found. '#%d'"
+msgstr ""
+
+#: ../src/AtansUser/Controller/RoleAdminController.php:123
+#, php-format
+msgid "Role '%s' was successfully updated."
+msgstr ""
+
+#: ../src/AtansUser/Controller/RoleAdminController.php:165
+#, php-format
+msgid "Role '%s' was successfully deleted."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserAdminController.php:114
+#, php-format
+msgid "User '%s' was successfully created."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserAdminController.php:139
+#: ../src/AtansUser/Controller/UserAdminController.php:186
+#, php-format
+msgid "User does not found. '#%d'"
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserAdminController.php:161
+#, php-format
+msgid "User '%s' was successfully updated."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserAdminController.php:200
+#, php-format
+msgid "User '%s' was successfully deleted."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:173
+msgid "Your account has been successfully registered."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:222
+msgid "Authentication Failure."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:225
+msgid "A record with the supplied identity could not be found."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:228
+msgid "More than one record matches the supplied identity."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:231
+msgid "Supplied credential is invalid."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:234
+msgid "Authentication uncategorized error."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:238
+#, php-format
+msgid "Unknown authentication code: %d"
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:254
+msgid "This account cannot be used."
+msgstr ""
+
+#: ../src/AtansUser/Form/LoginForm.php:15
+#: ../src/AtansUser/Form/RegisterForm.php:42
+#: ../src/AtansUser/Form/UserAddForm.php:49
+#: ../view/atans-user/user-admin/index.phtml:41
+msgid "Username"
+msgstr ""
+
+#: ../src/AtansUser/Form/LoginForm.php:20
+#: ../src/AtansUser/Form/RegisterForm.php:52
+#: ../src/AtansUser/Form/UserAddForm.php:59
+msgid "Password"
+msgstr ""
+
+#: ../src/AtansUser/Form/PermissionForm.php:49
+#: ../view/atans-user/permission-admin/index.phtml:34
+msgid "Permission name"
+msgstr ""
+
+#: ../src/AtansUser/Form/PermissionForm.php:55
+msgid "Permission description"
+msgstr ""
+
+#: ../src/AtansUser/Form/RegisterForm.php:47
+#: ../src/AtansUser/Form/UserAddForm.php:54
+msgid "Email"
+msgstr ""
+
+#: ../src/AtansUser/Form/RegisterForm.php:57
+msgid "Password verify"
+msgstr ""
+
+#: ../src/AtansUser/Form/RoleForm.php:53
+msgid "Role name"
+msgstr ""
+
+#: ../src/AtansUser/Form/RoleForm.php:58
+msgid "Parent role"
+msgstr ""
+
+#: ../src/AtansUser/Form/RoleForm.php:61
+#: ../view/atans-user/permission-admin/partial.phtml:26
+#: ../view/atans-user/role-admin/partial.phtml:25
+#: ../view/atans-user/user-admin/partial.phtml:36
+msgid "None"
+msgstr ""
+
+#: ../src/AtansUser/Form/RoleForm.php:69
+#: ../view/atans-user/role-admin/index.phtml:35
+msgid "Permissions"
+msgstr ""
+
+#: ../src/AtansUser/Form/UserAddForm.php:64
+#: ../view/atans-user/permission-admin/index.phtml:35
+#: ../view/atans-user/user/index.phtml:22
+#: ../view/atans-user/user-admin/index.phtml:42
+msgid "Roles"
+msgstr ""
+
+#: ../src/AtansUser/Form/UserAddForm.php:81
+#: ../src/AtansUser/Form/UserSearchForm.php:45
+#: ../view/atans-user/user-admin/index.phtml:43
+msgid "Status"
+msgstr ""
+
+#: ../src/AtansUser/Form/UserEditForm.php:17
+msgid "New password"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/add.phtml:4
+#: ../view/atans-user/permission-admin/index.phtml:26
+msgid "Add permission"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/add.phtml:17
+#: ../view/atans-user/permission-admin/delete.phtml:13
+#: ../view/atans-user/permission-admin/edit.phtml:17
+#: ../view/atans-user/permission-admin/index.phtml:15
+#: ../view/atans-user/role-admin/add.phtml:17
+#: ../view/atans-user/role-admin/delete.phtml:13
+#: ../view/atans-user/role-admin/edit.phtml:17
+#: ../view/atans-user/role-admin/index.phtml:14
+#: ../view/atans-user/user-admin/add.phtml:17
+#: ../view/atans-user/user-admin/delete.phtml:13
+#: ../view/atans-user/user-admin/edit.phtml:17
+#: ../view/atans-user/user-admin/index.phtml:4
+msgid "User Management"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/add.phtml:21
+#: ../view/atans-user/permission-admin/delete.phtml:17
+#: ../view/atans-user/permission-admin/edit.phtml:21
+#: ../view/atans-user/permission-admin/index.phtml:4
+#: ../view/atans-user/user-admin/index.phtml:29
+msgid "Permission Management"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/add.phtml:62
+#: ../view/atans-user/permission-admin/edit.phtml:62
+#: ../view/atans-user/role-admin/add.phtml:62
+#: ../view/atans-user/role-admin/edit.phtml:62
+#: ../view/atans-user/user-admin/add.phtml:57
+#: ../view/atans-user/user-admin/edit.phtml:57
+msgid "Submit"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/add.phtml:65
+#: ../view/atans-user/permission-admin/delete.phtml:36
+#: ../view/atans-user/permission-admin/edit.phtml:65
+#: ../view/atans-user/role-admin/add.phtml:65
+#: ../view/atans-user/role-admin/delete.phtml:38
+#: ../view/atans-user/role-admin/edit.phtml:65
+#: ../view/atans-user/user-admin/add.phtml:60
+#: ../view/atans-user/user-admin/delete.phtml:32
+#: ../view/atans-user/user-admin/edit.phtml:60
+msgid "Cancel"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/delete.phtml:4
+msgid "Delete permission"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/delete.phtml:29
+#, php-format
+msgid "Are your sure you want to delete permission '%s' ?"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/delete.phtml:33
+#: ../view/atans-user/role-admin/delete.phtml:35
+#: ../view/atans-user/user-admin/delete.phtml:29
+msgid "Delete"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/edit.phtml:4
+msgid "Edit permission"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/index.phtml:36
+#: ../view/atans-user/role-admin/index.phtml:36
+#: ../view/atans-user/user-admin/index.phtml:44
+msgid "Actions"
+msgstr ""
+
+#: ../view/atans-user/permission-admin/index.phtml:49
+msgid "Could not find any permissions."
+msgstr ""
+
+#: ../view/atans-user/role-admin/add.phtml:4
+#: ../view/atans-user/role-admin/index.phtml:26
+msgid "Add role"
+msgstr ""
+
+#: ../view/atans-user/role-admin/add.phtml:21
+#: ../view/atans-user/role-admin/delete.phtml:17
+#: ../view/atans-user/role-admin/edit.phtml:21
+#: ../view/atans-user/role-admin/index.phtml:4
+#: ../view/atans-user/user-admin/index.phtml:26
+msgid "Role Management"
+msgstr ""
+
+#: ../view/atans-user/role-admin/delete.phtml:4
+msgid "Delete role"
+msgstr ""
+
+#: ../view/atans-user/role-admin/delete.phtml:30
+#, php-format
+msgid "Are you sure you want to delete role '%s' ?"
+msgstr ""
+
+#: ../view/atans-user/role-admin/edit.phtml:4
+msgid "Edit role"
+msgstr ""
+
+#: ../view/atans-user/role-admin/index.phtml:34
+msgid "Role"
+msgstr ""
+
+#: ../view/atans-user/role-admin/index.phtml:50
+msgid "Could not find any roles."
+msgstr ""
+
+#: ../view/atans-user/user/index.phtml:4
+msgid "User Home"
+msgstr ""
+
+#: ../view/atans-user/user/index.phtml:18
+#, php-format
+msgid "Hello，%s"
+msgstr ""
+
+#: ../view/atans-user/user/index.phtml:30
+#: ../view/atans-user/user/login.phtml:55
+msgid "Login"
+msgstr ""
+
+#: ../view/atans-user/user/login.phtml:6
+msgid "User login"
+msgstr ""
+
+#: ../view/atans-user/user/register.phtml:6
+msgid "User Register"
+msgstr ""
+
+#: ../view/atans-user/user/register.phtml:50
+msgid "Register"
+msgstr ""
+
+#: ../view/atans-user/user-admin/add.phtml:4
+#: ../view/atans-user/user-admin/index.phtml:20
+msgid "Add user"
+msgstr ""
+
+#: ../view/atans-user/user-admin/delete.phtml:4
+msgid "Delete user"
+msgstr ""
+
+#: ../view/atans-user/user-admin/delete.phtml:25
+#, php-format
+msgid "Are you sure you want to delete user '%s' ?"
+msgstr ""
+
+#: ../view/atans-user/user-admin/edit.phtml:4
+msgid "Edit user"
+msgstr ""
+
+#: ../view/atans-user/user-admin/index.phtml:56
+msgid "Could not find any users."
+msgstr ""
+
+#: ../view/atans-user/user-admin/partial.phtml:20
+#, php-format
+msgid "Unknown status '%s'"
+msgstr ""
+
+#: ../view/atans-user/user-admin/search-form.phtml:13
+msgid "Page size"
+msgstr ""

@@ -1,10 +1,10 @@
 <?php
 namespace AtansUser\Options;
 
-interface RegistrationInterface
+interface RegistrationOptionsInterface
 {
     /**
-     * Set enable user registartion
+     * Set enable user registration
      *
      * @param  bool $enableRegistration
      * @return ModuleOptions
@@ -12,7 +12,7 @@ interface RegistrationInterface
     public function setEnableRegistration($enableRegistration);
 
     /**
-     * Get enable user registartion
+     * Get enable user registration
      *
      * @return bool
      */
@@ -47,4 +47,19 @@ interface RegistrationInterface
      * @return string
      */
     public function getUserDefaultStatus();
+
+    /**
+     * set login after registration
+     *
+     * @param bool $loginAfterRegistration
+     * @return ModuleOptions
+     */
+    public function setLoginAfterRegistration($loginAfterRegistration);
+
+    /**
+     * get login after registration
+     *
+     * @return bool
+     */
+    public function getLoginAfterRegistration();
 }

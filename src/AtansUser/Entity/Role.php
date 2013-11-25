@@ -30,7 +30,7 @@ class Role
 
     /**
      * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * @var Role
      */
     protected $parentRole = null;
@@ -112,7 +112,7 @@ class Role
      * @param  Role $parentRole
      * @return Role
      */
-    public function setParentRole(Role $parentRole)
+    public function setParentRole(Role $parentRole = null)
     {
         $this->parentRole = $parentRole;
         return $this;

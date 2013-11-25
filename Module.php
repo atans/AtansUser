@@ -1,7 +1,22 @@
 <?php
 namespace AtansUser;
 
-class Module {
+use Zend\Mvc\MvcEvent;
+use Zend\Validator\AbstractValidator;
+
+class Module
+{
+    public function onBootstrap(MvcEvent $e)
+    {
+        // Add validator if default translator was defined
+        if ($translator = AbstractValidator::getDefaultTranslator()) {
+            $translator->addTranslationFilePattern(
+                'phpArray',
+                __DIR__ . '/languages/Zend_Validate',
+                '%s.php'
+            );
+        }
+    }
 
     public function getAutoloaderConfig()
     {
@@ -22,6 +37,9 @@ class Module {
     public function getServiceConfig()
     {
         return array(
+            'invokables' => array(
+                'atansuser_user_service' => 'AtansUser\Service\User',
+            ),
             'factories' => array(
                 'atansuser_module_options' => function ($sm) {
                     $config = $sm->get('config');
@@ -30,39 +48,43 @@ class Module {
                 'atansuser_login_form' => function ($sm) {
                     return new Form\LoginForm();
                 },
-                'atansuser_permission_add_form' => function ($sm) {
-                    $form = new Form\PermissionForm($sm);
-                    $form->setInputFilter(new InputFilter\PermissionAddFilter($sm));
-                    return $form;
+                'atansuser_register_form' => function ($sm) {
+                    return new Form\RegisterForm($sm);
                 },
-                'atansuser_permission_edit_form' => function ($sm) {
-                    $form = new Form\PermissionForm($sm);
-                    $form->setInputFilter(new InputFilter\PermissionEditFilter($sm));
-                    return $form;
+                'atansuser_permission_form' => function ($sm) {
+                    return new Form\PermissionForm($sm);
                 },
-                'atansuser_role_add_form' => function ($sm) {
-                    $form = new Form\RoleForm($sm);
-                    $form->setInputFilter(new InputFilter\RoleAddFilter($sm));
-                    return $form;
+                'atansuser_permission_search_form' => function ($sm) {
+                    return new Form\PermissionSearchForm($sm);
                 },
-                'atansuser_role_edit_form' => function ($sm) {
-                    $form = new Form\RoleForm($sm);
-                    $form->setInputFilter(new InputFilter\RoleEditFilter($sm));
-                    return $form;
+                'atansuser_role_form' => function ($sm) {
+                    return new Form\RoleForm($sm);
+                },
+                'atansuser_role_search_form' => function ($sm) {
+                    return new Form\RoleSearchForm($sm);
                 },
                 'atansuser_user_add_form' => function ($sm) {
                     $form = new Form\UserAddForm($sm);
-                    $form->setInputFIlter(new InputFilter\UserAddFilter($sm));
                     return $form;
                 },
                 'atansuser_user_edit_form' => function ($sm) {
-                    $form = new Form\UserEditForm($sm);
-                    $form->setInputFIlter(new InputFilter\UserEditFilter($sm));
-                    return $form;
+                    return new Form\UserEditForm($sm);
+                },
+                'atansuser_user_search_form' => function ($sm) {
+                    return new Form\UserSearchForm($sm);
                 },
                 'Zend\Authentication\AuthenticationService' => function ($sm) {
                     return $sm->get('doctrine.authenticationservice.orm_default');
                 },
+                'atansuser_user_statuses' => function ($sm) {
+                    $translator = $sm->get('Translator');
+
+                    return array(
+                        Entity\User::STATUS_ACTIVE   => $translator->translate('Active', __NAMESPACE__),
+                        Entity\User::STATUS_INACTIVE => $translator->translate('Inactive', __NAMESPACE__),
+                        Entity\User::STATUS_DELETED  => $translator->translate('Deleted', __NAMESPACE__),
+                    );
+                 },
             ),
         );
     }

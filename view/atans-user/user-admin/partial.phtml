@@ -1,17 +1,19 @@
 <?php
+namespace AtansUser;
+
 use AtansUser\Entity\User;
 
 switch ($user->getStatus()) {
     case User::STATUS_ACTIVE :
-        $status = $this->translate('Active');
+        $status = $this->translate('Active', __NAMESPACE__);
         $statusClass = ' label-success';
         break;
     case User::STATUS_INACTIVE :
-        $status = $this->translate('Inactive');
+        $status = $this->translate('Inactive', __NAMESPACE__);
         $statusClass = ' label-warning';
         break;
     case User::STATUS_DELETED :
-        $status = $this->translate('Deleted');
+        $status = $this->translate('Deleted', __NAMESPACE__);
         $statusClass = ' label-danger';
         break;
     default :
@@ -31,7 +33,7 @@ switch ($user->getStatus()) {
             <?php echo $this->htmlList($roles, false, array('class' => 'list-inline'))?>
         <?php else: ?>
             <span class="label label-warning">
-                <?php echo $this->escapeHtml($this->translate('None')) ?>
+                <?php echo $this->escapeHtml($this->translate('None', __NAMESPACE__)) ?>
             </span>
         <?php endif ?>
     </td>

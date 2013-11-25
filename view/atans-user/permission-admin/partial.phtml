@@ -1,3 +1,6 @@
+<?php
+namespace AtansUser;
+?>
 <tr id="permission-<?php echo $this->escapeHtmlAttr($permission->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($permission->getId()) ?>">
     <td>
         <?php echo $this->escapeHtml($permission->getId()) ?>
@@ -6,29 +9,31 @@
         <?php echo $this->escapeHtml($permission->getName()) ?>
         <?php if ($description = $permission->getDescription()): ?>
         <br>
-        <small class="muted"><?php echo $this->escapeHtml($description) ?></small>
+        <small class="text-muted">
+            <?php echo $this->escapeHtml($description) ?>
+        </small>
         <?php endif ?>
     </td>
     <td>
-        <?php if ($roles = $permission->getRoles()): ?>
-            <ul class="unstyled">
+        <?php if (($roles = $permission->getRoles()) && count($roles) > 0): ?>
+            <ul class="list-unstyled">
                 <?php foreach ($roles as $role) :?>
                 <li><?php echo $this->escapeHtml($role->getName()) ?></li>
                 <?php endforeach ?>
             </ul>
         <?php else: ?>
             <span class="label label-warning">
-                <?php echo $this->translate('暫無角色') ?>
+                <?php echo $this->translate('None', __NAMESPACE__) ?>
             </span>
         <?php endif ?>
     </td>
     <td>
         <div class="btn-group">
-            <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission/edit', array('id' => $permission->getId())) ?>">
-                <i class="icon-edit"></i>
+            <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission/edit', array('id' => $permission->getId())) ?>">
+                <i class="glyphicon glyphicon-edit"></i>
             </a>
-            <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission/delete', array('id' => $permission->getId())) ?>">
-                <i class="icon-remove"></i>
+            <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission/delete', array('id' => $permission->getId())) ?>">
+                <i class="glyphicon glyphicon-remove"></i>
             </a>
         </div>
     </td>

@@ -3,17 +3,24 @@ namespace AtansUser\Controller;
 
 use AtansUser\Entity\User;
 use AtansUser\Options\ModuleOptions;
+use AtansUser\Service\User as UserService;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Result;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Stdlib\Parameters;
+use Zend\Validator\EmailAddress;
 use Zend\View\Model\ViewModel;
 
 class UserController extends AbstractActionController
 {
-    const ROUTE_LOGIN  = 'atansuser/login';
-    const ROUTE_LOGOUT = 'atansuser/logout';
+    const ROUTE_LOGIN    = 'atansuser/login';
+    const ROUTE_LOGOUT   = 'atansuser/logout';
+    const ROUTE_REGISTER = 'atansuser/register';
+
+    const CONTROLLER_NAME = 'AtansUser\Controller\User';
 
     /**
      * Flash messenger name space
@@ -21,6 +28,11 @@ class UserController extends AbstractActionController
      * @var string
      */
     const FM_NS = 'atansuser-user-index';
+
+    /**
+     * Translator text domain
+     */
+    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
      * @var AuthenticationService
@@ -45,7 +57,7 @@ class UserController extends AbstractActionController
     protected $loginForm;
 
     /**
-     * @var From
+     * @var Form
      */
     protected $registerForm;
 
@@ -54,19 +66,18 @@ class UserController extends AbstractActionController
      */
     protected $options;
 
+    /**
+     * @var UserService
+     */
+    protected $userService;
+
     public function indexAction()
     {
         if (!$this->identity()) {
             return $this->redirect()->toRoute(static::ROUTE_LOGIN);
         }
 
-        $viewModel = new ViewModel(array(
-            'flashMessages' => null,
-        ));
-        if ($flashMessages = $this->flashMessenger()->setNamespace(self::FM_NS)->getMessages()) {
-            $viewModel->setVariable('flashMessages', $flashMessages);
-        }
-
+        $viewModel = new ViewModel();
         $viewModel->setTemplate($this->getOptions()->getUserIndexTemplate());
 
         return $viewModel;
@@ -74,67 +85,204 @@ class UserController extends AbstractActionController
 
     public function loginAction()
     {
-        $translator = $this->getServiceLocator()->get('Translator');
-        $error = null;
-        $form  = $this->getLoginForm();
-
+        $form    = $this->getLoginForm();
         $request = $this->getRequest();
+
+        if ($this->getOptions()->getUseRedirectParameterIfPresent() && $request->getQuery('redirect')) {
+            $redirect = $request->getQuery('redirect');
+        } else {
+            $redirect = false;
+        }
+
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $data = $form->getData();
-
-                $authService = $this->getAuthenticationService();
-                $adapter = $authService->getAdapter();
-                $adapter->setIdentityValue($data['username']);
-                $adapter->setCredentialValue($data['password']);
-                $authResult = $authService->authenticate();
-
-                if ($authResult->isValid()) {
-                    $user = $authService->getIdentity();
-                    if ($user->getStatus() !== User::STATUS_ACTIVE) {
-                        $authService->clearIdentity();
-                        $error = array(
-                            $translator->translate('帳號不能使用'),
-                        );
-                    } else {
-                        return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
-                    }
-                }
-                switch ($authResult->getCode()) {
-                    case Result::FAILURE:
-                        $error = $translator->translate('失敗');
-                        break;
-                    case Result::FAILURE_IDENTITY_NOT_FOUND:
-                        $error = $translator->translate('帳號不存在.');
-                        break;
-                    case Result::FAILURE_IDENTITY_AMBIGUOUS:
-                        $error = $translator->translate('輸入的帳號匹配多個記錄.');
-                        break;
-                    case Result::FAILURE_CREDENTIAL_INVALID:
-                        $error = $translator->translate('密碼不正確.');
-                        break;
-                    case Result::FAILURE_UNCATEGORIZED:
-                        $error = $translator->translate('未知原因失敗.');
-                        break;
-                    case Result::SUCCESS:
-                        $error = $translator->translate('認證成功.');
-                        break;
-                }
-
+                $request->setPost(new Parameters($form->getData()));
+                return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
             }
         }
 
         return array(
-            'error' => $error,
-            'form'  => $form,
+            'form'     => $form,
+            'redirect' => $redirect,
         );
+    }
+
+    public function registerAction()
+    {
+        if ($this->getAuthenticationService()->getIdentity()) {
+            return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
+        }
+
+        if (!$this->getOptions()->getEnableRegistration()) {
+            return array(
+                'enableRegistration' => false,
+            );
+        }
+
+        $request    = $this->getRequest();
+        $form       = $this->getRegisterForm();
+        $translator = $this->getServiceLocator()->get('Translator');
+
+        if ($this->getOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
+            $redirect = $request->getQuery()->get('redirect');
+        } else {
+            $redirect = false;
+        }
+
+        $redirectUrl = $this->url()->fromRoute(static::ROUTE_REGISTER) . ($redirect ? '?redirect=' . rawurlencode($redirect) : '');
+
+        $prg = $this->prg($redirectUrl, true);
+
+        if ($prg instanceof \Zend\Http\PhpEnvironment\Response) {
+            return $prg;
+        } elseif ($prg === false) {
+            return array(
+                'form'               => $form,
+                'enableRegistration' => $this->getOptions()->getEnableRegistration(),
+                'redirect'           => $redirect,
+            );
+        }
+
+        $user = $this->getUserService()->register($prg);
+
+        if (!$user) {
+            return array(
+                'form'               => $form,
+                'enableRegistration' => $this->getOptions()->getEnableRegistration(),
+                'redirect'           => $redirect,
+            );
+        }
+
+        if ($this->getOptions()->getLoginAfterRegistration()) {
+            $identityFields = $this->getOptions()->getAuthIdentityFields();
+            $post = array();
+            if (in_array('email', $identityFields)) {
+                $post['identity'] = $user->getEmail();
+            } elseif (in_array('username', $identityFields)) {
+                $post['identity'] = $user->getUsername();
+            }
+            $post['credential'] = $prg['password'];
+            $request->setPost(new Parameters($post));
+
+            return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
+        }
+
+        $this->flashMessenger()
+             ->setNamespace('atansuser-user-login')
+             ->addSuccessMessage($translator->translate('Your account has been successfully registered.'));
+
+
+        return $this->redirect()->toUrl(
+            $this->url()->fromRoute(static::ROUTE_LOGIN) . ($redirect ? '?redirect=' . rawurlencode($redirect) : '')
+        );
+    }
+
+    public function authenticateAction()
+    {
+        if ($this->getAuthenticationService()->getIdentity()) {
+            return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
+        }
+
+        $request = $this->getRequest();
+
+        $identity   = $request->getPost('identity');
+        $credential = $request->getPost('credential');
+        $redirect   = $request->getPost('redirect', $request->getQuery('redirect', false));
+
+        $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-login');
+        $translator     = $this->getServiceLocator()->get('Translator');
+
+        $authService = $this->getAuthenticationService();
+
+        $bcrypt = new Bcrypt();
+        $bcrypt->setCost($this->getOptions()->getPasswordCost());
+
+        $adapter = $authService->getAdapter();
+        $adapterOptions = $adapter->getOptions();
+        $adapterOptions->setCredentialCallable(function(User $user, $passwordGiven) use ($bcrypt) {
+            return $bcrypt->verify($passwordGiven, $user->getPassword());
+        });
+
+        $identityFields = $this->getOptions()->getAuthIdentityFields();
+        $emailValidator = new EmailAddress();
+        if (in_array('email', $identityFields) && $emailValidator->isValid($identity)) {
+            $adapterOptions->setIdentityProperty('email');
+        } else {
+            $adapterOptions->setIdentityProperty('username');
+        }
+
+        $adapter->setIdentityValue($identity);
+        $adapter->setCredentialValue($credential);
+        $authResult = $authService->authenticate();
+
+        if (!$authResult->isValid()) {
+            switch ($authResult->getCode()) {
+                case Result::FAILURE:
+                    $flashMessenger->addErrorMessage($translator->translate('Authentication Failure.', static::TRANSLATOR_TEXT_DOMAIN));
+                    break;
+                case Result::FAILURE_IDENTITY_NOT_FOUND:
+                    $flashMessenger->addErrorMessage($translator->translate('A record with the supplied identity could not be found.', static::TRANSLATOR_TEXT_DOMAIN));
+                    break;
+                case Result::FAILURE_IDENTITY_AMBIGUOUS:
+                    $flashMessenger->addErrorMessage($translator->translate('More than one record matches the supplied identity.', static::TRANSLATOR_TEXT_DOMAIN));
+                    break;
+                case Result::FAILURE_CREDENTIAL_INVALID:
+                    $flashMessenger->addErrorMessage($translator->translate('Supplied credential is invalid.', static::TRANSLATOR_TEXT_DOMAIN));
+                    break;
+                case Result::FAILURE_UNCATEGORIZED:
+                    $flashMessenger->addErrorMessage($translator->translate('Authentication uncategorized error.', static::TRANSLATOR_TEXT_DOMAIN));
+                    break;
+                default:
+                    $flashMessenger->addErrorMessage(sprintf(
+                        $translator->translate("Unknown authentication code: %d", static::TRANSLATOR_TEXT_DOMAIN),
+                        $authResult->getCode()
+                    ));
+            }
+
+            if ($this->getOptions()->getUseRedirectParameterIfPresent() && $redirect) {
+                return $this->redirect()->toUrl($this->url()->fromRoute($this->getOptions()->getLogoutRedirectRoute())
+                    . ($redirect ? '?redirect=' . rawurlencode($redirect): ''));
+            }
+
+            return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
+        }
+
+        $user = $authService->getIdentity();
+        if (in_array($user->getStatus(), array(User::STATUS_INACTIVE, User::STATUS_DELETED))) {
+            $authService->clearIdentity();
+            $flashMessenger->addErrorMessage($translator->translate('This account cannot be used.', static::TRANSLATOR_TEXT_DOMAIN));
+
+            return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
+        }
+
+        if ($this->getOptions()->getUseRedirectParameterIfPresent() && $redirect) {
+            return $this->redirect()->toUrl($redirect);
+        }
+
+        return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
     }
 
     public function logoutAction()
     {
         $this->getAuthenticationService()->clearIdentity();
+
+        $redirect = $this->params()->fromQuery('redirect', false);
+
+        if ($this->getOptions()->getUseRedirectParameterIfPresent() && $redirect) {
+            return $this->redirect()->toUrl($redirect);
+        }
+
         return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
+    }
+
+    public function changepasswordAction()
+    {
+        if (!$this->getAuthenticationService()->hasIdentity()) {
+            return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
+        }
+
+        return array();
     }
 
     /**
@@ -234,6 +382,56 @@ class UserController extends AbstractActionController
     public function setOptions(ModuleOptions $options)
     {
         $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get registerForm
+     *
+     * @return Form
+     */
+    public function getRegisterForm()
+    {
+        if (!$this->registerForm instanceof Form) {
+            $this->setRegisterForm($this->getServiceLocator()->get('atansuser_register_form'));
+        }
+        return $this->registerForm;
+    }
+
+    /**
+     * Set registerForm
+     *
+     * @param  Form $registerForm
+     * @return UserController
+     */
+    public function setRegisterForm(Form $registerForm)
+    {
+        $this->registerForm = $registerForm;
+        return $this;
+    }
+
+    /**
+     * Get userService
+     *
+     * @return UserService
+     */
+    public function getUserService()
+    {
+        if (!$this->userService instanceof UserService) {
+            $this->setUserService($this->getServiceLocator()->get('atansuser_user_service'));
+        }
+        return $this->userService;
+    }
+
+    /**
+     * Set userService
+     *
+     * @param  UserService $userService
+     * @return UserController
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
         return $this;
     }
 }

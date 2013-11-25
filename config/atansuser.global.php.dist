@@ -3,28 +3,38 @@
 return array(
     'atansuser' => array(
         /**
-         * 是否開放用戶註冊
+         * Enable registration
          */
         // 'enable_registration' => true,
 
         /**
-         * 用戶默認角色
+         * User default roles
          */
-        // 'user_default_roles'  => array('member'),
+        // 'user_default_roles'  => array(),
 
         /**
-         * 登入重定向路由
+         * User login redirect route
          */
         // 'login_redirect_route' => 'atansuser',
 
         /**
-         * 登入重定向路由
+         * User logout redirect rote
          */
         // 'logout_redirect_route' => 'atansuser/login',
 
         /**
-         * 用戶首頁模板
+         * User index template
          */
         // 'user_index_template' => 'atans-user/user/index',
+
+        /**
+         * Use redirect parameter if present
+         */
+        // 'use_redirect_parameter_if_present' => true,
+
+        /**
+         * User password cost
+         */
+        // 'password_cost' => 14,
     ),
 );

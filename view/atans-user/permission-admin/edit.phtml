@@ -1,5 +1,7 @@
 <?php
-$title = $this->translate('Edit permission');
+namespace AtansUser;
+
+$title = $this->translate('Edit permission', __NAMESPACE__);
 $this->headTitle($title);
 
 $form = $this->form;
@@ -7,50 +9,63 @@ $form->setAttribute('action', $this->url('zfcadmin/user/permission/edit', array(
 $form->prepare();
 ?>
 
-<h3>
-    <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
-        <i class="icon-chevron-left"></i>
-    </a>
+<h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
-</h3>
 
-<hr>
+    <small class="pull-right">
+        <a href="<?php echo $this->url('zfcadmin/user')?>">
+            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+        </a>
+        &gt;
+        <a href="<?php echo $this->url('zfcadmin/user')?>">
+            <?php echo $this->translate('Permission Management', __NAMESPACE__) ?>
+        </a>
+        &gt;
+        <?php echo $this->escapeHtml($title) ?>
+    </small>
+</h4>
 
 <?php echo $this->form()->openTag($form) ?>
-    <?php echo $this->formHidden($form->get('id')) ?>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <?php $inputFilter = $form->getInputFilter(); ?>
+        <?php foreach ($form as $element): ?>
+            <?php if ($element instanceof \Zend\Form\Element\Hidden): ?>
+                <?php echo $this->formElement($element) ?>
+            <?php else: ?>
+                <?php $elementMessages = $element->getMessages(); ?>
+                <div class="form-group <?php echo ($elementMessages ? ' has-error':'')?>">
+                    <div class="control-label col-lg-3 col-md-3 col-sm-3">
+                        <?php if ($inputFilter->get($element->getName())->isRequired()): ?>
+                            <span class="text-danger">*</span>
+                        <?php endif ?>
 
+                        <?php echo $this->escapeHtml($this->translate($element->getLabel(), __NAMESPACE__)) ?>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <?php echo $this->formElement($element) ?>
 
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('名稱') ?>
-        </div>
-        <div class="controls">
-            <?php echo $this->formInput($form->get('name')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('name')) ?>
+                        <?php if ($elementMessages): ?>
+                            <div class="help-block">
+                                <?php echo $this->htmlList($elementMessages, false, array('class' => 'list-unstyled')) ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            <?php endif ?>
+        <?php endforeach ?>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6">
+                <button class="btn btn-primary" type="submit">
+                    <?php echo $this->translate('Submit', __NAMESPACE__) ?>
+                </button>
+                <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
+                    <?php echo $this->translate('Cancel', __NAMESPACE__) ?>
+                </a>
             </div>
         </div>
     </div>
-
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $this->translate('描述') ?>
-        </div>
-        <div class="controls">
-            <?php echo $this->formInput($form->get('description')) ?>
-            <div class="help-block">
-                <?php echo $this->formElementErrors($form->get('description')) ?>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button class="btn btn-primary" type="submit">
-            <?php echo $this->translate('提交') ?>
-        </button>
-        <a class="btn" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
-            <?php echo $this->translate('取消') ?>
-        </a>
-    </div>
-
+</div>
 <?php echo $this->form()->closeTag() ?>

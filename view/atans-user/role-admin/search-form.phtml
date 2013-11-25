@@ -1,0 +1,30 @@
+<?php
+namespace AtansUser;
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('zfcadmin/user/role'));
+$form->prepare();
+?>
+<?php echo $this->form()->openTag($form) ?>
+
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <?php echo $this->translate('Page size', __NAMESPACE__) ?>
+            </div>
+            <?php echo $this->formElement($form->get('size')) ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="input-group">
+            <?php echo $this->formElement($form->get('query')) ?>
+            <div class="input-group-btn">
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+<?php echo $this->form()->closeTag() ?>

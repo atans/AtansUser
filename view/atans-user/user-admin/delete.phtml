@@ -1,7 +1,7 @@
 <?php
 namespace AtansUser;
 
-$title = $this->translate('Delete permission', __NAMESPACE__);
+$title = $this->translate('Delete user', __NAMESPACE__);
 $this->headTitle($title);
 ?>
 
@@ -12,27 +12,23 @@ $this->headTitle($title);
         <a href="<?php echo $this->url('zfcadmin/user')?>">
             <?php echo $this->translate('User Management', __NAMESPACE__) ?>
         </a>
-        &gt;
-        <a href="<?php echo $this->url('zfcadmin/user')?>">
-            <?php echo $this->translate('Permission Management', __NAMESPACE__) ?>
-        </a>
-        &gt;
-        <?php echo $this->escapeHtml($title) ?>
+        &gt; <?php echo $this->escapeHtml($title) ?>
     </small>
 </h4>
 
-<form action="<?php echo $this->url('zfcadmin/user/permission/delete', array('id' => $permission->getId())) ?>" method="post">
+<form action="<?php echo $this->url('zfcadmin/user/delete', array('id' => $user->getId())) ?>" method="post">
 
     <input name="delete" type="hidden" value="Yes">
+
     <div class="panel panel-default">
         <div class="panel-body">
-            <?php echo sprintf($this->translate("Are your sure you want to delete permission '%s' ?", __NAMESPACE__), $permission->getName())?>
+                <?php echo sprintf($this->translate("Are you sure you want to delete user '%s' ?", __NAMESPACE__), $user->getUsername())?>
         </div>
         <div class="panel-footer">
             <button class="btn btn-danger" type="submit">
                 <?php echo $this->translate('Delete', __NAMESPACE__) ?>
             </button>
-            <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
+            <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user') ?>">
                 <?php echo $this->translate('Cancel', __NAMESPACE__) ?>
             </a>
         </div>

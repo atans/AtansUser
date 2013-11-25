@@ -11,15 +11,18 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
     {
         parent::__construct('login-form');
 
-        $username = new Element\Text('username');
+        $username = new Element\Text('identity');
         $username->setLabel('Username')
                  ->setAttribute('class', 'form-control');
         $this->add($username);
 
-        $password = new Element\Password('password');
+        $password = new Element\Password('credential');
         $password->setLabel('Password')
                  ->setAttribute('class', 'form-control');
         $this->add($password);
+
+        $next = new Element\Hidden('redirect');
+        $this->add($next);
     }
 
     /**
@@ -31,15 +34,22 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
     public function getInputFilterSpecification()
     {
         return array(
-            'username' => array(
+            'identity' => array(
                 'required' => true,
                 'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
             ),
-            'password' => array(
+            'credential' => array(
                 'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+            ),
+            'redirect' => array(
+                'required' => false,
                 'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),

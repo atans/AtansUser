@@ -1,5 +1,7 @@
 <?php
-$title = $this->translate('Permission Management');
+namespace AtansUser;
+
+$title = $this->translate('Permission Management', __NAMESPACE__);
 $this->headTitle($title);
 
 echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-permission-admin-index'));
@@ -7,38 +9,69 @@ echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-permission
 
 <h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
+
     <small class="pull-right">
-        <a href="<?php echo $this->url('zfcadmin/user')?>"><?php echo $this->translate('User management') ?></a> &gt; <?php echo $this->escapeHtml($title) ?>
+        <a href="<?php echo $this->url('zfcadmin/user')?>">
+            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+        </a>
+        &gt;
+        <?php echo $this->escapeHtml($title) ?>
     </small>
 </h4>
 
-    <p>
-        <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission/add') ?>">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a class="btn btn-default btn-sm" href="<?php echo $this->url('zfcadmin/user/permission/add') ?>">
             <i class="glyphicon glyphicon-plus"></i>
-            <?php echo $this->translate('Add permission') ?>
+            <?php echo $this->translate('Add permission', __NAMESPACE__) ?>
         </a>
-    </p>
-
-<?php if (count($permissions) > 0) : ?>
-    <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th class="span1">#</th>
-            <th class="span5"><?php echo $this->translate('Permission name') ?></th>
-            <th class="span5"><?php echo $this->translate('Roles') ?></th>
-            <th class="span1"><?php echo $this->translate('Actions') ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        foreach ($permissions as $permission) {
-            echo $this->partial('atans-user/permission-admin/partial', array('permission' => $permission));
-        }
-        ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <div class="alert">
-        <h4><?php echo $this->translate('Could not find any permissions.') ?></h4>
     </div>
-<?php endif ?>
+    <?php if (count($paginator) > 0) : ?>
+        <div class="panel-body">
+            <?php echo $this->render('atans-user/permission-admin/search-form', array('form' => $form)) ?>
+        </div>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="col-lg-1 col-md-1 col-sm-1">#</th>
+                <th class="col-lg-4 col-md-4 col-sm-4"><?php echo $this->translate('Permission name', __NAMESPACE__) ?></th>
+                <th class="col-lg-5 col-md-5 col-sm-5"><?php echo $this->translate('Roles', __NAMESPACE__) ?></th>
+                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', __NAMESPACE__) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($paginator as $permission) {
+                echo $this->partial('atans-user/permission-admin/partial', array('permission' => $permission));
+            }
+            ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+    <div class="panel-body">
+        <?php echo $this->render('atans-user/permission-admin/search-form', array('form' => $form)) ?>
+        <br>
+
+        <div class="alert alert-info">
+            <?php echo $this->translate('Could not find any permissions.', __NAMESPACE__) ?>
+        </div>
+    </div>
+    <?php endif ?>
+</div>
+
+<?php
+if (count($this->paginator)) {
+    echo $this->paginationControl(
+        $this->paginator,
+        'Sliding',
+        'pagination/query',
+        array(
+            'route' => 'zfcadmin/user/permission',
+            'options' => array(
+                'query' => $form->getData(),
+            ),
+        )
+    );
+}
+?>

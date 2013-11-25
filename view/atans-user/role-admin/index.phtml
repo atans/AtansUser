@@ -1,50 +1,76 @@
 <?php
-$title = $this->translate('角色管理');
+namespace AtansUser;
+
+$title = $this->translate('Role Management', __NAMESPACE__);
 $this->headTitle($title);
 
+echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-role-admin-index'));
 ?>
-<?php if ($flashMessages): ?>
-<div class="alert alert-info">
-    <a class="close" data-dismiss="alert" href="#">&times;</a>
-    <ul>
-    <?php foreach ($flashMessages as $flashMessage): ?>
-        <li><?php echo $this->escapeHtml($flashMessage) ?></li>
-    <?php endforeach ?>
-    </ul>
-</div>
-<?php endif ?>
 
 <h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
     <small class="pull-right">
+        <a href="<?php echo $this->url('zfcadmin/user')?>">
+            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+        </a>
+        &gt;
+        <?php echo $this->escapeHtml($title) ?>
     </small>
 </h4>
 
-<a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role/add') ?>">
-    <i class="glyphicon glyphicon-plus"></i>
-    <?php echo $this->translate('Add Permission') ?>
-</a>
 
-<?php if (count($roles) > 0) : ?>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a class="btn btn-default btn-sm" href="<?php echo $this->url('zfcadmin/user/role/add') ?>">
+            <i class="glyphicon glyphicon-plus"></i>
+            <?php echo $this->translate('Add role', __NAMESPACE__) ?>
+        </a>
+    </div>
+<?php if (count($paginator) > 0) : ?>
+    <div class="panel-body">
+        <?php echo $this->render('atans-user/role-admin/search-form', array('form' => $form)) ?>
+    </div>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th class="span1">#</th>
-                <th class="span2"><?php echo $this->translate('角色') ?></th>
-                <th class="span8"><?php echo $this->translate('權限') ?></th>
-                <th class="span1"><?php echo $this->translate('操作') ?></th>
+                <th class="col-lg-1 col-md-1 col-sm-1">#</th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Role', __NAMESPACE__) ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Parent role', __NAMESPACE__) ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Permissions', __NAMESPACE__) ?></th>
+                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', __NAMESPACE__) ?></th>
             </tr>
         </thead>
         <tbody>
             <?php
-            foreach ($roles as $role) {
+            foreach ($paginator as $role) {
                 echo $this->partial('atans-user/role-admin/partial', array('role' => $role));
             }
             ?>
         </tbody>
     </table>
 <?php else: ?>
-    <div class="alert">
-        <h4><?php echo $this->translate('找不到任何角色') ?></h4>
+    <div class="panel-body">
+        <?php echo $this->render('atans-user/role-admin/search-form', array('form' => $form)) ?>
+        <br>
+        <div class="alert alert-info">
+            <?php echo $this->translate('Could not find any roles.', __NAMESPACE__) ?>
+        </div>
     </div>
 <?php endif ?>
+</div>
+
+<?php
+if (count($this->paginator)) {
+    echo $this->paginationControl(
+        $this->paginator,
+        'Sliding',
+        'pagination/query',
+        array(
+            'route' => 'zfcadmin/user/role',
+            'options' => array(
+                'query' => $form->getData(),
+            ),
+        )
+    );
+}
+?>

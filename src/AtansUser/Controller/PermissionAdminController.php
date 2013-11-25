@@ -16,6 +16,11 @@ class PermissionAdminController extends AbstractActionController
     const FM_NS = 'atansuser-permission-admin-index';
 
     /**
+     * Translator text domain
+     */
+    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
+
+    /**
      * @var EntityManager
      */
     protected $entityManager;
@@ -30,20 +35,34 @@ class PermissionAdminController extends AbstractActionController
     /**
      * @var Form
      */
-    protected $permissionAddForm;
+    protected $permissionForm;
 
     /**
      * @var Form
      */
-    protected $permissionEditForm;
+    protected $permissionSearchForm;
 
     public function indexAction()
     {
-        $entityManager        = $this->getEntityManager();
-        $permissionRepository = $entityManager->getRepository($this->entities['Permission']);
+        $userRepository = $this->getEntityManager()->getRepository($this->entities['Permission']);
+        $request        = $this->getRequest();
+
+        $data = array(
+            'page'   => $request->getQuery('page', 1),
+            'size'   => $request->getQuery('size', 10),
+            'query'  => $request->getQuery('query', ''),
+            'order'  => $request->getQuery('order', 'DESC'),
+        );
+
+        $form = $this->getPermissionSearchForm();
+        $form->setData($data);
+        $form->isValid();
+
+        $paginator = $userRepository->pagination($form->getData());
 
         return array(
-            'permissions' => $permissionRepository->findAll()
+            'form'      => $form,
+            'paginator' => $paginator,
         );
     }
 
@@ -54,7 +73,7 @@ class PermissionAdminController extends AbstractActionController
 
         $permission = new Permission();
 
-        $form = $this->getPermissionAddForm();
+        $form = $this->getPermissionForm();
         $form->bind($permission);
 
         $request = $this->getRequest();
@@ -68,7 +87,7 @@ class PermissionAdminController extends AbstractActionController
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
                     ->addSuccessMessage(sprintf(
-                        $translator->translate("Permission'%s' was successfully created."),
+                        $translator->translate("Permission '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
                         $permission->getName()
                     ));
 
@@ -92,15 +111,15 @@ class PermissionAdminController extends AbstractActionController
         if (!$permission) {
             $this->flashMessenger()
                  ->setNamespace(self::FM_NS)
-                 ->addMessage(sprintf(
-                     $translator->translate("Permission '%d' does not found."),
+                 ->addErrorMessage(sprintf(
+                     $translator->translate("Permission does not found. '#%d'"),
                      $id
                   ));
 
             return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
 
-        $form = $this->getPermissionEditForm();
+        $form = $this->getPermissionForm();
         $form->bind($permission);
 
         $request = $this->getRequest();
@@ -108,25 +127,17 @@ class PermissionAdminController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                if ($permissionRepository->noNameExists($permission->getName(), $permission->getId())) {
-                    $entityManager->persist($permission);
-                    $entityManager->flush();
+                $entityManager->persist($permission);
+                $entityManager->flush();
 
-                    $this->flashMessenger()
-                        ->setNamespace(self::FM_NS)
-                        ->addMessage(sprintf(
-                            $translator->translate("Permission '%s' was successfully updated"),
-                            $permission->getName()
-                        ));
-
-                    return $this->redirect()->toRoute('zfcadmin/user/permission');
-                } else {
-                    $form->get('name')->setMessages(array(sprintf(
-                        $translator->translate("Permission'%s' does exist."),
+                $this->flashMessenger()
+                    ->setNamespace(self::FM_NS)
+                    ->addSuccessMessage(sprintf(
+                        $translator->translate("Permission '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
                         $permission->getName()
-                    )));
-                }
+                    ));
 
+                return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
         }
 
@@ -146,8 +157,8 @@ class PermissionAdminController extends AbstractActionController
         if (!$permission) {
             $this->flashMessenger()
                  ->setNamespace(self::FM_NS)
-                 ->addMessage(sprintf(
-                     $translator->translate("Permission '%d' does not found"),
+                 ->addErrorMessage(sprintf(
+                     $translator->translate("Permission does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
                      $id
                  ));
 
@@ -163,8 +174,8 @@ class PermissionAdminController extends AbstractActionController
 
                 $this->flashMessenger()
                      ->setNamespace(self::FM_NS)
-                     ->addMessage(sprintf(
-                         $translator->translate("Permission '%s' was successfully deleted"),
+                     ->addSuccessMessage(sprintf(
+                         $translator->translate("Permission '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
                          $permission->getName()
                      ));
 
@@ -194,7 +205,7 @@ class PermissionAdminController extends AbstractActionController
      * Set entityManager
      *
      * @param  EntityManager $entityManager
-     * @return PermissionController
+     * @return PermissionAdminController
      */
     public function setEntityManager(EntityManager $entityManager)
     {
@@ -203,52 +214,52 @@ class PermissionAdminController extends AbstractActionController
     }
 
     /**
-     * Get permissionAddForm
+     * Get permissionForm
      *
      * @return Form
      */
-    public function getPermissionAddForm()
+    public function getPermissionForm()
     {
-        if (!$this->permissionAddForm instanceof Form) {
-            $this->setPermissionAddForm($this->getServiceLocator()->get('atansuser_permission_add_form'));
+        if (!$this->permissionForm instanceof Form) {
+            $this->setPermissionForm($this->getServiceLocator()->get('atansuser_permission_form'));
         }
-        return $this->permissionAddForm;
+        return $this->permissionForm;
     }
 
     /**
-     * Set permissionAddForm
+     * Set permissionForm
      *
-     * @param  Form $permissionAddForm
-     * @return PermissionController
+     * @param  Form $permissionForm
+     * @return PermissionAdminController
      */
-    public function setPermissionAddForm(Form $permissionAddForm)
+    public function setPermissionForm(Form $permissionForm)
     {
-        $this->permissionAddForm = $permissionAddForm;
+        $this->permissionForm = $permissionForm;
         return $this;
     }
 
     /**
-     * Get permissionEditForm
+     * Get permissionSearchForm
      *
      * @return Form
      */
-    public function getPermissionEditForm()
+    public function getPermissionSearchForm()
     {
-        if (!$this->permissionEditForm instanceof Form) {
-            $this->setPermissionEditForm($this->getServiceLocator()->get('atansuser_permission_edit_form'));
+        if (!$this->permissionSearchForm instanceof Form) {
+            $this->setPermissionSearchForm($this->getServiceLocator()->get('atansuser_permission_search_form'));
         }
-        return $this->permissionEditForm;
+        return $this->permissionSearchForm;
     }
 
     /**
-     * Set permissionEditForm
+     * Set permissionSearchForm
      *
-     * @param  Form $permissionEditForm
-     * @return PermissionController
+     * @param  Form $permissionSearchForm
+     * @return PermissionAdminController
      */
-    public function setPermissionEditForm(Form $permissionEditForm)
+    public function setPermissionSearchForm($permissionSearchForm)
     {
-        $this->permissionEditForm = $permissionEditForm;
+        $this->permissionSearchForm = $permissionSearchForm;
         return $this;
     }
 }

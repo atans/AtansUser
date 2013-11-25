@@ -5,8 +5,8 @@ use AtansUser\Entity\User;
 use Zend\Stdlib\AbstractOptions;
 
 class ModuleOptions extends AbstractOptions implements
-    RegistrationInterface,
-    UserInterface
+    RegistrationOptionsInterface,
+    UserOptionsInterface
 {
     /**
      * Turn off strict options mode
@@ -21,12 +21,22 @@ class ModuleOptions extends AbstractOptions implements
     /**
      * @var array
      */
-    protected $userDefaultRoles = array('member');
+    protected $userDefaultRoles = array();
 
     /**
      * @var string
      */
     protected $userDefaultStatus = User::STATUS_ACTIVE;
+
+    /**
+     * @var bool
+     */
+    protected $loginAfterRegistration = true;
+
+    /**
+     * @var array
+     */
+    protected $authIdentityFields = array('username', 'email');
 
     /**
      * @var string
@@ -44,7 +54,17 @@ class ModuleOptions extends AbstractOptions implements
     protected $userIndexTemplate = 'atans-user/user/index';
 
     /**
-     * Set enable user registartion
+     * @var bool
+     */
+    protected $useRedirectParameterIfPresent = true;
+
+    /**
+     * @var int
+     */
+    protected $passwordCost = 14;
+
+    /**
+     * Set enable user registration
      *
      * @param  bool $enableRegistration
      * @return ModuleOptions
@@ -56,7 +76,7 @@ class ModuleOptions extends AbstractOptions implements
     }
 
     /**
-     * Get enable user registartion
+     * Get enable user registration
      *
      * @return bool
      */
@@ -107,6 +127,52 @@ class ModuleOptions extends AbstractOptions implements
     public function getUserDefaultStatus()
     {
         return $this->userDefaultStatus;
+    }
+
+    /**
+     * Set loginAfterRegistration
+     *
+     * @param  boolean $loginAfterRegistration
+     * @return ModuleOptions
+     */
+    public function setLoginAfterRegistration($loginAfterRegistration)
+    {
+        $this->loginAfterRegistration = $loginAfterRegistration;
+
+        return $this;
+    }
+
+    /**
+     * Get loginAfterRegistration
+     *
+     * @return boolean
+     */
+    public function getLoginAfterRegistration()
+    {
+        return $this->loginAfterRegistration;
+    }
+
+    /**
+     * Set authIdentityFields
+     *
+     * @param  array $authIdentityFields
+     * @return ModuleOptions
+     */
+    public function setAuthIdentityFields($authIdentityFields)
+    {
+        $this->authIdentityFields = $authIdentityFields;
+
+        return $this;
+    }
+
+    /**
+     * Get authIdentityFields
+     *
+     * @return array
+     */
+    public function getAuthIdentityFields()
+    {
+        return $this->authIdentityFields;
     }
 
     /**
@@ -173,5 +239,49 @@ class ModuleOptions extends AbstractOptions implements
     public function getUserIndexTemplate()
     {
         return $this->userIndexTemplate;
+    }
+
+    /**
+     * Set useRedirectParameterIfPresent
+     *
+     * @param  boolean $useRedirectParameterIfPresent
+     * @return ModuleOptions
+     */
+    public function setUseRedirectParameterIfPresent($useRedirectParameterIfPresent)
+    {
+        $this->useRedirectParameterIfPresent = $useRedirectParameterIfPresent;
+        return $this;
+    }
+
+    /**
+     * Get useRedirectParameterIfPresent
+     *
+     * @return boolean
+     */
+    public function getUseRedirectParameterIfPresent()
+    {
+        return $this->useRedirectParameterIfPresent;
+    }
+
+    /**
+     * Set passwordCost
+     *
+     * @param  int $passwordCost
+     * @return ModuleOptions
+     */
+    public function setPasswordCost($passwordCost)
+    {
+        $this->passwordCost = $passwordCost;
+        return $this;
+    }
+
+    /**
+     * Get passwordCost
+     *
+     * @return int
+     */
+    public function getPasswordCost()
+    {
+        return $this->passwordCost;
     }
 }

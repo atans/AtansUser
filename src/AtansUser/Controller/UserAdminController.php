@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
+use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class UserAdminController extends AbstractActionController
@@ -17,6 +18,11 @@ class UserAdminController extends AbstractActionController
      * @var string
      */
     const FM_NS = 'atansuser-user-admin-index';
+
+    /**
+     * Translator text domain
+     */
+    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
      * @var AuthenticationService
@@ -51,18 +57,34 @@ class UserAdminController extends AbstractActionController
      */
     protected $userEditForm;
 
+    /**
+     * @var Form
+     */
+    protected $userSearchForm;
+
     public function indexAction()
     {
         $userRepository = $this->getEntityManager()->getRepository($this->entities['User']);
-        $returns = array(
-            'users'         => $userRepository->findAll(),
-            'flashMessages' => null,
-        );
-        if ($flashMessages = $this->flashMessenger()->setNamespace(self::FM_NS)->getMessages()) {
-            $returns['flashMessages'] = $flashMessages;
-        }
+        $request        = $this->getRequest();
 
-        return $returns;
+        $data = array(
+            'page'   => $request->getQuery('page', 1),
+            'size'   => $request->getQuery('size', 10),
+            'query'  => $request->getQuery('query', ''),
+            'status' => $request->getQuery('status', ''),
+            'order'  => $request->getQuery('order', 'DESC'),
+        );
+
+        $form = $this->getUserSearchForm();
+        $form->setData($data);
+        $form->isValid();
+
+        $paginator = $userRepository->pagination($form->getData());
+
+        return array(
+            'form'      => $form,
+            'paginator' => $paginator,
+        );
     }
 
     public function addAction()
@@ -74,19 +96,7 @@ class UserAdminController extends AbstractActionController
 
         $user = new User();
         $user->setStatus($this->getOptions()->getUserDefaultStatus());
-
-        // Role string to id
-//        $rolesValue = array();
-//        $roleRepository = $entityManager->getRepository($this->entities['Role']);
-//        foreach ($this->getOptions()->getUserDefaultRoles() as $roleName) {
-//            $role = $roleRepository->findOneBy(array('name' => $roleName));
-//            if ($role) {
-//                $rolesValue[] = $role->getId();
-//            }
-//        }
-
         $form->bind($user);
-        //$form->get('userRoles')->setValue($rolesValue);
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -98,7 +108,7 @@ class UserAdminController extends AbstractActionController
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
                     ->addSuccessMessage(sprintf(
-                        $translator->translate("User '%s' was successfully created."),
+                        $translator->translate("User '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
                         $user->getUsername()
                     ));
 
@@ -116,36 +126,38 @@ class UserAdminController extends AbstractActionController
         $entityManager = $this->getEntityManager();
         $id            = (int)$this->params()->fromRoute('id');
         $translator    = $this->getServiceLocator()->get('Translator');
+        $request       = $this->getRequest();
 
         $user = $entityManager->find($this->entities['User'], $id);
         if (!$user) {
             $this->flashMessenger()
                 ->setNamespace(self::FM_NS)
-                ->addMessage(sprintf($translator->translate("User '%d' does not found"), $id));
+                ->addMessage(sprintf(
+                    $translator->translate("User does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                    $id
+                ));
 
             return $this->redirect()->toRoute('zfcadmin/user');
         }
 
         $form = $this->getUserEditForm();
         $form->bind($user);
-
-        $request = $this->getRequest();
         if ($request->isPost()) {
-            $postData = $request->getPost();
-            if (!isset($postData['userRoles'])) {
-                $postData['userRoles'] = array();
-            }
-            $form->setData($postData);
+            $form->setData($request->getPost());
             if ($form->isValid()) {
+                $data = $form->getData(FormInterface::VALUES_AS_ARRAY);
+                if (strlen($data['newPassword'])) {
+                    $user->setPassword($data['newPassword']);
+                }
                 $entityManager->persist($user);
                 $entityManager->flush();
 
                 $this->flashMessenger()
-                    ->setNamespace(self::FM_NS)
-                    ->addSuccessMessage(sprintf(
-                        $translator->translate("User '%s' was successfully updated."),
-                        $user->getUsername()
-                    ));
+                     ->setNamespace(self::FM_NS)
+                     ->addSuccessMessage(sprintf(
+                         $translator->translate("User '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
+                         $user->getUsername()
+                     ));
 
                 return $this->redirect()->toRoute('zfcadmin/user');
             }
@@ -153,6 +165,44 @@ class UserAdminController extends AbstractActionController
 
         return array(
             'form' => $form,
+            'user' => $user,
+        );
+    }
+
+    public function deleteAction()
+    {
+        $entityManager = $this->getEntityManager();
+        $id            = (int)$this->params()->fromRoute('id');
+        $translator    = $this->getServiceLocator()->get('Translator');
+        $request       = $this->getRequest();
+
+        $user = $entityManager->find($this->entities['User'], $id);
+        if (!$user) {
+            $this->flashMessenger()
+                ->setNamespace(self::FM_NS)
+                ->addMessage(sprintf($translator->translate("User does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN), $id));
+
+            return $this->redirect()->toRoute('zfcadmin/user');
+        }
+
+        if ($request->isPost()) {
+            $delete = $request->getPost('delete', 'No');
+            if ($delete == 'Yes') {
+                $entityManager->remove($user);
+                $entityManager->flush();
+
+                $this->flashMessenger()
+                     ->setNamespace(self::FM_NS)
+                     ->addSuccessMessage(sprintf(
+                         $translator->translate("User '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
+                         $user->getUsername()
+                     ));
+
+                return $this->redirect()->toRoute('zfcadmin/user');
+            }
+        }
+
+        return array(
             'user' => $user,
         );
     }
@@ -301,6 +351,31 @@ class UserAdminController extends AbstractActionController
     public function setUserEditForm($userEditForm)
     {
         $this->userEditForm = $userEditForm;
+        return $this;
+    }
+
+    /**
+     * Get userSearchForm
+     *
+     * @return Form
+     */
+    public function getUserSearchForm()
+    {
+        if (!$this->userSearchForm instanceof Form) {
+            $this->setUserSearchForm($this->getServiceLocator()->get('atansuser_user_search_form'));
+        }
+        return $this->userSearchForm;
+    }
+
+    /**
+     * Set userSearchForm
+     *
+     * @param  Form $userSearchForm
+     * @return UserAdminController
+     */
+    public function setUserSearchForm($userSearchForm)
+    {
+        $this->userSearchForm = $userSearchForm;
         return $this;
     }
 }

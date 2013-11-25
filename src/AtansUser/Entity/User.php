@@ -10,7 +10,7 @@ use ZfcRbac\Identity\IdentityInterface;
 /**
  * User
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="UserRepository")
  * @ORM\Table(
  *  name="user",
  *  options={"collate"="utf8_general_ci"},
@@ -20,6 +20,7 @@ use ZfcRbac\Identity\IdentityInterface;
  *  }
  * )
  */
+
 class User implements IdentityInterface
 {
     const STATUS_ACTIVE   = 'active';
@@ -183,6 +184,18 @@ class User implements IdentityInterface
             }
         }
         return $roles;
+    }
+
+    /**
+     * Add user role
+     *
+     * @param  Role $role
+     * @return User
+     */
+    public function addUserRole(Role $role)
+    {
+        $this->userRoles->add($role);
+        return $this;
     }
 
     /**

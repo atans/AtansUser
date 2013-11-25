@@ -3,20 +3,24 @@ namespace AtansUser\Form;
 
 use AtansUser\Entity\User;
 use Doctrine\ORM\EntityManager;
-use DoctrineModule\Form\Element\ObjectMultiCheckbox;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-use DoctrineModule\Validator\UniqueObject;
+use DoctrineModule\Validator\NoObjectExists;
 use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
-class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInterface
+class RegisterForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
      * @var EntityManager
      */
     protected $entityManager;
+
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
 
     /**
      * @var array
@@ -25,25 +29,14 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
         'User' => 'AtansUser\Entity\User',
     );
 
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
-
     public function __construct(ServiceManager $serviceManager)
     {
-        parent::__construct('user-form');
-        $this->setAttribute('method', 'post');
-        $this->setAttribute('class', 'form-horizontal');
+        parent::__construct('register-form');
 
         $this->setServiceManager($serviceManager);
 
-        $entityManager = $this->getEntityManager();
-        $this->setHydrator(new DoctrineObject($entityManager))
+        $this->setHydrator(new DoctrineObject($this->getEntityManager()))
              ->setObject(new User());
-
-        $id = new Element\Hidden('id');
-        $this->add($id);
 
         $username = new Element\Text('username');
         $username->setLabel('Username')
@@ -60,32 +53,13 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                  ->setAttribute('class', 'form-control');
         $this->add($password);
 
-        $userRoles = new ObjectMultiCheckbox('userRoles');
-        $userRoles->setLabel('Roles')
-                  ->setLabelAttributes(array(
-                      'class' => 'checkbox-inline'
-                  ))
-                  ->setOptions(array(
-                      'use_hidden_element' => true,
-                      'object_manager' => $entityManager,
-                      'target_class'   => 'AtansUser\Entity\Role',
-                      'property'       => 'name',
-                      'is_method'      => true,
-                      'find_method'    => array(
-                          'name' => 'findAll',
-                      ),
-                  ));
-        $this->add($userRoles);
+        $passwordVerify = new Element\Password('passwordVerify');
+        $passwordVerify->setLabel('Password verify')
+                       ->setAttribute('class', 'form-control');
+        $this->add($passwordVerify);
 
-        $status = new Element\Radio('status');
-        $status->setLabel('Status')
-               ->setLabelAttributes(array(
-                   'class' => 'radio-inline',
-               ))
-               ->setOptions(array(
-                   'value_options' => $serviceManager->get('atansuser_user_statuses'),
-               ));
-        $this->add($status);
+        $next = new Element\Hidden('redirect');
+        $this->add($next);
     }
 
     /**
@@ -96,30 +70,29 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      */
     public function getInputFilterSpecification()
     {
-        $entityManager = $this->getEntityManager();
+        $userRepository = $this->getEntityManager()->getRepository($this->entities['User']);
 
         return array(
-            'id' => array(
+            'username' => array(
                 'required' => true,
                 'filters' => array(
-                    array('name' => 'int'),
-                ),
-            ),
-            'username' => array(
-                'requred' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name' => 'DoctrineModule\Validator\UniqueObject',
+                        'name' => 'StringLength',
                         'options' => array(
-                            'object_manager'    => $entityManager,
-                            'object_repository' => $entityManager->getRepository($this->entities['User']),
-                            'fields' => array('username'),
+                            'min' => 3,
+                            'max' => 255,
+                        ),
+                    ),
+                    array(
+                        'name' => 'DoctrineModule\Validator\NoObjectExists',
+                        'options' => array(
+                            'object_repository' => $userRepository,
+                            'fields'            => 'username',
                             'messages' => array(
-                                UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The username already taken',
+                                NoObjectExists::ERROR_OBJECT_FOUND => 'The username already taken',
                             ),
                         ),
                     ),
@@ -128,15 +101,13 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
             'email' => array(
                 'required' => true,
                 'validators' => array(
-                    array('name' => 'EmailAddress'),
                     array(
-                        'name' => 'DoctrineModule\Validator\UniqueObject',
+                        'name' => 'DoctrineModule\Validator\NoObjectExists',
                         'options' => array(
-                            'object_manager'    => $entityManager,
-                            'object_repository' => $entityManager->getRepository($this->entities['User']),
-                            'fields' => array('email'),
+                            'object_repository' => $userRepository,
+                            'fields'            => 'email',
                             'messages' => array(
-                                UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The email already taken',
+                                NoObjectExists::ERROR_OBJECT_FOUND => 'The email already taken',
                             ),
                         ),
                     ),
@@ -147,12 +118,37 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                 'filters' => array(
                     array('name' => 'StringTrim'),
                 ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'min' => 6,
+                        ),
+                    ),
+                ),
             ),
-            'userRoles' => array(
-                'required' => false,
-            ),
-            'status' => array(
+            'passwordVerify' => array(
                 'required' => true,
+                'filters' => array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'min' => 6,
+                        ),
+                    ),
+                    array(
+                        'name' => 'Identical',
+                        'options' => array(
+                            'token' => 'password'
+                        ),
+                    ),
+                ),
+            ),
+            'redirect' => array(
+                'required' => false,
             ),
         );
     }
@@ -174,9 +170,9 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      * Set entityManager
      *
      * @param  EntityManager $entityManager
-     * @return UserAddForm
+     * @return RegisterForm
      */
-    public function setEntityManager($entityManager)
+    public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
         return $this;
@@ -196,7 +192,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      * Set serviceManager
      *
      * @param  ServiceManager $serviceManager
-     * @return UserAddForm
+     * @return RegisterForm
      */
     public function setServiceManager($serviceManager)
     {

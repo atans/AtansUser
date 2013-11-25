@@ -9,6 +9,10 @@ return array(
                 'identity_class'      => 'AtansUser\Entity\User',
                 'identity_property'   => 'username',
                 'credential_property' => 'password',
+                'credential_callable' => function ($user, $passwordGiven) {
+                    var_dump(get_class($user));
+                        exit;
+                },
             ),
         ),
         'driver' => array(
@@ -23,22 +27,6 @@ return array(
                 'drivers' => array(
                     __NAMESPACE__ .'\Entity' => __NAMESPACE__ . '_driver',
                 ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'admin' => array(
-             array(
-                'label' => '用戶',
-                'route' => 'zfcadmin/user',
-            ),
-            array(
-                'label' => '權限',
-                'route' => 'zfcadmin/user/permission',
-            ),
-            array(
-                'label' => '角色',
-                'route' => 'zfcadmin/user/role',
             ),
         ),
     ),
@@ -73,20 +61,19 @@ return array(
                             ),
                         ),
                     ),
+                    'register' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/register',
+                            'defaults' => array(
+                                'action' => 'register',
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'zfcadmin' => array(
                 'child_routes' => array(
-                    'login' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => '/login[/]',
-                            'defaults' => array(
-                                'controller' => 'AtansUser\Controller\UserAdmin',
-                                'action' => 'login',
-                            ),
-                        ),
-                    ),
                     'user' => array(
                         'type' => 'segment',
                         'options' => array(
@@ -233,6 +220,16 @@ return array(
         'firewalls' => array(
             'ZfcRbac\Firewall\Route' => array(
                 array('route' => 'admin/*', 'roles' => 'admin'),
+            ),
+        ),
+    ),
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
+                'type' => 'gettext',
+                'base_dir' => __DIR__ . '/../languages',
+                'pattern' => '%s.mo',
+                'text_domain' => __NAMESPACE__,
             ),
         ),
     ),

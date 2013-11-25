@@ -7,38 +7,24 @@ use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator;
 use Zend\Paginator\Paginator;
 
-class RoleRepository extends EntityRepository
+class UserRepository extends EntityRepository
 {
-    /**
-     * Find all role without id
-     *
-     * @param  null|int $id
-     * @return array
-     */
-    public function findAllRoleWithoutId($id = null)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('r')
-            ->from($this->getEntityName(), 'r');
-
-        if (!is_null($id) && is_int($id)) {
-            $qb->where($qb->expr()->neq('r.id', ':id'))
-               ->setParameter('id', $id);
-        }
-
-        return $qb->getQuery()->getResult();
-    }
-
     public function pagination(array $data)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select('r')
-            ->from($this->getEntityName(), 'r');
+        $qb->select('u')
+            ->from($this->getEntityName(), 'u');
+
+        if (isset($data['status']) && strlen($data['status']) > 0) {
+            $qb->andWhere($qb->expr()->eq('u.status', ':status'))
+               ->setParameter('status', $data['status']);
+        }
 
         if (isset($data['query']) && strlen($queryString = trim($data['query']))) {
             $qb->andWhere($qb->expr()->orX(
-                $qb->expr()->like('r.name', ':query')
+                $qb->expr()->like('u.username', ':query'),
+                $qb->expr()->like('u.email', ':query')
             ));
             $qb->setParameter('query', "%$queryString%");
         }
@@ -47,7 +33,7 @@ class RoleRepository extends EntityRepository
         if (isset($data['order']) && in_array(strtoupper($data['order']), array('ASC', 'DESC'))) {
             $order = $data['order'];
         }
-        $qb->addOrderBy('r.id', $order);
+        $qb->addOrderBy('u.id', $order);
 
         if (!isset($data['page']) || !isset($data['size'])) {
             throw new Exception\InvalidArgumentException("'page' and 'size' are must be defined");
@@ -58,7 +44,7 @@ class RoleRepository extends EntityRepository
         ));
 
         $paginator->setCurrentPageNumber($data['page'])
-            ->setItemCountPerPage($data['size']);
+                  ->setItemCountPerPage($data['size']);
 
         return $paginator;
     }

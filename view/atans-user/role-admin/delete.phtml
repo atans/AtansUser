@@ -1,33 +1,42 @@
 <?php
-$title = $this->translate('刪除角色');
+namespace AtansUser;
+
+$title = $this->translate('Delete role', __NAMESPACE__);
 $this->headTitle($title);
 ?>
 
-<h3>
-    <a class="btn" href="<?php echo $this->url('zfcadmin/user/role') ?>">
-        <i class="icon-chevron-left"></i>
-    </a>
+<h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
-</h3>
 
-<hr>
+    <small class="pull-right">
+        <a href="<?php echo $this->url('zfcadmin/user')?>">
+            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+        </a>
+        &gt;
+        <a href="<?php echo $this->url('zfcadmin/user')?>">
+            <?php echo $this->translate('Role Management', __NAMESPACE__) ?>
+        </a>
+        &gt;
+        <?php echo $this->escapeHtml($title) ?>
+    </small>
+</h4>
 
 <form action="<?php echo $this->url('zfcadmin/user/role/delete', array('id' => $role->getId())) ?>" method="post">
 
     <input name="delete" type="hidden" value="Yes">
 
-    <p>
-        <span class="label label-important">
-            <?php echo sprintf($this->translate("確定要刪除角色 '%s' ?"), $role->getName())?>
-        </span>
-    </p>
+    <div class="panel panel-default">
+        <div class="panel-body">
+                <?php echo sprintf($this->translate("Are you sure you want to delete role '%s' ?", __NAMESPACE__), $role->getName())?>
+        </div>
 
-    <div class="form-actions">
-        <button class="btn btn-primary" type="submit">
-            <?php echo $this->translate('提交') ?>
+    <div class="panel-footer">
+        <button class="btn btn-danger" type="submit">
+            <?php echo $this->translate('Delete', __NAMESPACE__) ?>
         </button>
-        <a class="btn" href="<?php echo $this->url('zfcadmin/user/role') ?>">
-            <?php echo $this->translate('取消') ?>
+        <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role') ?>">
+            <?php echo $this->translate('Cancel', __NAMESPACE__) ?>
         </a>
+    </div>
     </div>
 </form>
