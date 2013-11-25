@@ -54,17 +54,17 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
              ->setAttribute('class', 'form-control');
         $this->add($name);
 
-        $parentRole = new ObjectSelect('parentRole');
-        $parentRole->setLabel("Parent role");
-        $parentRole->setAttribute('class', 'form-control');
-        $parentRole->setOptions(array(
+        $parent = new ObjectSelect('parent');
+        $parent->setLabel("Parent role");
+        $parent->setAttribute('class', 'form-control');
+        $parent->setOptions(array(
             'empty_option'   => sprintf('== %s ==', $translator->translate('None', static::TRANSLATOR_TEXT_DOMAIN)),
             'object_manager' => $entityManager,
             'target_class'   => 'AtansUser\Entity\Role',
             'property'       => 'name',
 
         ));
-        $this->add($parentRole);
+        $this->add($parent);
 
         $permissions = new ObjectMultiCheckbox('permissions');
         $permissions->setLabel('Permissions')
@@ -123,7 +123,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                     ),
                 ),
             ),
-            'parentRole' => array(
+            'parent' => array(
                 'required' => false,
             ),
             'permissions' => array(

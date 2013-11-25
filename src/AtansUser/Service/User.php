@@ -55,8 +55,8 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     {
         $currentUser = $this->getAuthenticationService()->getIdentity();
 
-        $oldPassword = $data['password'];
-        $newPassword = $data['newPassword'];
+        $oldPassword = $data['credential'];
+        $newPassword = $data['newCredential'];
 
         $bcrypt  = new Bcrypt();
         $bcrypt->setCost($this->getOptions()->getPasswordCost());
@@ -69,8 +69,8 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $currentUser->setPassword($password);
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
-        $this->entityManager->persist($currentUser);
-        $this->entityManager->flush();
+        $this->getEntityManager()->persist($currentUser);
+        $this->getEntityManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $currentUser));
 
         return true;
@@ -121,6 +121,19 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Get authenticationService
+     *
+     * @return AuthenticationService
+     */
+    public function getAuthenticationService()
+    {
+        if (!$this->authenticationService instanceof AuthenticationService) {
+            $this->setAuthenticationService($this->getServiceLocator()->get('Zend\Authentication\AuthenticationService'));
+        }
+        return $this->authenticationService;
+    }
+
+    /**
      * Set authenticationService
      *
      * @param  AuthenticationService $authenticationService
@@ -130,16 +143,6 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     {
         $this->authenticationService = $authenticationService;
         return $this;
-    }
-
-    /**
-     * Get authenticationService
-     *
-     * @return AuthenticationService
-     */
-    public function getAuthenticationService()
-    {
-        return $this->authenticationService;
     }
 
     /**

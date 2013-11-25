@@ -70,6 +70,15 @@ return array(
                             ),
                         ),
                     ),
+                    'change-password' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/change-password',
+                            'defaults' => array(
+                                'action' => 'change-password',
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'zfcadmin' => array(

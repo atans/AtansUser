@@ -1,4 +1,5 @@
 <?php
+use AtansUser\Entity\User;
 
 return array(
     'atansuser' => array(
@@ -11,6 +12,22 @@ return array(
          * User default roles
          */
         // 'user_default_roles'  => array(),
+
+        /**
+         * User default status
+         */
+        // 'user_default_status' => User::STATUS_ACTIVE,
+
+
+        /**
+         * Login after registration
+         */
+        // 'login_after_registration' => true,
+
+        /**
+         * Auth identity fields
+         */
+        // 'auth_identity_fields' => array('username', 'email'),
 
         /**
          * User login redirect route
@@ -36,5 +53,15 @@ return array(
          * User password cost
          */
         // 'password_cost' => 14,
+
+        /**
+         * Enable user status
+         */
+        // 'enable_user_status' => true,
+
+        /**
+         * Allowed user statuses
+         */
+        // 'allowed_user_statuses' => array(User::STATUS_ACTIVE),
     ),
 );

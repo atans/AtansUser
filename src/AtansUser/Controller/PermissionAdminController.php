@@ -44,8 +44,8 @@ class PermissionAdminController extends AbstractActionController
 
     public function indexAction()
     {
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['Permission']);
         $request        = $this->getRequest();
+        $userRepository = $this->getEntityManager()->getRepository($this->entities['Permission']);
 
         $data = array(
             'page'   => $request->getQuery('page', 1),

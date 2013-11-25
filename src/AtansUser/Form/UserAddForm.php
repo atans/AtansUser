@@ -30,9 +30,9 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      */
     protected $serviceManager;
 
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ServiceManager $serviceManager, $name = 'user-add-form')
     {
-        parent::__construct('user-form');
+        parent::__construct($name);
         $this->setAttribute('method', 'post');
         $this->setAttribute('class', 'form-horizontal');
 

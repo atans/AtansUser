@@ -10,15 +10,17 @@ use Zend\Authentication\Result;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Stdlib\ResponseInterface as Response;
 use Zend\Stdlib\Parameters;
 use Zend\Validator\EmailAddress;
 use Zend\View\Model\ViewModel;
 
 class UserController extends AbstractActionController
 {
-    const ROUTE_LOGIN    = 'atansuser/login';
-    const ROUTE_LOGOUT   = 'atansuser/logout';
-    const ROUTE_REGISTER = 'atansuser/register';
+    const ROUTE_LOGIN           = 'atansuser/login';
+    const ROUTE_LOGOUT          = 'atansuser/logout';
+    const ROUTE_REGISTER        = 'atansuser/register';
+    const ROUTE_CHANGE_PASSWORD = 'atansuser/change-password';
 
     const CONTROLLER_NAME = 'AtansUser\Controller\User';
 
@@ -38,6 +40,11 @@ class UserController extends AbstractActionController
      * @var AuthenticationService
      */
     protected $authenticationService;
+
+    /**
+     * @var Form
+     */
+    protected $changePasswordForm;
 
     /**
      * @var EntityManager
@@ -134,7 +141,7 @@ class UserController extends AbstractActionController
 
         $prg = $this->prg($redirectUrl, true);
 
-        if ($prg instanceof \Zend\Http\PhpEnvironment\Response) {
+        if ($prg instanceof Response) {
             return $prg;
         } elseif ($prg === false) {
             return array(
@@ -249,11 +256,13 @@ class UserController extends AbstractActionController
         }
 
         $user = $authService->getIdentity();
-        if (in_array($user->getStatus(), array(User::STATUS_INACTIVE, User::STATUS_DELETED))) {
-            $authService->clearIdentity();
-            $flashMessenger->addErrorMessage($translator->translate('This account cannot be used.', static::TRANSLATOR_TEXT_DOMAIN));
 
-            return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
+        if ($this->getOptions()->getEnableUserStatus()) {
+            if (!in_array($user->getStatus(), $this->getOptions()->getAllowedLoginStatuses())) {
+                $authService->clearIdentity();
+                $flashMessenger->addErrorMessage($translator->translate('Your account is not active.', static::TRANSLATOR_TEXT_DOMAIN));
+                return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
+            }
         }
 
         if ($this->getOptions()->getUseRedirectParameterIfPresent() && $redirect) {
@@ -276,13 +285,45 @@ class UserController extends AbstractActionController
         return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
     }
 
-    public function changepasswordAction()
+    public function changePasswordAction()
     {
         if (!$this->getAuthenticationService()->hasIdentity()) {
             return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
         }
 
-        return array();
+        $prg = $this->prg(static::ROUTE_CHANGE_PASSWORD);
+        $form = $this->getChangePasswordForm();
+
+        if ($prg instanceof Response) {
+            return $prg;
+        } elseif ($prg === false) {
+            return array(
+                'form' => $form,
+            );
+        }
+
+        $form->setData($prg);
+
+        if (!$form->isValid()) {
+            return array(
+                'form' => $form,
+            );
+        }
+
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-password');
+
+        if (!$this->getUserService()->changePassword($form->getData())) {
+            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.'));
+
+            return array(
+                'form' => $form,
+            );
+        }
+
+        $flashMessenger->addSuccessMessage($translator->translate('Password changed successfully.'));
+
+        return $this->redirect()->toRoute(static::ROUTE_CHANGE_PASSWORD);
     }
 
     /**
@@ -307,6 +348,32 @@ class UserController extends AbstractActionController
     public function setAuthenticationService(AuthenticationService $authenticationService)
     {
         $this->authenticationService = $authenticationService;
+        return $this;
+    }
+
+    /**
+     * Get changePasswordForm
+     *
+     * @return Form
+     */
+    public function getChangePasswordForm()
+    {
+        if (!$this->changePasswordForm instanceof Form) {
+            $this->setChangePasswordForm($this->getServiceLocator()->get('atansuser_change_password_form'));
+        }
+        return $this->changePasswordForm;
+    }
+
+    /**
+     * Set changePasswordForm
+     *
+     * @param  Form $changePasswordForm
+     * @return UserController
+     */
+    public function setChangePasswordForm($changePasswordForm)
+    {
+        $this->changePasswordForm = $changePasswordForm;
+
         return $this;
     }
 

@@ -30,7 +30,7 @@ switch ($user->getStatus()) {
     </td>
     <td>
         <?php if ($roles = $user->getRoles()): ?>
-            <?php echo $this->htmlList($roles, false, array('class' => 'list-inline'))?>
+            <?php echo $this->htmlList($roles, false, array('class' => 'list-unstyled'))?>
         <?php else: ?>
             <span class="label label-warning">
                 <?php echo $this->escapeHtml($this->translate('None', __NAMESPACE__)) ?>

@@ -64,8 +64,8 @@ class UserAdminController extends AbstractActionController
 
     public function indexAction()
     {
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['User']);
         $request        = $this->getRequest();
+        $userRepository = $this->getEntityManager()->getRepository($this->entities['User']);
 
         $data = array(
             'page'   => $request->getQuery('page', 1),

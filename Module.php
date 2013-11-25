@@ -45,6 +45,9 @@ class Module
                     $config = $sm->get('config');
                     return new Options\ModuleOptions(isset($config['atansuser']) ? $config['atansuser'] : array());
                 },
+                'atansuser_change_password_form' => function ($sm) {
+                    return new Form\ChangePasswordForm($sm);
+                },
                 'atansuser_login_form' => function ($sm) {
                     return new Form\LoginForm();
                 },

@@ -1,5 +1,7 @@
 <?php
 namespace AtansUser;
+
+$permissions = $role->getPermissions();
 ?>
 <tr id="role-<?php echo $this->escapeHtmlAttr($role->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($role->getId()) ?>">
     <td>
@@ -10,16 +12,16 @@ namespace AtansUser;
 
     </td>
     <td>
-        <?php if ($parentRole = $role->getParentRole()): ?>
+        <?php if ($parent = $role->getParent()): ?>
             <span class="label label-success">
-                <?php echo $this->escapeHtml($parentRole->getName()) ?>
+                <?php echo $this->escapeHtml($parent->getName()) ?>
             </span>
         <?php else: ?>
             <?php echo $this->translate('None', __NAMESPACE__) ?>
         <?php endif ?>
     </td>
     <td>
-        <?php if ($permissions = $role->getPermissions()): ?>
+        <?php if (count($permissions) > 1): ?>
             <ul class="list-unstyled">
                 <?php foreach ($permissions as $permission) :?>
                 <li>

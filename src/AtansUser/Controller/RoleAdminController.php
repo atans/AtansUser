@@ -44,8 +44,8 @@ class RoleAdminController extends AbstractActionController
 
     public function indexAction()
     {
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['Role']);
         $request        = $this->getRequest();
+        $userRepository = $this->getEntityManager()->getRepository($this->entities['Role']);
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
@@ -86,7 +86,7 @@ class RoleAdminController extends AbstractActionController
 
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
-                    ->addMessage(sprintf(
+                    ->addSuccessMessage(sprintf(
                         $translator->translate("Role '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
                         $role->getName()
                     ));
@@ -111,7 +111,7 @@ class RoleAdminController extends AbstractActionController
         if (!$role) {
             $this->flashMessenger()
                  ->setNamespace(self::FM_NS)
-                 ->addMessage(sprintf(
+                 ->addSuccessMessage(sprintf(
                     $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
                     $id
                 ));
@@ -122,12 +122,12 @@ class RoleAdminController extends AbstractActionController
         $form = $this->getRoleForm();
         $form->bind($role);
 
-        $parentRoleProxy = $form->get('parentRole')->getProxy();
-        $parentRoleProxy->setIsMethod(true)
-                        ->setFindMethod(array(
-                            'name'   => 'findAllRoleWithoutId',
-                            'params' => array('id' => $id),
-                        ));
+        $parentProxy = $form->get('parent')->getProxy();
+        $parentProxy->setIsMethod(true)
+                    ->setFindMethod(array(
+                        'name'   => 'findAllRoleWithoutId',
+                        'params' => array('id' => $id),
+                    ));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -180,7 +180,7 @@ class RoleAdminController extends AbstractActionController
 
                 $this->flashMessenger()
                     ->setNamespace(self::FM_NS)
-                    ->addMessage(sprintf(
+                    ->addSuccessMessage(sprintf(
                         $translator->translate("Role '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
                         $role->getName()
                     ));

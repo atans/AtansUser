@@ -64,6 +64,16 @@ class ModuleOptions extends AbstractOptions implements
     protected $passwordCost = 14;
 
     /**
+     * @var bool
+     */
+    protected $enableUserStatus = true;
+
+    /**
+     * @var array
+     */
+    protected $allowedLoginStatuses = array(User::STATUS_ACTIVE);
+
+    /**
      * Set enable user registration
      *
      * @param  bool $enableRegistration
@@ -212,7 +222,7 @@ class ModuleOptions extends AbstractOptions implements
     /**
      * Get logout redirect route
      *
-     * @return stirng
+     * @return string
      */
     public function getLogoutRedirectRoute()
     {
@@ -283,5 +293,51 @@ class ModuleOptions extends AbstractOptions implements
     public function getPasswordCost()
     {
         return $this->passwordCost;
+    }
+
+    /**
+     * Set enableUserStatus
+     *
+     * @param  boolean $enableUserStatus
+     * @return ModuleOptions
+     */
+    public function setEnableUserStatus($enableUserStatus)
+    {
+        $this->enableUserStatus = $enableUserStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get enableUserStatus
+     *
+     * @return boolean
+     */
+    public function getEnableUserStatus()
+    {
+        return $this->enableUserStatus;
+    }
+
+    /**
+     * Set allowedLoginStatuses
+     *
+     * @param  array $allowedLoginStatuses
+     * @return ModuleOptions
+     */
+    public function setAllowedLoginStatuses($allowedLoginStatuses)
+    {
+        $this->allowedLoginStatuses = $allowedLoginStatuses;
+
+        return $this;
+    }
+
+    /**
+     * Get allowedLoginStatuses
+     *
+     * @return array
+     */
+    public function getAllowedLoginStatuses()
+    {
+        return $this->allowedLoginStatuses;
     }
 }

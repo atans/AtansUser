@@ -8,8 +8,7 @@ class UserEditForm extends UserAddForm
 {
     public function __construct(ServiceManager $serviceManager)
     {
-
-        parent::__construct($serviceManager);
+        parent::__construct($serviceManager, 'user-edit-form');
 
         $this->remove('password');
 

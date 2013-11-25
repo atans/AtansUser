@@ -91,4 +91,34 @@ interface UserOptionsInterface
      * @return int
      */
     public function getPasswordCost();
+
+    /**
+     * Set enable user status
+     *
+     * @param  bool $enableUserStatus
+     * @return ModuleOptions
+     */
+    public function setEnableUserStatus($enableUserStatus);
+
+    /**
+     * Get enable user status
+     *
+     * @return bool
+     */
+    public function getEnableUserStatus();
+
+    /**
+     * Set allowed login statuses
+     *
+     * @param  array $allowedLoginStatuses
+     * @return mixed
+     */
+    public function setAllowedLoginStatuses($allowedLoginStatuses);
+
+    /**
+     * Get allowed login statuses
+     *
+     * @return array
+     */
+    public function getAllowedLoginStatuses();
 }

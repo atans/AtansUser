@@ -26,14 +26,14 @@ class Role
      * @ORM\Column(type="string", length=32, nullable=true)
      * @var string
      */
-    protected $name = null;
+    protected $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * @var Role
      */
-    protected $parentRole = null;
+    protected $parent = null;
 
     /**
      * @ORM\ManyToMany(targetEntity="Permission", inversedBy="roles")
@@ -97,24 +97,24 @@ class Role
     }
 
     /**
-     * Get parentRole
+     * Get parent
      *
      * @return Role
      */
-    public function getParentRole()
+    public function getParent()
     {
-        return $this->parentRole;
+        return $this->parent;
     }
 
     /**
-     * Set parentRole
+     * Set parent
      *
-     * @param  Role $parentRole
+     * @param  Role $parent
      * @return Role
      */
-    public function setParentRole(Role $parentRole = null)
+    public function setParent(Role $parent = null)
     {
-        $this->parentRole = $parentRole;
+        $this->parent = $parent;
         return $this;
     }
 
