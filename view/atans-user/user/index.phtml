@@ -7,19 +7,46 @@ $this->headTitle($title);
 echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-index'));
 ?>
 
-<h3><?php echo $this->escapeHtml($title) ?></h3>
-<hr>
+<h4 class="page-header">
+    <?php echo $this->escapeHtml($title) ?>
+
+</h4>
 
 <?php if ($user = $this->identity()) :?>
+    <p>
+        <span class="btn-group btn-group-sm">
+            <a class="btn btn-default" href="<?php echo $this->url('atansuser/change-password') ?>">
+                <?php echo $this->translate('Change password', __NAMESPACE__) ?>
+            </a>
+
+            <a class="btn btn-default" href="<?php echo $this->url('atansuser/change-email') ?>">
+                <?php echo $this->translate('Change email', __NAMESPACE__) ?>
+            </a>
+        </span>
+
+        <span class="btn-group btn-group-sm">
+            <a class="btn btn-default" href="<?php echo $this->url('atansuser/logout') ?>">
+                <?php echo $this->translate('Logout', __NAMESPACE__) ?>
+            </a>
+        </span>
+    </p>
+
     <p>
         <strong>
             <?php echo sprintf($this->translate('Hello，%s', __NAMESPACE__), $user->getUsername()) ?>
         </strong>
     </p>
-    <p>
-        <?php echo $this->translate('Roles', __NAMESPACE__) ?>:
-        <?php echo implode(', ', $user->getRoles()) ?>
-    </p>
+
+    <ul class="list-unstyled">
+        <li>
+            <?php echo $this->translate('Roles', __NAMESPACE__) ?>:
+            <?php echo implode(', ', $user->getRoles()) ?>
+        </li>
+        <li>
+            <?php echo $this->translate('Email', __NAMESPACE__) ?>:
+            <?php echo $this->escapeHtml($user->getEmail()) ?>
+        </li>
+    </ul>
 
 <?php else: ?>
     <a href="<?php echo $this->url('atansuser/login') ?>">

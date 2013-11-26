@@ -1,28 +1,42 @@
 <?php
 namespace AtansUser;
 
-$title = $this->translate('User Register', __NAMESPACE__);
+$title = $this->translate('Change email', __NAMESPACE__);
 $this->headTitle($title);
 
 $form = $this->form;
-$form->setAttribute('action', $this->url('atansuser/register'));
+$form->setAttribute('action', $this->url('atansuser/change-email'));
 $form->setAttribute('class', 'form-horizontal');
 ?>
+<?php echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-change-email'))?>
+
+<h4 class="page-header">
+    <?php echo $this->escapeHtml($title) ?>
+
+    <small class="pull-right">
+        <a href="<?php echo $this->url('atansuser')?>">
+            <?php echo $this->translate('User Home', __NAMESPACE__) ?>
+        </a>
+        &gt; <?php echo $this->escapeHtml($title) ?>
+    </small>
+</h4>
 
 <?php echo $this->form()->openTag($form) ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <?php echo $this->escapeHtml($title) ?>
-        </div>
-        <div class="panel-body">
-            <?php foreach ($form as $element):?>
-                <?php $elementMessages = $element->getMessages(); ?>
 
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <?php $inputFilter = $form->getInputFilter(); ?>
+            <?php foreach ($form as $element): ?>
                 <?php if ($element instanceof \Zend\Form\Element\Hidden): ?>
-                    <?php echo $this->formHidden($element) ?>
+                    <?php echo $this->formElement($element) ?>
                 <?php else: ?>
+                    <?php $elementMessages = $element->getMessages(); ?>
                     <div class="form-group <?php echo ($elementMessages ? ' has-error':'')?>">
                         <div class="control-label col-lg-3 col-md-3 col-sm-3">
+                            <?php if ($inputFilter->get($element->getName())->isRequired()): ?>
+                                <span class="text-danger">*</span>
+                            <?php endif ?>
+
                             <?php echo $this->escapeHtml($this->translate($element->getLabel(), __NAMESPACE__)) ?>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -42,10 +56,11 @@ $form->setAttribute('class', 'form-horizontal');
             <div class="row">
                 <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6">
                     <button class="btn btn-primary" type="submit">
-                        <?php echo $this->translate('Register', __NAMESPACE__) ?>
+                        <?php echo $this->translate('Submit', __NAMESPACE__) ?>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
 <?php echo $this->form()->closeTag() ?>

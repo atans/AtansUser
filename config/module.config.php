@@ -70,6 +70,15 @@ return array(
                             ),
                         ),
                     ),
+                    'change-email' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/change-email',
+                            'defaults' => array(
+                                'action' => 'change-email',
+                            ),
+                        ),
+                    ),
                     'change-password' => array(
                         'type' => 'literal',
                         'options' => array(

@@ -223,6 +223,18 @@ class User implements IdentityInterface
     }
 
     /**
+     * Remove user role
+     *
+     * @param  Role $role
+     * @return User
+     */
+    public function removeUserRole(Role $role)
+    {
+        $this->userRoles->remove($role);
+        return $this;
+    }
+
+    /**
      * Remove user roles
      *
      * @param  Collection $userRoles

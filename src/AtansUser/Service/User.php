@@ -46,6 +46,33 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     protected $serviceLocator;
 
     /**
+     * Change email
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function changeEmail(array $data)
+    {
+        $currentUser = $this->getAuthenticationService()->getIdentity();
+
+        $bcrypt = new Bcrypt();
+        $bcrypt->setCost($this->getOptions()->getPasswordCost());
+
+        if (!$bcrypt->verify($data['credential'], $currentUser->getPassword())) {
+            return false;
+        }
+
+        $currentUser->setEmail($data['newEmail']);
+
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
+        $this->getEntityManager()->persist($currentUser);
+        $this->getEntityManager()->flush();
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
+
+        return true;
+    }
+
+    /**
      * Change password
      *
      * @param array $data

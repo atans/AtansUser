@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2013-11-25 16:14+0800\n"
-"PO-Revision-Date: 2013-11-25 16:15+0800\n"
+"POT-Creation-Date: 2013-11-25 17:27+0800\n"
+"PO-Revision-Date: 2013-11-25 17:27+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: zh_TW\n"
@@ -15,15 +15,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../Module.php:86 ../view/atans-user/user-admin/partial.phtml:8
+#: ../Module.php:88 ../view/atans-user/user-admin/partial.phtml:8
 msgid "Active"
 msgstr "可用"
 
-#: ../Module.php:87 ../view/atans-user/user-admin/partial.phtml:12
+#: ../Module.php:89 ../view/atans-user/user-admin/partial.phtml:12
 msgid "Inactive"
 msgstr "停用"
 
-#: ../Module.php:88 ../view/atans-user/user-admin/partial.phtml:16
+#: ../Module.php:90 ../view/atans-user/user-admin/partial.phtml:16
 msgid "Deleted"
 msgstr "已刪除"
 
@@ -90,57 +90,71 @@ msgstr "用戶 '%s' 更新成功。"
 msgid "User '%s' was successfully deleted."
 msgstr "用戶 '%s' 刪除成功。"
 
-#: ../src/AtansUser/Controller/UserController.php:180
+#: ../src/AtansUser/Controller/UserController.php:186
 msgid "Your account has been successfully registered."
 msgstr "你的帳號註冊成功。"
 
-#: ../src/AtansUser/Controller/UserController.php:229
+#: ../src/AtansUser/Controller/UserController.php:235
 msgid "Authentication Failure."
 msgstr "認證失敗。"
 
-#: ../src/AtansUser/Controller/UserController.php:232
+#: ../src/AtansUser/Controller/UserController.php:238
 msgid "A record with the supplied identity could not be found."
 msgstr "找不到帳號。"
 
-#: ../src/AtansUser/Controller/UserController.php:235
+#: ../src/AtansUser/Controller/UserController.php:241
 msgid "More than one record matches the supplied identity."
 msgstr "帳號匹配超過一個記錄。"
 
-#: ../src/AtansUser/Controller/UserController.php:238
+#: ../src/AtansUser/Controller/UserController.php:244
 msgid "Supplied credential is invalid."
 msgstr "密碼錯誤。"
 
-#: ../src/AtansUser/Controller/UserController.php:241
+#: ../src/AtansUser/Controller/UserController.php:247
 msgid "Authentication uncategorized error."
 msgstr "認證未分類錯誤。"
 
-#: ../src/AtansUser/Controller/UserController.php:245
+#: ../src/AtansUser/Controller/UserController.php:251
 #, php-format
 msgid "Unknown authentication code: %d"
 msgstr "未知認證碼: %d"
 
-#: ../src/AtansUser/Controller/UserController.php:263
+#: ../src/AtansUser/Controller/UserController.php:269
 msgid "Your account is not active."
 msgstr "您的帳戶處於非活動狀態。"
 
-#: ../src/AtansUser/Controller/UserController.php:317
+#: ../src/AtansUser/Controller/UserController.php:323
+#: ../src/AtansUser/Controller/UserController.php:362
 msgid "Your current password was incorrectly typed."
 msgstr "你的舊密碼不正確。"
 
-#: ../src/AtansUser/Controller/UserController.php:322
+#: ../src/AtansUser/Controller/UserController.php:328
+msgid "Email changed successfully."
+msgstr "電郵修改成功。"
+
+#: ../src/AtansUser/Controller/UserController.php:367
 msgid "Password changed successfully."
 msgstr "密碼修改成功。"
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:23
+#: ../src/AtansUser/Form/ChangeEmailForm.php:17
+#: ../src/AtansUser/Form/ChangePasswordForm.php:17
 msgid "Current password"
 msgstr "當前密碼"
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:28
+#: ../src/AtansUser/Form/ChangeEmailForm.php:22
+msgid "New email"
+msgstr "新電郵"
+
+#: ../src/AtansUser/Form/ChangeEmailForm.php:27
+msgid "Verify new email"
+msgstr "重填新電郵"
+
+#: ../src/AtansUser/Form/ChangePasswordForm.php:22
 #: ../src/AtansUser/Form/UserEditForm.php:16
 msgid "New password"
 msgstr "新密碼"
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:33
+#: ../src/AtansUser/Form/ChangePasswordForm.php:27
 msgid "Verify new password"
 msgstr "重填新密碼"
 
@@ -168,6 +182,7 @@ msgstr "權限描述"
 
 #: ../src/AtansUser/Form/RegisterForm.php:47
 #: ../src/AtansUser/Form/UserAddForm.php:54
+#: ../view/atans-user/user/index.phtml:43
 msgid "Email"
 msgstr "電郵"
 
@@ -199,7 +214,7 @@ msgstr "權限"
 
 #: ../src/AtansUser/Form/UserAddForm.php:64
 #: ../view/atans-user/permission-admin/index.phtml:39
-#: ../view/atans-user/user/index.phtml:20
+#: ../view/atans-user/user/index.phtml:39
 #: ../view/atans-user/user-admin/index.phtml:42
 msgid "Roles"
 msgstr "角色"
@@ -242,6 +257,7 @@ msgstr "權限管理"
 #: ../view/atans-user/permission-admin/edit.phtml:62
 #: ../view/atans-user/role-admin/add.phtml:62
 #: ../view/atans-user/role-admin/edit.phtml:62
+#: ../view/atans-user/user/change-email.phtml:51
 #: ../view/atans-user/user/change-password.phtml:51
 #: ../view/atans-user/user-admin/add.phtml:57
 #: ../view/atans-user/user-admin/edit.phtml:57
@@ -329,7 +345,13 @@ msgstr "角色"
 msgid "Could not find any roles."
 msgstr "找不到任何角色。"
 
+#: ../view/atans-user/user/change-email.phtml:4
+#: ../view/atans-user/user/index.phtml:26
+msgid "Change email"
+msgstr "修改電郵"
+
 #: ../view/atans-user/user/change-password.phtml:4
+#: ../view/atans-user/user/index.phtml:22
 msgid "Change password"
 msgstr "修改密碼"
 
@@ -342,12 +364,16 @@ msgstr "用戶首頁"
 msgid "Hello，%s"
 msgstr "你好，%s"
 
-#: ../view/atans-user/user/index.phtml:26
-#: ../view/atans-user/user/login.phtml:55
+#: ../view/atans-user/user/index.phtml:32
+msgid "Logout"
+msgstr "登出"
+
+#: ../view/atans-user/user/index.phtml:50
+#: ../view/atans-user/user/login.phtml:53
 msgid "Login"
 msgstr "登入"
 
-#: ../view/atans-user/user/login.phtml:6
+#: ../view/atans-user/user/login.phtml:4
 msgid "User login"
 msgstr "用戶登入"
 

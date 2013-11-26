@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2013-11-25 16:15+0800\n"
-"PO-Revision-Date: 2013-11-25 16:15+0800\n"
+"POT-Creation-Date: 2013-11-25 18:01+0800\n"
+"PO-Revision-Date: 2013-11-25 18:01+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: en-US\n"
@@ -15,15 +15,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../Module.php:86 ../view/atans-user/user-admin/partial.phtml:8
+#: ../Module.php:88 ../view/atans-user/user-admin/partial.phtml:8
 msgid "Active"
 msgstr ""
 
-#: ../Module.php:87 ../view/atans-user/user-admin/partial.phtml:12
+#: ../Module.php:89 ../view/atans-user/user-admin/partial.phtml:12
 msgid "Inactive"
 msgstr ""
 
-#: ../Module.php:88 ../view/atans-user/user-admin/partial.phtml:16
+#: ../Module.php:90 ../view/atans-user/user-admin/partial.phtml:16
 msgid "Deleted"
 msgstr ""
 
@@ -90,57 +90,71 @@ msgstr ""
 msgid "User '%s' was successfully deleted."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:180
+#: ../src/AtansUser/Controller/UserController.php:186
 msgid "Your account has been successfully registered."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:229
+#: ../src/AtansUser/Controller/UserController.php:235
 msgid "Authentication Failure."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:232
+#: ../src/AtansUser/Controller/UserController.php:238
 msgid "A record with the supplied identity could not be found."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:235
+#: ../src/AtansUser/Controller/UserController.php:241
 msgid "More than one record matches the supplied identity."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:238
+#: ../src/AtansUser/Controller/UserController.php:244
 msgid "Supplied credential is invalid."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:241
+#: ../src/AtansUser/Controller/UserController.php:247
 msgid "Authentication uncategorized error."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:245
+#: ../src/AtansUser/Controller/UserController.php:251
 #, php-format
 msgid "Unknown authentication code: %d"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:263
+#: ../src/AtansUser/Controller/UserController.php:269
 msgid "Your account is not active."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:317
+#: ../src/AtansUser/Controller/UserController.php:323
+#: ../src/AtansUser/Controller/UserController.php:362
 msgid "Your current password was incorrectly typed."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:322
+#: ../src/AtansUser/Controller/UserController.php:328
+msgid "Email changed successfully."
+msgstr ""
+
+#: ../src/AtansUser/Controller/UserController.php:367
 msgid "Password changed successfully."
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:23
+#: ../src/AtansUser/Form/ChangeEmailForm.php:17
+#: ../src/AtansUser/Form/ChangePasswordForm.php:17
 msgid "Current password"
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:28
+#: ../src/AtansUser/Form/ChangeEmailForm.php:22
+msgid "New email"
+msgstr ""
+
+#: ../src/AtansUser/Form/ChangeEmailForm.php:27
+msgid "Verify new email"
+msgstr ""
+
+#: ../src/AtansUser/Form/ChangePasswordForm.php:22
 #: ../src/AtansUser/Form/UserEditForm.php:16
 msgid "New password"
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:33
+#: ../src/AtansUser/Form/ChangePasswordForm.php:27
 msgid "Verify new password"
 msgstr ""
 
@@ -168,6 +182,7 @@ msgstr ""
 
 #: ../src/AtansUser/Form/RegisterForm.php:47
 #: ../src/AtansUser/Form/UserAddForm.php:54
+#: ../view/atans-user/user/index.phtml:46
 msgid "Email"
 msgstr ""
 
@@ -199,7 +214,7 @@ msgstr ""
 
 #: ../src/AtansUser/Form/UserAddForm.php:64
 #: ../view/atans-user/permission-admin/index.phtml:39
-#: ../view/atans-user/user/index.phtml:20
+#: ../view/atans-user/user/index.phtml:42
 #: ../view/atans-user/user-admin/index.phtml:42
 msgid "Roles"
 msgstr ""
@@ -242,7 +257,8 @@ msgstr ""
 #: ../view/atans-user/permission-admin/edit.phtml:62
 #: ../view/atans-user/role-admin/add.phtml:62
 #: ../view/atans-user/role-admin/edit.phtml:62
-#: ../view/atans-user/user/change-password.phtml:51
+#: ../view/atans-user/user/change-email.phtml:59
+#: ../view/atans-user/user/change-password.phtml:60
 #: ../view/atans-user/user-admin/add.phtml:57
 #: ../view/atans-user/user-admin/edit.phtml:57
 msgid "Submit"
@@ -329,33 +345,45 @@ msgstr ""
 msgid "Could not find any roles."
 msgstr ""
 
-#: ../view/atans-user/user/change-password.phtml:4
-msgid "Change password"
+#: ../view/atans-user/user/change-email.phtml:4
+#: ../view/atans-user/user/index.phtml:23
+msgid "Change email"
 msgstr ""
 
+#: ../view/atans-user/user/change-email.phtml:18
+#: ../view/atans-user/user/change-password.phtml:18
 #: ../view/atans-user/user/index.phtml:4
 msgid "User Home"
 msgstr ""
 
-#: ../view/atans-user/user/index.phtml:16
+#: ../view/atans-user/user/change-password.phtml:4
+#: ../view/atans-user/user/index.phtml:19
+msgid "Change password"
+msgstr ""
+
+#: ../view/atans-user/user/index.phtml:29
+msgid "Logout"
+msgstr ""
+
+#: ../view/atans-user/user/index.phtml:36
 #, php-format
 msgid "Hello，%s"
 msgstr ""
 
-#: ../view/atans-user/user/index.phtml:26
-#: ../view/atans-user/user/login.phtml:55
+#: ../view/atans-user/user/index.phtml:53
+#: ../view/atans-user/user/login.phtml:53
 msgid "Login"
 msgstr ""
 
-#: ../view/atans-user/user/login.phtml:6
+#: ../view/atans-user/user/login.phtml:4
 msgid "User login"
 msgstr ""
 
-#: ../view/atans-user/user/register.phtml:6
+#: ../view/atans-user/user/register.phtml:4
 msgid "User Register"
 msgstr ""
 
-#: ../view/atans-user/user/register.phtml:50
+#: ../view/atans-user/user/register.phtml:45
 msgid "Register"
 msgstr ""
 

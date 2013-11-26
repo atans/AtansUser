@@ -3,17 +3,11 @@ namespace AtansUser\Form;
 
 use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class ChangePasswordForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
-
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct()
     {
         parent::__construct('change-password-form');
         $this->setAttribute('method', 'post');
@@ -88,27 +82,5 @@ class ChangePasswordForm extends ProvidesEventsForm implements InputFilterProvid
                 ),
             ),
         );
-    }
-
-    /**
-     * Get serviceManager
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set serviceManager
-     *
-     * @param  ServiceManager $serviceManager
-     * @return ChangePasswordForm
-     */
-    public function setServiceManager($serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-        return $this;
     }
 }

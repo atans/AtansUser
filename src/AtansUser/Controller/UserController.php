@@ -20,6 +20,7 @@ class UserController extends AbstractActionController
     const ROUTE_LOGIN           = 'atansuser/login';
     const ROUTE_LOGOUT          = 'atansuser/logout';
     const ROUTE_REGISTER        = 'atansuser/register';
+    const ROUTE_CHANGE_EMAIL    = 'atansuser/change-email';
     const ROUTE_CHANGE_PASSWORD = 'atansuser/change-password';
 
     const CONTROLLER_NAME = 'AtansUser\Controller\User';
@@ -40,6 +41,11 @@ class UserController extends AbstractActionController
      * @var AuthenticationService
      */
     protected $authenticationService;
+
+    /**
+     * @var Form
+     */
+    protected $changeEmailForm;
 
     /**
      * @var Form
@@ -285,6 +291,45 @@ class UserController extends AbstractActionController
         return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
     }
 
+    public function changeEmailAction()
+    {
+        if (!$this->getAuthenticationService()->hasIdentity()) {
+            return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
+        }
+
+        $form = $this->getChangeEmailForm();
+
+        $prg = $this->prg(static::ROUTE_CHANGE_EMAIL);
+        if ($prg instanceof Response) {
+            return $prg;
+        } elseif ($prg === false) {
+            return array(
+                'form' => $form,
+            );
+        }
+
+        $form->setData($prg);
+
+        if (!$form->isValid()) {
+            return array(
+                'form' => $form,
+            );
+        }
+
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-email');
+
+        if (!$this->getUserService()->changeEmail($form->getData())) {
+            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
+
+            return $this->redirect()->toRoute(static::ROUTE_CHANGE_EMAIL);
+        }
+
+        $flashMessenger->addSuccessMessage($translator->translate('Email changed successfully.', static::TRANSLATOR_TEXT_DOMAIN));
+
+        return $this->redirect()->toRoute(static::ROUTE_CHANGE_EMAIL);
+    }
+
     public function changePasswordAction()
     {
         if (!$this->getAuthenticationService()->hasIdentity()) {
@@ -346,6 +391,31 @@ class UserController extends AbstractActionController
     public function setAuthenticationService(AuthenticationService $authenticationService)
     {
         $this->authenticationService = $authenticationService;
+        return $this;
+    }
+
+    /**
+     * Get changeEmailForm
+     *
+     * @return Form
+     */
+    public function getChangeEmailForm()
+    {
+        if (!$this->changeEmailForm instanceof Form) {
+            $this->setChangeEmailForm($this->getServiceLocator()->get('atansuser_change_email_form'));
+        }
+        return $this->changeEmailForm;
+    }
+
+    /**
+     * Set changeEmailForm
+     *
+     * @param  Form $changeEmailForm
+     * @return UserController
+     */
+    public function setChangeEmailForm($changeEmailForm)
+    {
+        $this->changeEmailForm = $changeEmailForm;
         return $this;
     }
 
