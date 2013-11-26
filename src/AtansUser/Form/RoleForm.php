@@ -17,7 +17,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
     const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
-     * @var EntityManger
+     * @var EntityManager
      */
     protected $entityManager;
 
