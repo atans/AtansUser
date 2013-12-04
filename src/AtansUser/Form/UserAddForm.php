@@ -86,6 +86,8 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                    'value_options' => $serviceManager->get('atansuser_user_statuses'),
                ));
         $this->add($status);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

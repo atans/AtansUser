@@ -27,6 +27,8 @@ class ChangeEmailForm extends ProvidesEventsForm implements InputFilterProviderI
         $newEmailVerify->setLabel('Verify new email')
                        ->setAttribute('class', 'form-control');
         $this->add($newEmailVerify);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

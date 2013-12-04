@@ -60,6 +60,8 @@ class RegisterForm extends ProvidesEventsForm implements InputFilterProviderInte
 
         $next = new Element\Hidden('redirect');
         $this->add($next);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

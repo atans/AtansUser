@@ -28,6 +28,7 @@ class ChangePasswordForm extends ProvidesEventsForm implements InputFilterProvid
                             ->setAttribute('class', 'form-control');
         $this->add($newCredentialVerify);
 
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

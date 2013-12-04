@@ -37,6 +37,8 @@ class PermissionSearchForm extends ProvidesEventsForm implements InputFilterProv
         $query = new Element\Text('query');
         $query->setAttribute('class', 'form-control');
         $this->add($query);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

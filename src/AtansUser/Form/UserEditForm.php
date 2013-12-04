@@ -16,6 +16,8 @@ class UserEditForm extends UserAddForm
         $password->setLabel('New password')
             ->setAttribute('class', 'form-control');
         $this->add($password);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     public function getInputFilterSpecification()

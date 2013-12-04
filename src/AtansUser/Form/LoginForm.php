@@ -23,6 +23,8 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
 
         $next = new Element\Hidden('redirect');
         $this->add($next);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

@@ -83,6 +83,8 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                     ));
 
         $this->add($permissions);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

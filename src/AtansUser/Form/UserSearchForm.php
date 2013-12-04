@@ -46,6 +46,8 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
                ))
                ->setValueOptions($serviceManager->get('atansuser_user_statuses'));
         $this->add($status);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**

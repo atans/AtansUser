@@ -55,6 +55,8 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
         $description->setLabel('Permission description')
                     ->setAttribute('class', 'form-control');
         $this->add($description);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**
