@@ -283,10 +283,9 @@ class RoleAdminController extends AbstractActionController
      * @param  Form $roleSearchForm
      * @return RoleAdminController
      */
-    public function setRoleSearchForm($roleSearchForm)
+    public function setRoleSearchForm(Form $roleSearchForm)
     {
         $this->roleSearchForm = $roleSearchForm;
-
         return $this;
     }
 }
