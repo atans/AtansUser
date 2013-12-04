@@ -67,7 +67,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
         $this->getEntityManager()->persist($currentUser);
         $this->getEntityManager()->flush();
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $currentUser));
 
         return true;
     }
