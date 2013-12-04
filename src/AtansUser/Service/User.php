@@ -58,7 +58,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $bcrypt = new Bcrypt();
         $bcrypt->setCost($this->getOptions()->getPasswordCost());
 
-        if (!$bcrypt->verify($data['credential'], $currentUser->getPassword())) {
+        if (! $bcrypt->verify($data['credential'], $currentUser->getPassword())) {
             return false;
         }
 
@@ -88,7 +88,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $bcrypt  = new Bcrypt();
         $bcrypt->setCost($this->getOptions()->getPasswordCost());
 
-        if (!$bcrypt->verify($oldPassword, $currentUser->getPassword())) {
+        if (! $bcrypt->verify($oldPassword, $currentUser->getPassword())) {
             return false;
         }
 
@@ -114,7 +114,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $form = $this->getRegisterForm();
         $form->setData($data);
 
-        if (!$form->isValid()) {
+        if (! $form->isValid()) {
             return false;
         }
 
@@ -154,7 +154,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
      */
     public function getAuthenticationService()
     {
-        if (!$this->authenticationService instanceof AuthenticationService) {
+        if (! $this->authenticationService instanceof AuthenticationService) {
             $this->setAuthenticationService($this->getServiceLocator()->get('Zend\Authentication\AuthenticationService'));
         }
         return $this->authenticationService;
@@ -179,7 +179,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
      */
     public function getEntityManager()
     {
-        if (!$this->entityManager instanceof EntityManager) {
+        if (! $this->entityManager instanceof EntityManager) {
             $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
@@ -204,7 +204,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
      */
     public function getOptions()
     {
-        if (!$this->options instanceof ModuleOptions) {
+        if (! $this->options instanceof ModuleOptions) {
             $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
         }
         return $this->options;
@@ -229,7 +229,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
      */
     public function getRegisterForm()
     {
-        if (!$this->registerForm instanceof Form) {
+        if (! $this->registerForm instanceof Form) {
             $this->setRegisterForm($this->getServiceLocator()->get('atansuser_register_form'));
         }
         return $this->registerForm;
@@ -244,7 +244,6 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     public function setRegisterForm($registerForm)
     {
         $this->registerForm = $registerForm;
-
         return $this;
     }
 

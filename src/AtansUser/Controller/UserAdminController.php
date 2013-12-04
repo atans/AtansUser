@@ -3,7 +3,7 @@ namespace AtansUser\Controller;
 
 use AtansUser\Entity\User;
 use AtansUser\Options\ModuleOptions;
-use DateTime;
+use AtansUser\Service\UserAdmin as UserAdminService;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
@@ -58,6 +58,11 @@ class UserAdminController extends AbstractActionController
     protected $userEditForm;
 
     /**
+     * @var UserAdminService
+     */
+    protected $userAdminService;
+
+    /**
      * @var Form
      */
     protected $userSearchForm;
@@ -89,10 +94,10 @@ class UserAdminController extends AbstractActionController
 
     public function addAction()
     {
-        $entityManager = $this->getEntityManager();
-        $form          = $this->getUserAddForm();
-        $request       = $this->getRequest();
-        $translator    = $this->getServiceLocator()->get('Translator');
+        $form           = $this->getUserAddForm();
+        $request        = $this->getRequest();
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
         $user = new User();
         $user->setStatus($this->getOptions()->getUserDefaultStatus());
@@ -100,17 +105,12 @@ class UserAdminController extends AbstractActionController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $user->setCreated(new DateTime());
+                $this->getUserAdminService()->add($user);
 
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                $this->flashMessenger()
-                    ->setNamespace(self::FM_NS)
-                    ->addSuccessMessage(sprintf(
-                        $translator->translate("User '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
-                        $user->getUsername()
-                    ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                    $translator->translate("User '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $user->getUsername()
+                ));
 
                 return $this->redirect()->toRoute('zfcadmin/user');
             }
@@ -123,19 +123,18 @@ class UserAdminController extends AbstractActionController
 
     public function editAction()
     {
-        $entityManager = $this->getEntityManager();
-        $id            = (int)$this->params()->fromRoute('id');
-        $translator    = $this->getServiceLocator()->get('Translator');
-        $request       = $this->getRequest();
+        $entityManager  = $this->getEntityManager();
+        $id             = (int)$this->params()->fromRoute('id');
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $request        = $this->getRequest();
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
         $user = $entityManager->find($this->entities['User'], $id);
         if (!$user) {
-            $this->flashMessenger()
-                ->setNamespace(self::FM_NS)
-                ->addMessage(sprintf(
-                    $translator->translate("User does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
-                    $id
-                ));
+            $flashMessenger->addMessage(sprintf(
+                $translator->translate("User does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $id
+            ));
 
             return $this->redirect()->toRoute('zfcadmin/user');
         }
@@ -146,18 +145,12 @@ class UserAdminController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $data = $form->getData(FormInterface::VALUES_AS_ARRAY);
-                if (strlen($data['newPassword'])) {
-                    $user->setPassword($data['newPassword']);
-                }
-                $entityManager->persist($user);
-                $entityManager->flush();
+                $this->getUserAdminService()->edit($user, $data['newPassword']);
 
-                $this->flashMessenger()
-                     ->setNamespace(self::FM_NS)
-                     ->addSuccessMessage(sprintf(
-                         $translator->translate("User '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
-                         $user->getUsername()
-                     ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                     $translator->translate("User '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
+                     $user->getUsername()
+                 ));
 
                 return $this->redirect()->toRoute('zfcadmin/user');
             }
@@ -171,10 +164,11 @@ class UserAdminController extends AbstractActionController
 
     public function deleteAction()
     {
-        $entityManager = $this->getEntityManager();
-        $id            = (int)$this->params()->fromRoute('id');
-        $translator    = $this->getServiceLocator()->get('Translator');
-        $request       = $this->getRequest();
+        $entityManager  = $this->getEntityManager();
+        $id             = (int)$this->params()->fromRoute('id');
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $request        = $this->getRequest();
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
         $user = $entityManager->find($this->entities['User'], $id);
         if (!$user) {
@@ -188,15 +182,12 @@ class UserAdminController extends AbstractActionController
         if ($request->isPost()) {
             $delete = $request->getPost('delete', 'No');
             if ($delete == 'Yes') {
-                $entityManager->remove($user);
-                $entityManager->flush();
+                $this->getUserAdminService()->delete($user);
 
-                $this->flashMessenger()
-                     ->setNamespace(self::FM_NS)
-                     ->addSuccessMessage(sprintf(
-                         $translator->translate("User '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
-                         $user->getUsername()
-                     ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                     $translator->translate("User '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
+                     $user->getUsername()
+                 ));
 
                 return $this->redirect()->toRoute('zfcadmin/user');
             }
@@ -207,28 +198,6 @@ class UserAdminController extends AbstractActionController
         );
     }
 
-    public function loginAction()
-    {
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $data = $request->getPost();
-
-            $authService = $this->getAuthenticationService();
-            $adapter = $authService->getAdapter();
-            $adapter->setIdentityValue($data['username']);
-            $adapter->setCredentialValue($data['password']);
-            $authResult = $authService->authenticate();
-
-            if ($authResult->isValid()) {
-                return $this->redirect()->toRoute('user');
-            }
-        }
-
-        return array(
-            'form' => new \AtansUser\Form\LoginForm(),
-        );
-    }
-
     /**
      * Get authenticationService
      *
@@ -236,7 +205,7 @@ class UserAdminController extends AbstractActionController
      */
     public function getAuthenticationService()
     {
-        if (!$this->authenticationService instanceof AuthenticationService) {
+        if (! $this->authenticationService instanceof AuthenticationService) {
             $this->setAuthenticationService($this->getServiceLocator()->get('Zend\Authentication\AuthenticationService'));
         }
         return $this->authenticationService;
@@ -261,7 +230,7 @@ class UserAdminController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (!$this->entityManager instanceof EntityManager) {
+        if (! $this->entityManager instanceof EntityManager) {
             $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
@@ -286,7 +255,7 @@ class UserAdminController extends AbstractActionController
      */
     public function getOptions()
     {
-        if (!$this->options instanceof ModuleOptions) {
+        if (! $this->options instanceof ModuleOptions) {
             $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
         }
         return $this->options;
@@ -311,7 +280,7 @@ class UserAdminController extends AbstractActionController
      */
     public function getUserAddForm()
     {
-        if (!$this->userAddForm instanceof Form) {
+        if (! $this->userAddForm instanceof Form) {
             $this->setUserAddForm($this->getServiceLocator()->get('atansuser_user_add_form'));
         }
         return $this->userAddForm;
@@ -336,7 +305,7 @@ class UserAdminController extends AbstractActionController
      */
     public function getUserEditForm()
     {
-        if (!$this->userEditForm instanceof Form) {
+        if (! $this->userEditForm instanceof Form) {
             $this->setUserEditForm($this->getServiceLocator()->get('atansuser_user_edit_form'));
         }
         return $this->userEditForm;
@@ -355,13 +324,38 @@ class UserAdminController extends AbstractActionController
     }
 
     /**
+     * Get userAdminService
+     *
+     * @return UserAdminService
+     */
+    public function getUserAdminService()
+    {
+        if (! $this->userAdminService instanceof UserAdminService) {
+            $this->setUserAdminService($this->getServiceLocator()->get('atansuser_user_admin_service'));
+        }
+        return $this->userAdminService;
+    }
+
+    /**
+     * Set userAdminService
+     *
+     * @param  UserAdminService $userAdminService
+     * @return UserAdminController
+     */
+    public function setUserAdminService(UserAdminService $userAdminService)
+    {
+        $this->userAdminService = $userAdminService;
+        return $this;
+    }
+
+    /**
      * Get userSearchForm
      *
      * @return Form
      */
     public function getUserSearchForm()
     {
-        if (!$this->userSearchForm instanceof Form) {
+        if (! $this->userSearchForm instanceof Form) {
             $this->setUserSearchForm($this->getServiceLocator()->get('atansuser_user_search_form'));
         }
         return $this->userSearchForm;

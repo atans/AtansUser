@@ -2,6 +2,7 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\Role;
+use AtansUser\Service\RoleAdmin as RoleAdminService;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -38,6 +39,11 @@ class RoleAdminController extends AbstractActionController
     protected $roleForm;
 
     /**
+     * @var RoleAdminService
+     */
+    protected $roleAdminService;
+
+    /**
      * @var Form
      */
     protected $roleSearchForm;
@@ -68,8 +74,8 @@ class RoleAdminController extends AbstractActionController
 
     public function addAction()
     {
-        $entityManager = $this->getEntityManager();
-        $translator    = $this->getServiceLocator()->get('Translator');
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
         $role = new Role();
 
@@ -81,15 +87,12 @@ class RoleAdminController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $entityManager->persist($role);
-                $entityManager->flush();
+                $this->getRoleAdminService()->add($role);
 
-                $this->flashMessenger()
-                    ->setNamespace(self::FM_NS)
-                    ->addSuccessMessage(sprintf(
-                        $translator->translate("Role '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
-                        $role->getName()
-                    ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                    $translator->translate("Role '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $role->getName()
+                ));
 
                 return $this->redirect()->toRoute('zfcadmin/user/role');
             }
@@ -102,19 +105,18 @@ class RoleAdminController extends AbstractActionController
 
     public function editAction()
     {
-        $entityManager = $this->getEntityManager();
-        $id            = (int) $this->params()->fromRoute('id', 0);
-        $translator    = $this->getServiceLocator()->get('Translator');
+        $entityManager  = $this->getEntityManager();
+        $id             = (int) $this->params()->fromRoute('id', 0);
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
 
         $role = $entityManager->find($this->entities['Role'], $id);
-        if (!$role) {
-            $this->flashMessenger()
-                 ->setNamespace(self::FM_NS)
-                 ->addSuccessMessage(sprintf(
-                    $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
-                    $id
-                ));
+        if (! $role) {
+            $flashMessenger->addSuccessMessage(sprintf(
+                $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $id
+            ));
 
             return $this->redirect()->toRoute('zfcadmin/user/role');
         }
@@ -133,15 +135,12 @@ class RoleAdminController extends AbstractActionController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $entityManager->persist($role);
-                $entityManager->flush();
+                $this->getRoleAdminService()->edit($role);
 
-                $this->flashMessenger()
-                     ->setNamespace(self::FM_NS)
-                     ->addSuccessMessage(sprintf(
-                         $translator->translate("Role '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
-                         $role->getName()
-                     ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                     $translator->translate("Role '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
+                     $role->getName()
+                 ));
 
                 return $this->redirect()->toRoute('zfcadmin/user/role');
             }
@@ -158,15 +157,14 @@ class RoleAdminController extends AbstractActionController
         $entityManager = $this->getEntityManager();
         $id            = (int) $this->params()->fromRoute('id', 0);
         $translator    = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
-        $role = $this->getEntityManager()->find($this->entities['Role'], $id);
-        if (!$role) {
-            $this->flashMessenger()
-                ->setNamespace(self::FM_NS)
-                ->addMessage(sprintf(
-                    $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
-                    $id
-                ));
+        $role = $entityManager->find($this->entities['Role'], $id);
+        if (! $role) {
+            $flashMessenger->addMessage(sprintf(
+                $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $id
+            ));
 
             return $this->redirect()->toRoute('zfcadmin/user/role');
         }
@@ -175,15 +173,12 @@ class RoleAdminController extends AbstractActionController
         if ($request->isPost()) {
             $delete = $request->getPost('delete');
             if ($delete == 'Yes') {
-                $entityManager->remove($role);
-                $entityManager->flush();
+                $this->getRoleAdminService()->delete($role);
 
-                $this->flashMessenger()
-                    ->setNamespace(self::FM_NS)
-                    ->addSuccessMessage(sprintf(
-                        $translator->translate("Role '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
-                        $role->getName()
-                    ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                    $translator->translate("Role '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $role->getName()
+                ));
 
                 return $this->redirect()->toRoute('zfcadmin/user/role');
             }
@@ -201,7 +196,7 @@ class RoleAdminController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (!$this->entityManager instanceof EntityManager) {
+        if (! $this->entityManager instanceof EntityManager) {
             $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
@@ -211,7 +206,7 @@ class RoleAdminController extends AbstractActionController
      * Set entityManager
      *
      * @param  EntityManager $entityManager
-     * @return RoleController
+     * @return RoleAdminController
      */
     public function setEntityManager($entityManager)
     {
@@ -226,7 +221,7 @@ class RoleAdminController extends AbstractActionController
      */
     public function getRoleForm()
     {
-        if (!$this->roleForm instanceof Form) {
+        if (! $this->roleForm instanceof Form) {
             $this->setRoleForm($this->getServiceLocator()->get('atansuser_role_form'));
         }
         return $this->roleForm;
@@ -245,13 +240,38 @@ class RoleAdminController extends AbstractActionController
     }
 
     /**
+     * Get roleAdminService
+     *
+     * @return RoleAdminService
+     */
+    public function getRoleAdminService()
+    {
+        if (! $this->roleAdminService instanceof RoleAdminService) {
+            $this->setRoleAdminService($this->getServiceLocator()->get('atansuser_role_admin_service'));
+        }
+        return $this->roleAdminService;
+    }
+
+    /**
+     * Set roleAdminService
+     *
+     * @param  RoleAdminService $roleAdminService
+     * @return RoleAdminController
+     */
+    public function setRoleAdminService(RoleAdminService $roleAdminService)
+    {
+        $this->roleAdminService = $roleAdminService;
+        return $this;
+    }
+
+    /**
      * Get roleSearchForm
      *
      * @return Form
      */
     public function getRoleSearchForm()
     {
-        if (!$this->roleSearchForm instanceof Form) {
+        if (! $this->roleSearchForm instanceof Form) {
             $this->setRoleSearchForm($this->getServiceLocator()->get('atansuser_role_search_form'));
         }
         return $this->roleSearchForm;

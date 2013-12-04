@@ -2,6 +2,7 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\Permission;
+use AtansUser\Service\PermissionAdmin as PermissionAdminService;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -38,6 +39,11 @@ class PermissionAdminController extends AbstractActionController
     protected $permissionForm;
 
     /**
+     * @var PermissionAdminService
+     */
+    protected $permissionAdminService;
+
+    /**
      * @var Form
      */
     protected $permissionSearchForm;
@@ -68,8 +74,8 @@ class PermissionAdminController extends AbstractActionController
 
     public function addAction()
     {
-        $entityManager = $this->getEntityManager();
-        $translator    = $this->getServiceLocator()->get('Translator');
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
         $permission = new Permission();
 
@@ -81,15 +87,12 @@ class PermissionAdminController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $entityManager->persist($permission);
-                $entityManager->flush();
+                $this->getPermissionAdminService()->add($permission);
 
-                $this->flashMessenger()
-                    ->setNamespace(self::FM_NS)
-                    ->addSuccessMessage(sprintf(
-                        $translator->translate("Permission '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
-                        $permission->getName()
-                    ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                    $translator->translate("Permission '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $permission->getName()
+                ));
 
                 return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
@@ -102,19 +105,18 @@ class PermissionAdminController extends AbstractActionController
 
     public function editAction()
     {
-        $entityManager        = $this->getEntityManager();
-        $id                   = (int) $this->params()->fromRoute('id', 0);
-        $translator           = $this->getServiceLocator()->get('Translator');
-        $permissionRepository = $entityManager->getRepository($this->entities['Permission']);
+        $entityManager  = $this->getEntityManager();
+        $id             = (int) $this->params()->fromRoute('id', 0);
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
-        $permission = $permissionRepository->find($id);
-        if (!$permission) {
-            $this->flashMessenger()
-                 ->setNamespace(self::FM_NS)
-                 ->addErrorMessage(sprintf(
-                     $translator->translate("Permission does not found. '#%d'"),
-                     $id
-                  ));
+        $permissionRepository = $entityManager->getRepository($this->entities['Permission']);
+        $permission           = $permissionRepository->find($id);
+        if (! $permission) {
+            $flashMessenger->addErrorMessage(sprintf(
+                $translator->translate("Permission does not found. '#%d'"),
+                $id
+            ));
 
             return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
@@ -127,15 +129,12 @@ class PermissionAdminController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $entityManager->persist($permission);
-                $entityManager->flush();
+                $this->getPermissionAdminService()->edit($permission);
 
-                $this->flashMessenger()
-                    ->setNamespace(self::FM_NS)
-                    ->addSuccessMessage(sprintf(
-                        $translator->translate("Permission '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
-                        $permission->getName()
-                    ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                    $translator->translate("Permission '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $permission->getName()
+                ));
 
                 return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
@@ -149,18 +148,17 @@ class PermissionAdminController extends AbstractActionController
 
     public function deleteAction()
     {
-        $entityManager = $this->getEntityManager();
-        $id            = (int) $this->params()->fromRoute('id', 0);
-        $translator    = $this->getServiceLocator()->get('Translator');
+        $entityManager  = $this->getEntityManager();
+        $id             = (int) $this->params()->fromRoute('id', 0);
+        $translator     = $this->getServiceLocator()->get('Translator');
+        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
 
-        $permission = $this->getEntityManager()->find($this->entities['Permission'], $id);
-        if (!$permission) {
-            $this->flashMessenger()
-                 ->setNamespace(self::FM_NS)
-                 ->addErrorMessage(sprintf(
-                     $translator->translate("Permission does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
-                     $id
-                 ));
+        $permission = $entityManager->find($this->entities['Permission'], $id);
+        if (! $permission) {
+            $flashMessenger->addErrorMessage(sprintf(
+                $translator->translate("Permission does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $id
+            ));
 
             return $this->redirect()->toRoute('zfcadmin/user/permission');
         }
@@ -169,15 +167,12 @@ class PermissionAdminController extends AbstractActionController
         if ($request->isPost()) {
             $delete = $request->getPost('delete');
             if ($delete == 'Yes') {
-                $entityManager->remove($permission);
-                $entityManager->flush();
+                $this->getPermissionAdminService()->delete($permission);
 
-                $this->flashMessenger()
-                     ->setNamespace(self::FM_NS)
-                     ->addSuccessMessage(sprintf(
-                         $translator->translate("Permission '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
-                         $permission->getName()
-                     ));
+                $flashMessenger->addSuccessMessage(sprintf(
+                     $translator->translate("Permission '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
+                     $permission->getName()
+                 ));
 
                 return $this->redirect()->toRoute('zfcadmin/user/permission');
             }
@@ -195,10 +190,23 @@ class PermissionAdminController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (!$this->entityManager instanceof EntityManager) {
+        if (! $this->entityManager instanceof EntityManager) {
             $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
+    }
+
+    /**
+     * Get permissionAdminService
+     *
+     * @return PermissionAdminService
+     */
+    public function getPermissionAdminService()
+    {
+        if (! $this->permissionAdminService instanceof PermissionAdminService) {
+            $this->setPermissionAdminService($this->getServiceLocator()->get('atansuser_permission_admin_service'));
+        }
+        return $this->permissionAdminService;
     }
 
     /**
@@ -214,13 +222,25 @@ class PermissionAdminController extends AbstractActionController
     }
 
     /**
+     * Set permissionAdminService
+     *
+     * @param  PermissionAdminService$permissionAdminService
+     * @return PermissionAdminController
+     */
+    public function setPermissionAdminService(PermissionAdminService $permissionAdminService)
+    {
+        $this->permissionAdminService = $permissionAdminService;
+        return $this;
+    }
+
+    /**
      * Get permissionForm
      *
      * @return Form
      */
     public function getPermissionForm()
     {
-        if (!$this->permissionForm instanceof Form) {
+        if (! $this->permissionForm instanceof Form) {
             $this->setPermissionForm($this->getServiceLocator()->get('atansuser_permission_form'));
         }
         return $this->permissionForm;
@@ -245,7 +265,7 @@ class PermissionAdminController extends AbstractActionController
      */
     public function getPermissionSearchForm()
     {
-        if (!$this->permissionSearchForm instanceof Form) {
+        if (! $this->permissionSearchForm instanceof Form) {
             $this->setPermissionSearchForm($this->getServiceLocator()->get('atansuser_permission_search_form'));
         }
         return $this->permissionSearchForm;

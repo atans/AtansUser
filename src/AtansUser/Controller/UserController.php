@@ -86,7 +86,7 @@ class UserController extends AbstractActionController
 
     public function indexAction()
     {
-        if (!$this->identity()) {
+        if (! $this->identity()) {
             return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
         }
 
@@ -127,7 +127,7 @@ class UserController extends AbstractActionController
             return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
         }
 
-        if (!$this->getOptions()->getEnableRegistration()) {
+        if (! $this->getOptions()->getEnableRegistration()) {
             return array(
                 'enableRegistration' => false,
             );
@@ -159,7 +159,7 @@ class UserController extends AbstractActionController
 
         $user = $this->getUserService()->register($prg);
 
-        if (!$user) {
+        if (! $user) {
             return array(
                 'form'               => $form,
                 'enableRegistration' => $this->getOptions()->getEnableRegistration(),
@@ -229,7 +229,7 @@ class UserController extends AbstractActionController
         $adapter->setCredentialValue($credential);
         $authResult = $authService->authenticate();
 
-        if (!$authResult->isValid()) {
+        if (! $authResult->isValid()) {
             switch ($authResult->getCode()) {
                 case Result::FAILURE:
                     $flashMessenger->addErrorMessage($translator->translate('Authentication Failure.', static::TRANSLATOR_TEXT_DOMAIN));
@@ -293,7 +293,7 @@ class UserController extends AbstractActionController
 
     public function changeEmailAction()
     {
-        if (!$this->getAuthenticationService()->hasIdentity()) {
+        if (! $this->getAuthenticationService()->hasIdentity()) {
             return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
         }
 
@@ -310,7 +310,7 @@ class UserController extends AbstractActionController
 
         $form->setData($prg);
 
-        if (!$form->isValid()) {
+        if (! $form->isValid()) {
             return array(
                 'form' => $form,
             );
@@ -319,7 +319,7 @@ class UserController extends AbstractActionController
         $translator     = $this->getServiceLocator()->get('Translator');
         $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-email');
 
-        if (!$this->getUserService()->changeEmail($form->getData())) {
+        if (! $this->getUserService()->changeEmail($form->getData())) {
             $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
 
             return $this->redirect()->toRoute(static::ROUTE_CHANGE_EMAIL);
@@ -332,7 +332,7 @@ class UserController extends AbstractActionController
 
     public function changePasswordAction()
     {
-        if (!$this->getAuthenticationService()->hasIdentity()) {
+        if (! $this->getAuthenticationService()->hasIdentity()) {
             return $this->redirect()->toRoute($this->getOptions()->getLoginRedirectRoute());
         }
 
@@ -349,7 +349,7 @@ class UserController extends AbstractActionController
 
         $form->setData($prg);
 
-        if (!$form->isValid()) {
+        if (! $form->isValid()) {
             return array(
                 'form'  => $form,
             );
@@ -358,7 +358,7 @@ class UserController extends AbstractActionController
         $translator     = $this->getServiceLocator()->get('Translator');
         $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-password');
 
-        if (!$this->getUserService()->changePassword($form->getData())) {
+        if (! $this->getUserService()->changePassword($form->getData())) {
             $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
 
             return $this->redirect()->toRoute(static::ROUTE_CHANGE_PASSWORD);
@@ -376,7 +376,7 @@ class UserController extends AbstractActionController
      */
     public function getAuthenticationService()
     {
-        if (!$this->authenticationService instanceof AuthenticationService) {
+        if (! $this->authenticationService instanceof AuthenticationService) {
             $this->setAuthenticationService($this->getServiceLocator()->get('Zend\Authentication\AuthenticationService'));
         }
         return $this->authenticationService;
@@ -401,7 +401,7 @@ class UserController extends AbstractActionController
      */
     public function getChangeEmailForm()
     {
-        if (!$this->changeEmailForm instanceof Form) {
+        if (! $this->changeEmailForm instanceof Form) {
             $this->setChangeEmailForm($this->getServiceLocator()->get('atansuser_change_email_form'));
         }
         return $this->changeEmailForm;
@@ -426,7 +426,7 @@ class UserController extends AbstractActionController
      */
     public function getChangePasswordForm()
     {
-        if (!$this->changePasswordForm instanceof Form) {
+        if (! $this->changePasswordForm instanceof Form) {
             $this->setChangePasswordForm($this->getServiceLocator()->get('atansuser_change_password_form'));
         }
         return $this->changePasswordForm;
@@ -452,7 +452,7 @@ class UserController extends AbstractActionController
      */
     public function getEntityManager()
     {
-        if (!$this->entityManager instanceof EntityManager) {
+        if (! $this->entityManager instanceof EntityManager) {
             $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
@@ -477,7 +477,7 @@ class UserController extends AbstractActionController
      */
     public function getLoginForm()
     {
-        if (!$this->loginForm instanceof Form) {
+        if (! $this->loginForm instanceof Form) {
             $this->setLoginForm($this->getServiceLocator()->get('atansuser_login_form'));
         }
         return $this->loginForm;
@@ -502,7 +502,7 @@ class UserController extends AbstractActionController
      */
     public function getOptions()
     {
-        if (!$this->options instanceof ModuleOptions) {
+        if (! $this->options instanceof ModuleOptions) {
             $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
         }
         return $this->options;
@@ -527,7 +527,7 @@ class UserController extends AbstractActionController
      */
     public function getRegisterForm()
     {
-        if (!$this->registerForm instanceof Form) {
+        if (! $this->registerForm instanceof Form) {
             $this->setRegisterForm($this->getServiceLocator()->get('atansuser_register_form'));
         }
         return $this->registerForm;
@@ -552,7 +552,7 @@ class UserController extends AbstractActionController
      */
     public function getUserService()
     {
-        if (!$this->userService instanceof UserService) {
+        if (! $this->userService instanceof UserService) {
             $this->setUserService($this->getServiceLocator()->get('atansuser_user_service'));
         }
         return $this->userService;

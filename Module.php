@@ -38,7 +38,10 @@ class Module
     {
         return array(
             'invokables' => array(
-                'atansuser_user_service' => 'AtansUser\Service\User',
+                'atansuser_user_service'             => 'AtansUser\Service\User',
+                'atansuser_user_admin_service'       => 'AtansUser\Service\UserAdmin',
+                'atansuser_permission_admin_service' => 'AtansUser\Service\PermissionAdmin',
+                'atansuser_role_admin_service'       => 'AtansUser\Service\RoleAdmin',
             ),
             'factories' => array(
                 'atansuser_module_options' => function ($sm) {

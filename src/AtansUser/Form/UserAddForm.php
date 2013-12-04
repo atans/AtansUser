@@ -166,7 +166,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      */
     public function getEntityManager()
     {
-        if (!$this->entityManager instanceof EntityManager) {
+        if (! $this->entityManager instanceof EntityManager) {
             $this->setEntityManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
