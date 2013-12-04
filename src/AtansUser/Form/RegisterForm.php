@@ -58,8 +58,8 @@ class RegisterForm extends ProvidesEventsForm implements InputFilterProviderInte
                        ->setAttribute('class', 'form-control');
         $this->add($passwordVerify);
 
-        $next = new Element\Hidden('redirect');
-        $this->add($next);
+        $redirect = new Element\Hidden('redirect');
+        $this->add($redirect);
 
         $this->getEventManager()->trigger('init', $this);
     }

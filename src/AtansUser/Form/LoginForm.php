@@ -21,8 +21,8 @@ class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterfa
                  ->setAttribute('class', 'form-control');
         $this->add($password);
 
-        $next = new Element\Hidden('redirect');
-        $this->add($next);
+        $redirect = new Element\Hidden('redirect');
+        $this->add($redirect);
 
         $this->getEventManager()->trigger('init', $this);
     }
