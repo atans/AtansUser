@@ -4,6 +4,7 @@ namespace AtansUser\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ZfcRbac\Permission\PermissionInterface;
 
 /**
  * Permission
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  options={"collate"="utf8_general_ci"}
  * )
  */
-class Permission
+class Permission implements PermissionInterface
 {
     /**
      * @ORM\Id
@@ -59,18 +60,6 @@ class Permission
     }
 
     /**
-     * Set id
-     *
-     * @param  int $id
-     * @return Permission
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
      * Get name
      *
      * @return string
@@ -88,7 +77,7 @@ class Permission
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = (string) $name;
         return $this;
     }
 

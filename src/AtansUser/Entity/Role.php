@@ -4,6 +4,7 @@ namespace AtansUser\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Permissions\Rbac\AbstractRole;
 
 /**
  * Role
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="rbac_role", options={"collate"="utf8_general_ci"})
  * @package User\Entity
  */
-class Role
+class Role extends AbstractRole
 {
     /**
      * @ORM\Id
@@ -23,7 +24,7 @@ class Role
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=32, nullable=true)
+     * @ORM\Column(type="string", length=32)
      * @var string
      */
     protected $name;
@@ -36,16 +37,10 @@ class Role
     protected $parent = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Permission", inversedBy="roles")
-     * @ORM\OrderBy({"name" = "ASC"})
-     * @ORM\JoinTable(
-     *  name="rbac_role_permission",
-     *  joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
-     *  inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
-     * )
-     * @var Permission[]
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
+     * @var PermissionInterface[]|\Doctrine\Common\Collections\Collection
      */
-    protected $permissions = null;
+    protected $permissions;
 
     public function __construct()
     {
@@ -60,18 +55,6 @@ class Role
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set id
-     *
-     * @param  int $id
-     * @return Role
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
     }
 
     /**
@@ -92,7 +75,7 @@ class Role
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = (string) $name;
         return $this;
     }
 
@@ -109,10 +92,10 @@ class Role
     /**
      * Set parent
      *
-     * @param  Role $parent
+     * @param  string|Role $parent
      * @return Role
      */
-    public function setParent(Role $parent = null)
+    public function setParent($parent = null)
     {
         $this->parent = $parent;
         return $this;
@@ -129,15 +112,21 @@ class Role
     }
 
     /**
-     * Add permission
+     * Add a permission
      *
-     * @param Permission $permission
-     * @return $this
+     * @param \ZfcRbac\Permission\PermissionInterface|string $permission
+     * @return void
      */
-    public function addPermission(Permission $permission)
+    public function addPermission($permission)
     {
-        $this->permissions->add($permission);
-        return $this;
+        if (is_string($permission)) {
+            $name = $permission;
+            $permission = new Permission();
+            $permission->setName($name);
+        }
+
+        $permission->addRole($this);
+        $this->permissions[$permission->getName()] = $permission;
     }
 
     /**
@@ -149,7 +138,8 @@ class Role
     public function addPermissions(Collection $permissions)
     {
         foreach ($permissions as $permission) {
-            $this->permissions->add($permission);
+            //$this->permissions->add($permission);
+            $this->addPermission($permission);
         }
         return $this;
     }
@@ -157,12 +147,16 @@ class Role
     /**
      * Remove permission
      *
-     * @param  Permission $permission
+     * @param  \ZfcRbac\Permission\PermissionInterface|string $permission
      * @return Role
      */
-    public function removePermission(Permission $permission)
+    public function removePermission($permission)
     {
-        $this->permissions->removeElement($permission);
+        if (is_string($permission)) {
+            $this->permissions->remove($permission);
+        } else {
+            $this->permissions->remove($permission->getName());
+        }
         return $this;
     }
 
@@ -175,7 +169,8 @@ class Role
     public function removePermissions(Collection $permissions)
     {
         foreach ($permissions as $permission) {
-            $this->permissions->removeElement($permission);
+            //$this->permissions->removeElement($permission);
+            $this->removePermission($permission);
         }
         return $this;
     }
