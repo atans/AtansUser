@@ -21,7 +21,7 @@ $permissions = $role->getPermissions();
         <?php endif ?>
     </td>
     <td>
-        <?php if (count($permissions) > 1): ?>
+        <?php if (count($permissions) > 0): ?>
             <ul class="list-unstyled">
                 <?php foreach ($permissions as $permission) :?>
                 <li>

@@ -63,7 +63,7 @@ class User implements IdentityInterface
      * )
      * @var Role[]
      */
-    protected $userRoles;
+    protected $roles;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -79,7 +79,7 @@ class User implements IdentityInterface
 
     public function __construct()
     {
-        $this->userRoles = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -175,75 +175,75 @@ class User implements IdentityInterface
      *
      * @return array
      */
-    public function getRoles()
-    {
-        $roles = array();
-        if (count($this->userRoles) > 0) {
-            foreach ($this->userRoles as $userRole) {
-                $roles[] = $userRole->getName();
-            }
-        }
-        return $roles;
-    }
+//    public function getRoles()
+//    {
+//        $roles = array();
+//        if (count($this->userRoles) > 0) {
+//            foreach ($this->userRoles as $userRole) {
+//                $roles[] = $userRole->getName();
+//            }
+//        }
+//        return $roles;
+//    }
 
     /**
-     * Add user role
+     * Add role
      *
      * @param  Role $role
      * @return User
      */
-    public function addUserRole(Role $role)
+    public function addRole(Role $role)
     {
-        $this->userRoles->add($role);
+        $this->roles->add($role);
         return $this;
     }
 
     /**
-     * Add user roles
+     * Add roles
      *
-     * @param  Collection $userRoles
+     * @param  Collection $roles
      * @return User
      */
-    public function addUserRoles(Collection $userRoles)
+    public function addRoles(Collection $roles)
     {
-        foreach ($userRoles as $userRole) {
-            $this->userRoles->add($userRole);
+        foreach ($roles as $role) {
+            $this->roles->add($role);
         }
         return $this;
     }
 
     /**
-     * Get user roles
+     * Get roles
      *
      * @return Role[]|ArrayCollection
      */
-    public function getUserRoles()
+    public function getRoles()
     {
-        return $this->userRoles;
+        return $this->roles;
     }
 
     /**
-     * Remove user role
+     * Remove role
      *
      * @param  Role $role
      * @return User
      */
-    public function removeUserRole(Role $role)
+    public function removeRole(Role $role)
     {
-        $this->userRoles->remove($role);
+        $this->roles->remove($role);
         return $this;
     }
 
     /**
-     * Remove user roles
+     * Remove roles
      *
-     * @param  Collection $userRoles
+     * @param  Collection $roles
      * @return $this
      */
-    public function removeUserRoles(Collection $userRoles)
+    public function removeRoles(Collection $roles)
     {
-        foreach ($userRoles as $userRole) {
-            $this->userRoles->removeElement($userRole);
+        foreach ($roles as $role) {
+            $this->roles->removeElement($role);
         }
         return $this;
     }

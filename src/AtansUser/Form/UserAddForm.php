@@ -60,7 +60,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                  ->setAttribute('class', 'form-control');
         $this->add($password);
 
-        $userRoles = new ObjectMultiCheckbox('userRoles');
+        $userRoles = new ObjectMultiCheckbox('roles');
         $userRoles->setLabel('Roles')
                   ->setLabelAttributes(array(
                       'class' => 'checkbox-inline'
@@ -150,7 +150,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                     array('name' => 'StringTrim'),
                 ),
             ),
-            'userRoles' => array(
+            'roles' => array(
                 'required' => false,
             ),
             'status' => array(

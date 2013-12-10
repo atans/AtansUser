@@ -11,7 +11,7 @@ use ZfcRbac\Permission\PermissionInterface;
  *
  * @ORM\Entity(repositoryClass="PermissionRepository")
  * @ORM\Table(
- *  name="rbac_permission",
+ *  name="permission",
  *  options={"collate"="utf8_general_ci"}
  * )
  */

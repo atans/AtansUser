@@ -10,7 +10,7 @@ use Zend\Permissions\Rbac\AbstractRole;
  * Role
  *
  * @ORM\Entity(repositoryClass="RoleRepository")
- * @ORM\Table(name="rbac_role", options={"collate"="utf8_general_ci"})
+ * @ORM\Table(name="role", options={"collate"="utf8_general_ci"})
  * @package User\Entity
  */
 class Role extends AbstractRole
@@ -37,10 +37,16 @@ class Role extends AbstractRole
     protected $parent = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
-     * @var PermissionInterface[]|\Doctrine\Common\Collections\Collection
+     * @ORM\ManyToMany(targetEntity="Permission", inversedBy="roles")
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\JoinTable(
+     *  name="role_permission",
+     *  joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
+     * )
+     * @var Permission[]
      */
-    protected $permissions;
+    protected $permissions = null;
 
     public function __construct()
     {
@@ -112,21 +118,15 @@ class Role extends AbstractRole
     }
 
     /**
-     * Add a permission
+     * Add permission
      *
-     * @param \ZfcRbac\Permission\PermissionInterface|string $permission
-     * @return void
+     * @param Permission $permission
+     * @return $this
      */
     public function addPermission($permission)
     {
-        if (is_string($permission)) {
-            $name = $permission;
-            $permission = new Permission();
-            $permission->setName($name);
-        }
-
-        $permission->addRole($this);
-        $this->permissions[$permission->getName()] = $permission;
+        $this->permissions->add($permission);
+        return $this;
     }
 
     /**
@@ -138,8 +138,7 @@ class Role extends AbstractRole
     public function addPermissions(Collection $permissions)
     {
         foreach ($permissions as $permission) {
-            //$this->permissions->add($permission);
-            $this->addPermission($permission);
+            $this->permissions->add($permission);
         }
         return $this;
     }
@@ -147,16 +146,12 @@ class Role extends AbstractRole
     /**
      * Remove permission
      *
-     * @param  \ZfcRbac\Permission\PermissionInterface|string $permission
+     * @param  Permission $permission
      * @return Role
      */
-    public function removePermission($permission)
+    public function removePermission(Permission $permission)
     {
-        if (is_string($permission)) {
-            $this->permissions->remove($permission);
-        } else {
-            $this->permissions->remove($permission->getName());
-        }
+        $this->permissions->removeElement($permission);
         return $this;
     }
 
@@ -169,8 +164,7 @@ class Role extends AbstractRole
     public function removePermissions(Collection $permissions)
     {
         foreach ($permissions as $permission) {
-            //$this->permissions->removeElement($permission);
-            $this->removePermission($permission);
+            $this->permissions->removeElement($permission);
         }
         return $this;
     }

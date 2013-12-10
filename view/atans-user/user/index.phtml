@@ -5,6 +5,12 @@ $title = $this->translate('User Home', __NAMESPACE__);
 $this->headTitle($title);
 
 echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-index'));
+$roleNames = array();
+//if ($roles = $user->getRoles()) {
+//    foreach ($roles as $role) {
+//        $roleNames[] = $role->getName();
+//    }
+//}
 ?>
 
 <h4 class="page-header">
@@ -40,7 +46,7 @@ echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-index
     <ul class="list-unstyled">
         <li>
             <?php echo $this->translate('Roles', __NAMESPACE__) ?>:
-            <?php echo implode(', ', $user->getRoles()) ?>
+            <?php echo implode(', ', $roleNames) ?>
         </li>
         <li>
             <?php echo $this->translate('Email', __NAMESPACE__) ?>:
