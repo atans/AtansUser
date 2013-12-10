@@ -17,7 +17,9 @@ $permissions = $role->getPermissions();
                 <?php echo $this->escapeHtml($parent->getName()) ?>
             </span>
         <?php else: ?>
-            <?php echo $this->translate('None', __NAMESPACE__) ?>
+            <div class="label label-warning">
+                <?php echo $this->translate('None', __NAMESPACE__) ?>
+            </div>
         <?php endif ?>
     </td>
     <td>

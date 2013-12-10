@@ -20,6 +20,8 @@ switch ($user->getStatus()) {
         $status = sprintf($this->translate("Unknown status '%s'"), $user->getStatus());
         $statusClass = ' label-danger';
 }
+
+$roles = $user->getRoles()
 ?>
 <tr id="user-<?php echo $this->escapeHtmlAttr($user->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($user->getId()) ?>">
     <td>
@@ -29,7 +31,7 @@ switch ($user->getStatus()) {
         <?php echo $this->escapeHtml($user->getUserName()) ?>
     </td>
     <td>
-        <?php if ($roles = $user->getRoles()): ?>
+        <?php if (count($roles)): ?>
             <ul class="list-unstyled">
                 <?php foreach ($roles as $role): ?>
                 <li><?php echo $role->getName() ?></li>

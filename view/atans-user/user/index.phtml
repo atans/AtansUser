@@ -5,12 +5,15 @@ $title = $this->translate('User Home', __NAMESPACE__);
 $this->headTitle($title);
 
 echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-index'));
+
+$user = $this->identity();
 $roleNames = array();
-//if ($roles = $user->getRoles()) {
-//    foreach ($roles as $role) {
-//        $roleNames[] = $role->getName();
-//    }
-//}
+if ($roles = $user->getRoles()) {
+    foreach ($roles as $role) {
+        $roleNames[] = $role->getName();
+    }
+}
+
 ?>
 
 <h4 class="page-header">
@@ -18,44 +21,37 @@ $roleNames = array();
 
 </h4>
 
-<?php if ($user = $this->identity()) :?>
-    <p>
-        <span class="btn-group btn-group-sm">
-            <a class="btn btn-default" href="<?php echo $this->url('atansuser/change-password') ?>">
-                <?php echo $this->translate('Change password', __NAMESPACE__) ?>
-            </a>
+<p>
+    <span class="btn-group btn-group-sm">
+        <a class="btn btn-default" href="<?php echo $this->url('atansuser/change-password') ?>">
+            <?php echo $this->translate('Change password', __NAMESPACE__) ?>
+        </a>
 
-            <a class="btn btn-default" href="<?php echo $this->url('atansuser/change-email') ?>">
-                <?php echo $this->translate('Change email', __NAMESPACE__) ?>
-            </a>
-        </span>
+        <a class="btn btn-default" href="<?php echo $this->url('atansuser/change-email') ?>">
+            <?php echo $this->translate('Change email', __NAMESPACE__) ?>
+        </a>
+    </span>
 
-        <span class="btn-group btn-group-sm">
-            <a class="btn btn-default" href="<?php echo $this->url('atansuser/logout') ?>">
-                <?php echo $this->translate('Logout', __NAMESPACE__) ?>
-            </a>
-        </span>
-    </p>
+    <span class="btn-group btn-group-sm">
+        <a class="btn btn-default" href="<?php echo $this->url('atansuser/logout') ?>">
+            <?php echo $this->translate('Logout', __NAMESPACE__) ?>
+        </a>
+    </span>
+</p>
 
-    <p>
-        <strong>
-            <?php echo sprintf($this->translate('Hello，%s', __NAMESPACE__), $user->getUsername()) ?>
-        </strong>
-    </p>
+<p>
+    <strong>
+        <?php echo sprintf($this->translate('Hello，%s', __NAMESPACE__), $user->getUsername()) ?>
+    </strong>
+</p>
 
-    <ul class="list-unstyled">
-        <li>
-            <?php echo $this->translate('Roles', __NAMESPACE__) ?>:
-            <?php echo implode(', ', $roleNames) ?>
-        </li>
-        <li>
-            <?php echo $this->translate('Email', __NAMESPACE__) ?>:
-            <?php echo $this->escapeHtml($user->getEmail()) ?>
-        </li>
-    </ul>
-
-<?php else: ?>
-    <a href="<?php echo $this->url('atansuser/login') ?>">
-        <?php echo $this->translate('Login', __NAMESPACE__) ?>
-    </a>
-<?php endif ?>
+<ul class="list-unstyled">
+    <li>
+        <?php echo $this->translate('Roles', __NAMESPACE__) ?>:
+        <?php echo implode(', ', $roleNames) ?>
+    </li>
+    <li>
+        <?php echo $this->translate('Email', __NAMESPACE__) ?>:
+        <?php echo $this->escapeHtml($user->getEmail()) ?>
+    </li>
+</ul>

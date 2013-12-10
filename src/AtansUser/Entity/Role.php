@@ -37,7 +37,7 @@ class Role extends AbstractRole
     protected $parent = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Permission", inversedBy="roles")
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(
      *  name="role_permission",
@@ -118,15 +118,21 @@ class Role extends AbstractRole
     }
 
     /**
-     * Add permission
+     * Add a permission
      *
-     * @param Permission $permission
-     * @return $this
+     * @param  \ZfcRbac\Permission\PermissionInterface|string $permission
+     * @return void
      */
     public function addPermission($permission)
     {
-        $this->permissions->add($permission);
-        return $this;
+        if (is_string($permission)) {
+            $name       = $permission;
+            $permission = new Permission();
+            $permission->setName($name);
+        }
+
+        $permission->addRole($this);
+        $this->permissions[$permission->getName()] = $permission;
     }
 
     /**
@@ -138,7 +144,7 @@ class Role extends AbstractRole
     public function addPermissions(Collection $permissions)
     {
         foreach ($permissions as $permission) {
-            $this->permissions->add($permission);
+            $this->addPermission($permission);
         }
         return $this;
     }
