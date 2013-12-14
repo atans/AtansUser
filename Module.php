@@ -8,7 +8,7 @@ class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
-        // Add validator if default translator was defined
+        // Add translation file if default translator was defined
         if ($translator = AbstractValidator::getDefaultTranslator()) {
             $translator->addTranslationFilePattern(
                 'phpArray',
