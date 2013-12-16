@@ -18,7 +18,7 @@
         "doctrine/doctrine-module": "0.8.x-dev",
         "doctrine/doctrine-orm-module": "0.8.*@dev",
         "zf-commons/zfc-base": "0.1.*",
-        "zf-commons/zfc-rbac": "1.0.*",
+        "zf-commons/zfc-rbac": "1.0.2",
         "zf-commons/zfc-admin": "0.1.*",
         "atans/atans-common" : "0.1.*"
     },
