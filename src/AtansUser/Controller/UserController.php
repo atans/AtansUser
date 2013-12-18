@@ -4,7 +4,6 @@ namespace AtansUser\Controller;
 use AtansUser\Entity\User;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\User as UserService;
-use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Result;
 use Zend\Crypt\Password\Bcrypt;
@@ -26,13 +25,6 @@ class UserController extends AbstractActionController
     const CONTROLLER_NAME = 'AtansUser\Controller\User';
 
     /**
-     * Flash messenger name space
-     *
-     * @var string
-     */
-    const FM_NS = 'atansuser-user-index';
-
-    /**
      * Translator text domain
      */
     const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
@@ -51,11 +43,6 @@ class UserController extends AbstractActionController
      * @var Form
      */
     protected $changePasswordForm;
-
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
 
     /**
      * @var array
@@ -442,31 +429,6 @@ class UserController extends AbstractActionController
     {
         $this->changePasswordForm = $changePasswordForm;
 
-        return $this;
-    }
-
-    /**
-     * Get entityManager
-     *
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        }
-        return $this->entityManager;
-    }
-
-    /**
-     * Set entityManager
-     *
-     * @param  EntityManager $entityManager
-     * @return UserController
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
         return $this;
     }
 

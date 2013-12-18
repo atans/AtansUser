@@ -6,6 +6,11 @@ use Zend\ServiceManager\ServiceManager;
 
 class UserEditForm extends UserAddForm
 {
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct($serviceManager, 'user-edit-form');
@@ -20,6 +25,12 @@ class UserEditForm extends UserAddForm
         $this->getEventManager()->trigger('init', $this);
     }
 
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
     public function getInputFilterSpecification()
     {
         $inputFilter = parent::getInputFilterSpecification();

@@ -1,6 +1,7 @@
 <?php
 namespace AtansUser\Form;
 
+use AtansLogger\Options\ModuleOptions;
 use AtansUser\Entity\User;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
@@ -14,9 +15,14 @@ use ZfcBase\Form\ProvidesEventsForm;
 class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
+     * @var ModuleOptions
+     */
+    protected $moduleOptions;
+
+    /**
      * @var EntityManager
      */
-    protected $entityManager;
+    protected $objectManager;
 
     /**
      * @var array
@@ -30,6 +36,12 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      */
     protected $serviceManager;
 
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     * @param string $name
+     */
     public function __construct(ServiceManager $serviceManager, $name = 'user-add-form')
     {
         parent::__construct($name);
@@ -38,8 +50,8 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
 
         $this->setServiceManager($serviceManager);
 
-        $entityManager = $this->getEntityManager();
-        $this->setHydrator(new DoctrineObject($entityManager))
+        $objectManager = $this->getObjectManager();
+        $this->setHydrator(new DoctrineObject($objectManager))
              ->setObject(new User());
 
         $id = new Element\Hidden('id');
@@ -67,7 +79,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                   ))
                   ->setOptions(array(
                       'use_hidden_element' => true,
-                      'object_manager' => $entityManager,
+                      'object_manager' => $objectManager,
                       'target_class'   => 'AtansUser\Entity\Role',
                       'property'       => 'name',
                       'is_method'      => true,
@@ -98,7 +110,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
      */
     public function getInputFilterSpecification()
     {
-        $entityManager = $this->getEntityManager();
+        $objectManager = $this->getObjectManager();
 
         return array(
             'id' => array(
@@ -117,8 +129,8 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                     array(
                         'name' => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
-                            'object_manager'    => $entityManager,
-                            'object_repository' => $entityManager->getRepository($this->entities['User']),
+                            'object_manager'    => $objectManager,
+                            'object_repository' => $objectManager->getRepository($this->entities['User']),
                             'fields' => array('username'),
                             'messages' => array(
                                 UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The username already taken',
@@ -134,8 +146,8 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                     array(
                         'name' => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
-                            'object_manager'    => $entityManager,
-                            'object_repository' => $entityManager->getRepository($this->entities['User']),
+                            'object_manager'    => $objectManager,
+                            'object_repository' => $objectManager->getRepository($this->entities['User']),
                             'fields' => array('email'),
                             'messages' => array(
                                 UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The email already taken',
@@ -160,27 +172,52 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
     }
 
     /**
-     * Get entityManager
+     * Get moduleOptions
      *
-     * @return EntityManager
+     * @return ModuleOptions
      */
-    public function getEntityManager()
+    public function getModuleOptions()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->moduleOptions instanceof ModuleOptions) {
+            $this->setModuleOptions($this->getServiceManager()->get('atansuser_module_options'));
         }
-        return $this->entityManager;
+        return $this->moduleOptions;
     }
 
     /**
-     * Set entityManager
+     * Set moduleOptions
      *
-     * @param  EntityManager $entityManager
+     * @param  ModuleOptions $moduleOptions
      * @return UserAddForm
      */
-    public function setEntityManager($entityManager)
+    public function setModuleOptions(ModuleOptions $moduleOptions)
     {
-        $this->entityManager = $entityManager;
+        $this->moduleOptions = $moduleOptions;
+        return $this;
+    }
+
+    /**
+     * Get objectManager
+     *
+     * @return EntityManager
+     */
+    public function getObjectManager()
+    {
+        if (! $this->objectManager instanceof EntityManager) {
+            $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManager()));
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * Set objectManager
+     *
+     * @param  EntityManager $objectManager
+     * @return UserAddForm
+     */
+    public function setObjectManager(EntityManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
         return $this;
     }
 

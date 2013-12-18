@@ -12,7 +12,7 @@ class Module
         if ($translator = AbstractValidator::getDefaultTranslator()) {
             $translator->addTranslationFilePattern(
                 'phpArray',
-                __DIR__ . '/languages/Zend_Validate',
+                __DIR__ . '/language/Zend_Validate',
                 '%s.php'
             );
         }
@@ -38,6 +38,11 @@ class Module
     {
         return array(
             'invokables' => array(
+                'atansuser_change_email_form'        => 'AtansUser\Form\ChangeEmailForm',
+                'atansuser_change_password_form'     => 'AtansUser\Form\ChangePasswordForm',
+                'atansuser_login_form'               => 'AtansUser\Form\LoginForm',
+                'atansuser_permission_search_form'   => 'AtansUser\Form\PermissionSearchForm',
+                'atansuser_role_search_form'         => 'AtansUser\Form\RoleSearchForm',
                 'atansuser_user_service'             => 'AtansUser\Service\User',
                 'atansuser_user_admin_service'       => 'AtansUser\Service\UserAdmin',
                 'atansuser_permission_admin_service' => 'AtansUser\Service\PermissionAdmin',
@@ -48,29 +53,14 @@ class Module
                     $config = $sm->get('config');
                     return new Options\ModuleOptions(isset($config['atansuser']) ? $config['atansuser'] : array());
                 },
-                'atansuser_change_email_form' => function ($sm) {
-                    return new Form\ChangeEmailForm();
-                },
-                'atansuser_change_password_form' => function ($sm) {
-                    return new Form\ChangePasswordForm();
-                },
-                'atansuser_login_form' => function ($sm) {
-                    return new Form\LoginForm();
-                },
                 'atansuser_register_form' => function ($sm) {
                     return new Form\RegisterForm($sm);
                 },
                 'atansuser_permission_form' => function ($sm) {
                     return new Form\PermissionForm($sm);
                 },
-                'atansuser_permission_search_form' => function ($sm) {
-                    return new Form\PermissionSearchForm($sm);
-                },
                 'atansuser_role_form' => function ($sm) {
                     return new Form\RoleForm($sm);
-                },
-                'atansuser_role_search_form' => function ($sm) {
-                    return new Form\RoleSearchForm($sm);
                 },
                 'atansuser_user_add_form' => function ($sm) {
                     return new Form\UserAddForm($sm);

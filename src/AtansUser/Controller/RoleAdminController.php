@@ -2,8 +2,8 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\Role;
+use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\RoleAdmin as RoleAdminService;
-use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -14,7 +14,7 @@ class RoleAdminController extends AbstractActionController
      *
      * @var string
      */
-    const FM_NS = 'atansuser-role-admin-index';
+    const FLASHMESSENGER_NAMESPACE = 'atansuser-role-admin-index';
 
     /**
      * Translator text domain
@@ -22,16 +22,16 @@ class RoleAdminController extends AbstractActionController
     const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var array
      */
     protected $entities = array(
         'Role' => 'AtansUser\Entity\Role',
     );
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     /**
      * @var Form
@@ -50,8 +50,8 @@ class RoleAdminController extends AbstractActionController
 
     public function indexAction()
     {
-        $request        = $this->getRequest();
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['Role']);
+        $request       = $this->getRequest();
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
@@ -64,7 +64,7 @@ class RoleAdminController extends AbstractActionController
         $form->setData($data);
         $form->isValid();
 
-        $paginator = $userRepository->pagination($form->getData());
+        $paginator = $objectManager->getRepository($this->entities['Role'])->pagination($form->getData());
 
         return array(
             'form'      => $form,
@@ -75,7 +75,7 @@ class RoleAdminController extends AbstractActionController
     public function addAction()
     {
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
 
         $role = new Role();
 
@@ -90,7 +90,7 @@ class RoleAdminController extends AbstractActionController
                 $this->getRoleAdminService()->add($role);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("Role '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("Role '%s' was successfully created", static::TRANSLATOR_TEXT_DOMAIN),
                     $role->getName()
                 ));
 
@@ -105,16 +105,15 @@ class RoleAdminController extends AbstractActionController
 
     public function editAction()
     {
-        $entityManager  = $this->getEntityManager();
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
+        $objectManager  = $this->objectManager($this->getOptions()->getObjectManager());
 
-
-        $role = $entityManager->find($this->entities['Role'], $id);
+        $role = $objectManager->find($this->entities['Role'], $id);
         if (! $role) {
             $flashMessenger->addSuccessMessage(sprintf(
-                $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $translator->translate("Role does not found. '#%d'", static::TRANSLATOR_TEXT_DOMAIN),
                 $id
             ));
 
@@ -138,7 +137,7 @@ class RoleAdminController extends AbstractActionController
                 $this->getRoleAdminService()->edit($role);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                     $translator->translate("Role '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
+                     $translator->translate("Role '%s' was successfully updated", static::TRANSLATOR_TEXT_DOMAIN),
                      $role->getName()
                  ));
 
@@ -154,15 +153,15 @@ class RoleAdminController extends AbstractActionController
 
     public function deleteAction()
     {
-        $entityManager = $this->getEntityManager();
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id            = (int) $this->params()->fromRoute('id', 0);
         $translator    = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
 
-        $role = $entityManager->find($this->entities['Role'], $id);
+        $role = $objectManager->find($this->entities['Role'], $id);
         if (! $role) {
             $flashMessenger->addMessage(sprintf(
-                $translator->translate("Role does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $translator->translate("Role does not found. '#%d'", static::TRANSLATOR_TEXT_DOMAIN),
                 $id
             ));
 
@@ -176,7 +175,7 @@ class RoleAdminController extends AbstractActionController
                 $this->getRoleAdminService()->delete($role);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("Role '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("Role '%s' was successfully deleted", static::TRANSLATOR_TEXT_DOMAIN),
                     $role->getName()
                 ));
 
@@ -190,27 +189,27 @@ class RoleAdminController extends AbstractActionController
     }
 
     /**
-     * Get entityManager
+     * Get options
      *
-     * @return EntityManager
+     * @return ModuleOptions
      */
-    public function getEntityManager()
+    public function getOptions()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
         }
-        return $this->entityManager;
+        return $this->options;
     }
 
     /**
-     * Set entityManager
+     * Set options
      *
-     * @param  EntityManager $entityManager
+     * @param  ModuleOptions $options
      * @return RoleAdminController
      */
-    public function setEntityManager($entityManager)
+    public function setOptions(ModuleOptions $options)
     {
-        $this->entityManager = $entityManager;
+        $this->options = $options;
         return $this;
     }
 

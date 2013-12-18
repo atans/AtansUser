@@ -2,6 +2,7 @@
 namespace AtansUser\Form;
 
 use AtansUser\Entity\Permission;
+use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Validator\UniqueObject;
@@ -13,9 +14,14 @@ use ZfcBase\Form\ProvidesEventsForm;
 class PermissionForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
+     * @var ModuleOptions
+     */
+    protected $moduleOptions;
+
+    /**
      * @var EntityManager
      */
-    protected $entityManager;
+    protected $objectManager;
 
     /**
      * @var array
@@ -29,6 +35,11 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
      */
     protected $serviceManager;
 
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct('permission-form');
@@ -36,10 +47,8 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
         $this->setAttribute('class', 'form-horizontal');
 
         $this->setServiceManager($serviceManager);
-        $entityManager       = $this->getEntityManager();
-        $this->entityManager = $entityManager;
 
-        $this->setHydrator(new DoctrineHydrator($entityManager))
+        $this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
             ->setObject(new Permission());
 
         $id = new Element\Hidden('id');
@@ -49,7 +58,6 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
         $name->setLabel('Permission name')
              ->setAttribute('class', 'form-control');
         $this->add($name);
-
 
         $description = new Element\Text('description');
         $description->setLabel('Permission description')
@@ -67,7 +75,7 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
      */
     public function getInputFilterSpecification()
     {
-        $entityManager = $this->getEntityManager();
+        $objectManager = $this->getObjectManager();
 
         return array(
             'id' => array(
@@ -92,8 +100,8 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
                     array(
                         'name' => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
-                            'object_manager'    => $entityManager,
-                            'object_repository' => $entityManager->getRepository($this->entities['Permission']),
+                            'object_manager'    => $objectManager,
+                            'object_repository' => $objectManager->getRepository($this->entities['Permission']),
                             'fields' => 'name',
                             'messages' => array(
                                 UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The permission name already in use',
@@ -113,27 +121,52 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
     }
 
     /**
+     * Get moduleOptions
+     *
+     * @return ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        if (! $this->moduleOptions instanceof ModuleOptions) {
+            $this->setModuleOptions($this->getServiceManager()->get('atansuser_module_options'));
+        }
+        return $this->moduleOptions;
+    }
+
+    /**
+     * Set moduleOptions
+     *
+     * @param  ModuleOptions $moduleOptions
+     * @return PermissionForm
+     */
+    public function setModuleOptions(ModuleOptions $moduleOptions)
+    {
+        $this->moduleOptions = $moduleOptions;
+        return $this;
+    }
+
+    /**
      * Get entityManager
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager) {
-            $this->setEntityManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager) {
+            $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManager()));
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return RoleForm
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
         return $this;
     }
 

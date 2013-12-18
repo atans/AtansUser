@@ -3,6 +3,7 @@ namespace AtansUser\Form;
 
 use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
@@ -18,14 +19,23 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
      */
     protected $serviceManager;
 
+    /**
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
+        $this->setServiceManager($serviceManager);
+
         parent::__construct('user-search-form');
         $this->setAttribute('method', 'get');
         $this->setAttribute('class', 'form-inline');
-
-        $this->setServiceManager($serviceManager);
-        $translator = $serviceManager->get('Translator');
 
         $page = new Element\Text('page');
         $this->add($page);
@@ -42,7 +52,7 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
         $status = new Element\Select('status');
         $status->setAttribute('class', 'form-control')
                ->setOptions(array(
-                   'empty_option' => $translator->translate('Status', static::TRANSLATOR_TEXT_DOMAIN),
+                   'empty_option' => $this->getTranslator()->translate('Status', static::TRANSLATOR_TEXT_DOMAIN),
                ))
                ->setValueOptions($serviceManager->get('atansuser_user_statuses'));
         $this->add($status);
@@ -103,6 +113,31 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
     public function setServiceManager($serviceManager)
     {
         $this->serviceManager = $serviceManager;
+        return $this;
+    }
+
+    /**
+     * Get translator
+     *
+     * @return Translator
+     */
+    public function getTranslator()
+    {
+        if (! $this->translator instanceof Translator) {
+            $this->setTranslator($this->getServiceManager()->get('Translator'));
+        }
+        return $this->translator;
+    }
+
+    /**
+     * Set translator
+     *
+     * @param  Translator $translator
+     * @return UserSearchForm
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
         return $this;
     }
 }

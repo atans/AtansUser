@@ -1,11 +1,13 @@
 <?php
 namespace AtansUser;
 
+use AtansUser\Controller\UserAdminController;
+
 $title = $this->translate('User Management', __NAMESPACE__);
 $this->headTitle($title);
 ?>
 
-<?php echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-admin-index'))?>
+<?php echo $this->render('alert/bootstrap', array('namespace' => UserAdminController::FLASHMESSENGER_NAMESPACE))?>
 
 <h4 class="page-header">
     <span class="glyphicon glyphicon-user"></span>
@@ -58,7 +60,7 @@ $this->headTitle($title);
             <br>
 
             <div class="alert alert-info">
-                <?php echo $this->translate('Could not find any users.', __NAMESPACE__) ?>
+                <?php echo $this->translate('Could not find any users', __NAMESPACE__) ?>
             </div>
         </div>
     <?php endif ?>

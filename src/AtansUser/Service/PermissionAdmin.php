@@ -2,6 +2,7 @@
 namespace AtansUser\Service;
 
 use AtansUser\Entity\Permission;
+use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -12,7 +13,12 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     /**
      * @var EntityManager
      */
-    protected $entityManager;
+    protected $objectManager;
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     /**
      * @var ServiceLocatorInterface
@@ -28,8 +34,8 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     public function add(Permission $permission)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
-        $this->getEntityManager()->persist($permission);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($permission);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('permission' => $permission));
 
         return true;
@@ -44,8 +50,8 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     public function edit(Permission $permission)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
-        $this->getEntityManager()->persist($permission);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($permission);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('permission' => $permission));
 
         return true;
@@ -60,8 +66,8 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     public function delete(Permission $permission)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
-        $this->getEntityManager()->remove($permission);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->remove($permission);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('permission' => $permission));
 
         return true;
@@ -72,23 +78,48 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager instanceof EntityManager) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManager()));
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return UserAdmin
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return ModuleOptions
+     */
+    public function getOptions()
+    {
+        if (! $this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
+        }
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param  ModuleOptions $options
+     * @return PermissionAdmin
+     */
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
         return $this;
     }
 

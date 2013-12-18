@@ -5,6 +5,7 @@ use AtansUser\Entity\User;
 use Zend\Stdlib\AbstractOptions;
 
 class ModuleOptions extends AbstractOptions implements
+    AtansUserInterface,
     RegistrationOptionsInterface,
     UserOptionsInterface
 {
@@ -12,6 +13,11 @@ class ModuleOptions extends AbstractOptions implements
      * Turn off strict options mode
      */
     protected $__strictMode__ = false;
+
+    /**
+     * @var string
+     */
+    protected $objectManager = 'doctrine.entitymanager.orm_default';
 
     /**
      * @var bool
@@ -72,6 +78,30 @@ class ModuleOptions extends AbstractOptions implements
      * @var array
      */
     protected $allowedLoginStatuses = array(User::STATUS_ACTIVE);
+
+    /**
+     * Set objectManager
+     *
+     * @param  string $objectManager
+     * @return ModuleOptions
+     */
+    public function setObjectManager($objectManager)
+    {
+        $this->objectManager = $objectManager;
+
+        return $this;
+    }
+
+    /**
+     * Get objectManager
+     *
+     * @return string
+     */
+    public function getObjectManager()
+    {
+        return $this->objectManager;
+    }
+
 
     /**
      * Set enable user registration

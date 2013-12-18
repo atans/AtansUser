@@ -7,6 +7,9 @@ use ZfcBase\Form\ProvidesEventsForm;
 
 class LoginForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
+    /**
+     * Initialization
+     */
     public function __construct()
     {
         parent::__construct('login-form');

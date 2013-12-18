@@ -14,6 +14,9 @@ use ZfcBase\Form\ProvidesEventsForm;
 
 class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
+    /**
+     * Translator text domain
+     */
     const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
@@ -33,6 +36,11 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
      */
     protected $serviceManager;
 
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct('role-form');

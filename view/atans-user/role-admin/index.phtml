@@ -1,10 +1,12 @@
 <?php
 namespace AtansUser;
 
+use AtansUser\Controller\RoleAdminController;
+
 $title = $this->translate('Role Management', __NAMESPACE__);
 $this->headTitle($title);
 
-echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-role-admin-index'));
+echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::FLASHMESSENGER_NAMESPACE));
 ?>
 
 <h4 class="page-header">
@@ -53,7 +55,7 @@ echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-role-admin
         <?php echo $this->render('atans-user/role-admin/search-form', array('form' => $form)) ?>
         <br>
         <div class="alert alert-info">
-            <?php echo $this->translate('Could not find any roles.', __NAMESPACE__) ?>
+            <?php echo $this->translate('Could not find any roles', __NAMESPACE__) ?>
         </div>
     </div>
 <?php endif ?>

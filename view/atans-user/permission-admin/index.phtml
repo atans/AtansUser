@@ -1,10 +1,12 @@
 <?php
 namespace AtansUser;
 
+use AtansUser\Controller\PermissionAdminController;
+
 $title = $this->translate('Permission Management', __NAMESPACE__);
 $this->headTitle($title);
 
-echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-permission-admin-index'));
+echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminController::FLASHMESSENGER_NAMESPACE));
 ?>
 
 <h4 class="page-header">
@@ -54,7 +56,7 @@ echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-permission
         <br>
 
         <div class="alert alert-info">
-            <?php echo $this->translate('Could not find any permissions.', __NAMESPACE__) ?>
+            <?php echo $this->translate('Could not find any permissions', __NAMESPACE__) ?>
         </div>
     </div>
     <?php endif ?>

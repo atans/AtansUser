@@ -6,6 +6,11 @@ return array(
         /**
          * Enable registration
          */
+        // 'object_manager' => 'doctrine.entitymanager.orm_default',
+
+        /**
+         * Enable registration
+         */
         // 'enable_registration' => true,
 
         /**

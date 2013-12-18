@@ -29,6 +29,11 @@ class RegisterForm extends ProvidesEventsForm implements InputFilterProviderInte
         'User' => 'AtansUser\Entity\User',
     );
 
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct('register-form');

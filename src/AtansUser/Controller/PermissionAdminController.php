@@ -2,19 +2,14 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\Permission;
+use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\PermissionAdmin as PermissionAdminService;
-use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class PermissionAdminController extends AbstractActionController
 {
-    /**
-     * Flash messenger name space
-     *
-     * @var string
-     */
-    const FM_NS = 'atansuser-permission-admin-index';
+    const FLASHMESSENGER_NAMESPACE = 'atansuser-permission-admin-index';
 
     /**
      * Translator text domain
@@ -22,16 +17,16 @@ class PermissionAdminController extends AbstractActionController
     const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var array
      */
     protected $entities = array(
         'Permission' => 'AtansUser\Entity\Permission',
     );
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     /**
      * @var Form
@@ -51,7 +46,7 @@ class PermissionAdminController extends AbstractActionController
     public function indexAction()
     {
         $request        = $this->getRequest();
-        $userRepository = $this->getEntityManager()->getRepository($this->entities['Permission']);
+        $objectManger   = $this->objectManager($this->getOptions()->getObjectManager());
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
@@ -64,7 +59,7 @@ class PermissionAdminController extends AbstractActionController
         $form->setData($data);
         $form->isValid();
 
-        $paginator = $userRepository->pagination($form->getData());
+        $paginator = $objectManger->getRepository($this->entities['Permission'])->pagination($form->getData());
 
         return array(
             'form'      => $form,
@@ -75,7 +70,7 @@ class PermissionAdminController extends AbstractActionController
     public function addAction()
     {
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
 
         $permission = new Permission();
 
@@ -90,7 +85,7 @@ class PermissionAdminController extends AbstractActionController
                 $this->getPermissionAdminService()->add($permission);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("Permission '%s' was successfully created.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("Permission '%s' was successfully created", static::TRANSLATOR_TEXT_DOMAIN),
                     $permission->getName()
                 ));
 
@@ -105,12 +100,12 @@ class PermissionAdminController extends AbstractActionController
 
     public function editAction()
     {
-        $entityManager  = $this->getEntityManager();
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
+        $objectManager  = $this->objectManager($this->getOptions()->getObjectManager());
 
-        $permissionRepository = $entityManager->getRepository($this->entities['Permission']);
+        $permissionRepository = $objectManager->getRepository($this->entities['Permission']);
         $permission           = $permissionRepository->find($id);
         if (! $permission) {
             $flashMessenger->addErrorMessage(sprintf(
@@ -132,7 +127,7 @@ class PermissionAdminController extends AbstractActionController
                 $this->getPermissionAdminService()->edit($permission);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("Permission '%s' was successfully updated.", self::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("Permission '%s' was successfully updated", static::TRANSLATOR_TEXT_DOMAIN),
                     $permission->getName()
                 ));
 
@@ -148,15 +143,15 @@ class PermissionAdminController extends AbstractActionController
 
     public function deleteAction()
     {
-        $entityManager  = $this->getEntityManager();
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace(self::FM_NS);
+        $objectManager  = $this->objectManager($this->getOptions()->getObjectManager());
 
-        $permission = $entityManager->find($this->entities['Permission'], $id);
+        $permission = $objectManager->find($this->entities['Permission'], $id);
         if (! $permission) {
             $flashMessenger->addErrorMessage(sprintf(
-                $translator->translate("Permission does not found. '#%d'", self::TRANSLATOR_TEXT_DOMAIN),
+                $translator->translate("Permission does not found. '#%d'", static::TRANSLATOR_TEXT_DOMAIN),
                 $id
             ));
 
@@ -170,7 +165,7 @@ class PermissionAdminController extends AbstractActionController
                 $this->getPermissionAdminService()->delete($permission);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                     $translator->translate("Permission '%s' was successfully deleted.", self::TRANSLATOR_TEXT_DOMAIN),
+                     $translator->translate("Permission '%s' was successfully deleted", static::TRANSLATOR_TEXT_DOMAIN),
                      $permission->getName()
                  ));
 
@@ -184,16 +179,28 @@ class PermissionAdminController extends AbstractActionController
     }
 
     /**
-     * Get entityManager
+     * Get options
      *
-     * @return EntityManager
+     * @return ModuleOptions
      */
-    public function getEntityManager()
+    public function getOptions()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
         }
-        return $this->entityManager;
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param  ModuleOptions $options
+     * @return PermissionAdminController
+     */
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
+        return $this;
     }
 
     /**
@@ -207,18 +214,6 @@ class PermissionAdminController extends AbstractActionController
             $this->setPermissionAdminService($this->getServiceLocator()->get('atansuser_permission_admin_service'));
         }
         return $this->permissionAdminService;
-    }
-
-    /**
-     * Set entityManager
-     *
-     * @param  EntityManager $entityManager
-     * @return PermissionAdminController
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-        return $this;
     }
 
     /**

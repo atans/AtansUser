@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2013-11-25 18:01+0800\n"
-"PO-Revision-Date: 2013-11-25 18:01+0800\n"
+"POT-Creation-Date: 2013-12-18 17:38+0800\n"
+"PO-Revision-Date: 2013-12-18 17:38+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: en-US\n"
@@ -15,241 +15,241 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../Module.php:88 ../view/atans-user/user-admin/partial.phtml:8
+#: ../Module.php:81 ../view/atans-user/user-admin/partial.phtml:8
 msgid "Active"
 msgstr ""
 
-#: ../Module.php:89 ../view/atans-user/user-admin/partial.phtml:12
+#: ../Module.php:82 ../view/atans-user/user-admin/partial.phtml:12
 msgid "Inactive"
 msgstr ""
 
-#: ../Module.php:90 ../view/atans-user/user-admin/partial.phtml:16
+#: ../Module.php:83 ../view/atans-user/user-admin/partial.phtml:16
 msgid "Deleted"
 msgstr ""
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:90
+#: ../src/AtansUser/Controller/PermissionAdminController.php:88
 #, php-format
-msgid "Permission '%s' was successfully created."
+msgid "Permission '%s' was successfully created"
 msgstr ""
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:115
-#: ../src/AtansUser/Controller/PermissionAdminController.php:161
+#: ../src/AtansUser/Controller/PermissionAdminController.php:112
+#: ../src/AtansUser/Controller/PermissionAdminController.php:154
 #, php-format
 msgid "Permission does not found. '#%d'"
 msgstr ""
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:136
+#: ../src/AtansUser/Controller/PermissionAdminController.php:130
 #, php-format
-msgid "Permission '%s' was successfully updated."
+msgid "Permission '%s' was successfully updated"
 msgstr ""
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:178
+#: ../src/AtansUser/Controller/PermissionAdminController.php:168
 #, php-format
-msgid "Permission '%s' was successfully deleted."
+msgid "Permission '%s' was successfully deleted"
 msgstr ""
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:90
+#: ../src/AtansUser/Controller/RoleAdminController.php:93
 #, php-format
-msgid "Role '%s' was successfully created."
+msgid "Role '%s' was successfully created"
 msgstr ""
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:115
-#: ../src/AtansUser/Controller/RoleAdminController.php:167
+#: ../src/AtansUser/Controller/RoleAdminController.php:116
+#: ../src/AtansUser/Controller/RoleAdminController.php:164
 #, php-format
 msgid "Role does not found. '#%d'"
 msgstr ""
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:142
+#: ../src/AtansUser/Controller/RoleAdminController.php:140
 #, php-format
-msgid "Role '%s' was successfully updated."
+msgid "Role '%s' was successfully updated"
 msgstr ""
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:184
+#: ../src/AtansUser/Controller/RoleAdminController.php:178
 #, php-format
-msgid "Role '%s' was successfully deleted."
+msgid "Role '%s' was successfully deleted"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserAdminController.php:111
+#: ../src/AtansUser/Controller/UserAdminController.php:107
 #, php-format
-msgid "User '%s' was successfully created."
+msgid "User '%s' was successfully created"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserAdminController.php:136
-#: ../src/AtansUser/Controller/UserAdminController.php:183
+#: ../src/AtansUser/Controller/UserAdminController.php:131
+#: ../src/AtansUser/Controller/UserAdminController.php:173
 #, php-format
-msgid "User does not found. '#%d'"
+msgid "User does not found '#%d'"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserAdminController.php:158
+#: ../src/AtansUser/Controller/UserAdminController.php:147
 #, php-format
-msgid "User '%s' was successfully updated."
+msgid "User '%s' was successfully updated"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserAdminController.php:197
+#: ../src/AtansUser/Controller/UserAdminController.php:184
 #, php-format
-msgid "User '%s' was successfully deleted."
+msgid "User '%s' was successfully deleted"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:186
+#: ../src/AtansUser/Controller/UserController.php:173
 msgid "Your account has been successfully registered."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:235
+#: ../src/AtansUser/Controller/UserController.php:222
 msgid "Authentication Failure."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:238
+#: ../src/AtansUser/Controller/UserController.php:225
 msgid "A record with the supplied identity could not be found."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:241
+#: ../src/AtansUser/Controller/UserController.php:228
 msgid "More than one record matches the supplied identity."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:244
+#: ../src/AtansUser/Controller/UserController.php:231
 msgid "Supplied credential is invalid."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:247
+#: ../src/AtansUser/Controller/UserController.php:234
 msgid "Authentication uncategorized error."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:251
+#: ../src/AtansUser/Controller/UserController.php:238
 #, php-format
 msgid "Unknown authentication code: %d"
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:269
+#: ../src/AtansUser/Controller/UserController.php:256
 msgid "Your account is not active."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:323
-#: ../src/AtansUser/Controller/UserController.php:362
+#: ../src/AtansUser/Controller/UserController.php:310
+#: ../src/AtansUser/Controller/UserController.php:349
 msgid "Your current password was incorrectly typed."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:328
+#: ../src/AtansUser/Controller/UserController.php:315
 msgid "Email changed successfully."
 msgstr ""
 
-#: ../src/AtansUser/Controller/UserController.php:367
+#: ../src/AtansUser/Controller/UserController.php:354
 msgid "Password changed successfully."
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangeEmailForm.php:17
-#: ../src/AtansUser/Form/ChangePasswordForm.php:17
+#: ../src/AtansUser/Form/ChangeEmailForm.php:20
+#: ../src/AtansUser/Form/ChangePasswordForm.php:20
 msgid "Current password"
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangeEmailForm.php:22
+#: ../src/AtansUser/Form/ChangeEmailForm.php:25
 msgid "New email"
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangeEmailForm.php:27
+#: ../src/AtansUser/Form/ChangeEmailForm.php:30
 msgid "Verify new email"
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:22
-#: ../src/AtansUser/Form/UserEditForm.php:16
+#: ../src/AtansUser/Form/ChangePasswordForm.php:25
+#: ../src/AtansUser/Form/UserEditForm.php:21
 msgid "New password"
 msgstr ""
 
-#: ../src/AtansUser/Form/ChangePasswordForm.php:27
+#: ../src/AtansUser/Form/ChangePasswordForm.php:30
 msgid "Verify new password"
 msgstr ""
 
-#: ../src/AtansUser/Form/LoginForm.php:15
-#: ../src/AtansUser/Form/RegisterForm.php:42
-#: ../src/AtansUser/Form/UserAddForm.php:49
-#: ../view/atans-user/user-admin/index.phtml:41
+#: ../src/AtansUser/Form/LoginForm.php:18
+#: ../src/AtansUser/Form/RegisterForm.php:47
+#: ../src/AtansUser/Form/UserAddForm.php:61
+#: ../view/atans-user/user-admin/index.phtml:43
 msgid "Username"
 msgstr ""
 
-#: ../src/AtansUser/Form/LoginForm.php:20
-#: ../src/AtansUser/Form/RegisterForm.php:52
-#: ../src/AtansUser/Form/UserAddForm.php:59
+#: ../src/AtansUser/Form/LoginForm.php:23
+#: ../src/AtansUser/Form/RegisterForm.php:57
+#: ../src/AtansUser/Form/UserAddForm.php:71
 msgid "Password"
 msgstr ""
 
-#: ../src/AtansUser/Form/PermissionForm.php:49
-#: ../view/atans-user/permission-admin/index.phtml:38
+#: ../src/AtansUser/Form/PermissionForm.php:58
+#: ../view/atans-user/permission-admin/index.phtml:40
 msgid "Permission name"
 msgstr ""
 
-#: ../src/AtansUser/Form/PermissionForm.php:55
+#: ../src/AtansUser/Form/PermissionForm.php:63
 msgid "Permission description"
 msgstr ""
 
-#: ../src/AtansUser/Form/RegisterForm.php:47
-#: ../src/AtansUser/Form/UserAddForm.php:54
-#: ../view/atans-user/user/index.phtml:46
+#: ../src/AtansUser/Form/RegisterForm.php:52
+#: ../src/AtansUser/Form/UserAddForm.php:66
+#: ../view/atans-user/user/index.phtml:54
 msgid "Email"
 msgstr ""
 
-#: ../src/AtansUser/Form/RegisterForm.php:57
+#: ../src/AtansUser/Form/RegisterForm.php:62
 msgid "Password verify"
 msgstr ""
 
-#: ../src/AtansUser/Form/RoleForm.php:53
+#: ../src/AtansUser/Form/RoleForm.php:61
 msgid "Role name"
 msgstr ""
 
-#: ../src/AtansUser/Form/RoleForm.php:58
-#: ../view/atans-user/role-admin/index.phtml:38
+#: ../src/AtansUser/Form/RoleForm.php:66
+#: ../view/atans-user/role-admin/index.phtml:40
 msgid "Parent role"
 msgstr ""
 
-#: ../src/AtansUser/Form/RoleForm.php:61
+#: ../src/AtansUser/Form/RoleForm.php:69
 #: ../view/atans-user/permission-admin/partial.phtml:26
-#: ../view/atans-user/role-admin/partial.phtml:20
-#: ../view/atans-user/role-admin/partial.phtml:37
-#: ../view/atans-user/user-admin/partial.phtml:36
+#: ../view/atans-user/role-admin/partial.phtml:21
+#: ../view/atans-user/role-admin/partial.phtml:39
+#: ../view/atans-user/user-admin/partial.phtml:42
 msgid "None"
 msgstr ""
 
-#: ../src/AtansUser/Form/RoleForm.php:70
-#: ../view/atans-user/role-admin/index.phtml:39
+#: ../src/AtansUser/Form/RoleForm.php:78
+#: ../view/atans-user/role-admin/index.phtml:41
 msgid "Permissions"
 msgstr ""
 
-#: ../src/AtansUser/Form/UserAddForm.php:64
-#: ../view/atans-user/permission-admin/index.phtml:39
-#: ../view/atans-user/user/index.phtml:42
-#: ../view/atans-user/user-admin/index.phtml:42
+#: ../src/AtansUser/Form/UserAddForm.php:76
+#: ../view/atans-user/permission-admin/index.phtml:41
+#: ../view/atans-user/user/index.phtml:50
+#: ../view/atans-user/user-admin/index.phtml:44
 msgid "Roles"
 msgstr ""
 
-#: ../src/AtansUser/Form/UserAddForm.php:81
-#: ../src/AtansUser/Form/UserSearchForm.php:45
-#: ../view/atans-user/user-admin/index.phtml:43
+#: ../src/AtansUser/Form/UserAddForm.php:93
+#: ../src/AtansUser/Form/UserSearchForm.php:55
+#: ../view/atans-user/user-admin/index.phtml:45
 msgid "Status"
 msgstr ""
 
 #: ../view/atans-user/permission-admin/add.phtml:4
-#: ../view/atans-user/permission-admin/index.phtml:26
+#: ../view/atans-user/permission-admin/index.phtml:28
 msgid "Add permission"
 msgstr ""
 
 #: ../view/atans-user/permission-admin/add.phtml:17
 #: ../view/atans-user/permission-admin/delete.phtml:13
 #: ../view/atans-user/permission-admin/edit.phtml:17
-#: ../view/atans-user/permission-admin/index.phtml:15
+#: ../view/atans-user/permission-admin/index.phtml:17
 #: ../view/atans-user/role-admin/add.phtml:17
 #: ../view/atans-user/role-admin/delete.phtml:13
 #: ../view/atans-user/role-admin/edit.phtml:17
-#: ../view/atans-user/role-admin/index.phtml:14
+#: ../view/atans-user/role-admin/index.phtml:16
 #: ../view/atans-user/user-admin/add.phtml:17
 #: ../view/atans-user/user-admin/delete.phtml:13
 #: ../view/atans-user/user-admin/edit.phtml:17
-#: ../view/atans-user/user-admin/index.phtml:4
+#: ../view/atans-user/user-admin/index.phtml:6
 msgid "User Management"
 msgstr ""
 
 #: ../view/atans-user/permission-admin/add.phtml:21
 #: ../view/atans-user/permission-admin/delete.phtml:17
 #: ../view/atans-user/permission-admin/edit.phtml:21
-#: ../view/atans-user/permission-admin/index.phtml:4
-#: ../view/atans-user/user-admin/index.phtml:29
+#: ../view/atans-user/permission-admin/index.phtml:6
+#: ../view/atans-user/user-admin/index.phtml:31
 msgid "Permission Management"
 msgstr ""
 
@@ -258,7 +258,7 @@ msgstr ""
 #: ../view/atans-user/role-admin/add.phtml:62
 #: ../view/atans-user/role-admin/edit.phtml:62
 #: ../view/atans-user/user/change-email.phtml:59
-#: ../view/atans-user/user/change-password.phtml:60
+#: ../view/atans-user/user/change-password.phtml:59
 #: ../view/atans-user/user-admin/add.phtml:57
 #: ../view/atans-user/user-admin/edit.phtml:57
 msgid "Submit"
@@ -282,7 +282,7 @@ msgstr ""
 
 #: ../view/atans-user/permission-admin/delete.phtml:29
 #, php-format
-msgid "Are your sure you want to delete permission '%s' ?"
+msgid "Are your sure you want to delete permission '%s'?"
 msgstr ""
 
 #: ../view/atans-user/permission-admin/delete.phtml:33
@@ -295,14 +295,14 @@ msgstr ""
 msgid "Edit permission"
 msgstr ""
 
-#: ../view/atans-user/permission-admin/index.phtml:40
-#: ../view/atans-user/role-admin/index.phtml:40
-#: ../view/atans-user/user-admin/index.phtml:44
+#: ../view/atans-user/permission-admin/index.phtml:42
+#: ../view/atans-user/role-admin/index.phtml:42
+#: ../view/atans-user/user-admin/index.phtml:46
 msgid "Actions"
 msgstr ""
 
-#: ../view/atans-user/permission-admin/index.phtml:57
-msgid "Could not find any permissions."
+#: ../view/atans-user/permission-admin/index.phtml:59
+msgid "Could not find any permissions"
 msgstr ""
 
 #: ../view/atans-user/permission-admin/search-form.phtml:13
@@ -312,15 +312,15 @@ msgid "Page size"
 msgstr ""
 
 #: ../view/atans-user/role-admin/add.phtml:4
-#: ../view/atans-user/role-admin/index.phtml:26
+#: ../view/atans-user/role-admin/index.phtml:28
 msgid "Add role"
 msgstr ""
 
 #: ../view/atans-user/role-admin/add.phtml:21
 #: ../view/atans-user/role-admin/delete.phtml:17
 #: ../view/atans-user/role-admin/edit.phtml:21
-#: ../view/atans-user/role-admin/index.phtml:4
-#: ../view/atans-user/user-admin/index.phtml:26
+#: ../view/atans-user/role-admin/index.phtml:6
+#: ../view/atans-user/user-admin/index.phtml:28
 msgid "Role Management"
 msgstr ""
 
@@ -330,23 +330,23 @@ msgstr ""
 
 #: ../view/atans-user/role-admin/delete.phtml:30
 #, php-format
-msgid "Are you sure you want to delete role '%s' ?"
+msgid "Are you sure you want to delete role '%s'?"
 msgstr ""
 
 #: ../view/atans-user/role-admin/edit.phtml:4
 msgid "Edit role"
 msgstr ""
 
-#: ../view/atans-user/role-admin/index.phtml:37
+#: ../view/atans-user/role-admin/index.phtml:39
 msgid "Role"
 msgstr ""
 
-#: ../view/atans-user/role-admin/index.phtml:56
-msgid "Could not find any roles."
+#: ../view/atans-user/role-admin/index.phtml:58
+msgid "Could not find any roles"
 msgstr ""
 
 #: ../view/atans-user/user/change-email.phtml:4
-#: ../view/atans-user/user/index.phtml:23
+#: ../view/atans-user/user/index.phtml:31
 msgid "Change email"
 msgstr ""
 
@@ -357,26 +357,25 @@ msgid "User Home"
 msgstr ""
 
 #: ../view/atans-user/user/change-password.phtml:4
-#: ../view/atans-user/user/index.phtml:19
+#: ../view/atans-user/user/index.phtml:27
 msgid "Change password"
 msgstr ""
 
-#: ../view/atans-user/user/index.phtml:29
+#: ../view/atans-user/user/index.phtml:37
 msgid "Logout"
 msgstr ""
 
-#: ../view/atans-user/user/index.phtml:36
+#: ../view/atans-user/user/index.phtml:44
 #, php-format
 msgid "Hello，%s"
 msgstr ""
 
-#: ../view/atans-user/user/index.phtml:53
-#: ../view/atans-user/user/login.phtml:53
-msgid "Login"
-msgstr ""
-
 #: ../view/atans-user/user/login.phtml:4
 msgid "User login"
+msgstr ""
+
+#: ../view/atans-user/user/login.phtml:54
+msgid "Login"
 msgstr ""
 
 #: ../view/atans-user/user/register.phtml:4
@@ -388,7 +387,7 @@ msgid "Register"
 msgstr ""
 
 #: ../view/atans-user/user-admin/add.phtml:4
-#: ../view/atans-user/user-admin/index.phtml:20
+#: ../view/atans-user/user-admin/index.phtml:22
 msgid "Add user"
 msgstr ""
 
@@ -398,15 +397,15 @@ msgstr ""
 
 #: ../view/atans-user/user-admin/delete.phtml:25
 #, php-format
-msgid "Are you sure you want to delete user '%s' ?"
+msgid "Are you sure you want to delete user '%s'?"
 msgstr ""
 
 #: ../view/atans-user/user-admin/edit.phtml:4
 msgid "Edit user"
 msgstr ""
 
-#: ../view/atans-user/user-admin/index.phtml:61
-msgid "Could not find any users."
+#: ../view/atans-user/user-admin/index.phtml:63
+msgid "Could not find any users"
 msgstr ""
 
 #: ../view/atans-user/user-admin/partial.phtml:20

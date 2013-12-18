@@ -3,28 +3,18 @@ namespace AtansUser\Form;
 
 use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class RoleSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
-     * Translator text domain
+     * Initialization
      */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
-
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
-
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct()
     {
         parent::__construct('role-search-form');
         $this->setAttribute('method', 'get');
         $this->setAttribute('class', 'form-inline');
-
-        $this->setServiceManager($serviceManager);
 
         $page = new Element\Text('page');
         $this->add($page);
@@ -70,27 +60,5 @@ class RoleSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
                 ),
             ),
         );
-    }
-
-    /**
-     * Get serviceManager
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set serviceManager
-     *
-     * @param ServiceManager $serviceManager
-     * @return UserSearchForm
-     */
-    public function setServiceManager($serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-        return $this;
     }
 }
