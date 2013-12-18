@@ -64,7 +64,7 @@ class UserAdminController extends AbstractActionController
     public function indexAction()
     {
         $request       = $this->getRequest();
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManager() . '1');
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
