@@ -9,10 +9,6 @@ return array(
                 'identity_class'      => 'AtansUser\Entity\User',
                 'identity_property'   => 'username',
                 'credential_property' => 'password',
-                'credential_callable' => function ($user, $passwordGiven) {
-                    var_dump(get_class($user));
-                        exit;
-                },
             ),
         ),
         'driver' => array(
@@ -244,9 +240,9 @@ return array(
     'translator' => array(
         'translation_file_patterns' => array(
             array(
-                'type' => 'gettext',
-                'base_dir' => __DIR__ . '/../language',
-                'pattern' => '%s.mo',
+                'type'        => 'gettext',
+                'base_dir'    => __DIR__ . '/../language',
+                'pattern'     => '%s.mo',
                 'text_domain' => __NAMESPACE__,
             ),
         ),

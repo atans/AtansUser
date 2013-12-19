@@ -13,14 +13,14 @@ use ZfcBase\EventManager\EventProvider;
 class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var ModuleOptions
      */
     protected $options;
+
+    /**
+     * @var EntityManager
+     */
+    protected $objectManager;
 
     /**
      * @var ServiceLocatorInterface
@@ -38,8 +38,8 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
         $user->setCreated(new DateTime());
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($user);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
         return true;
@@ -62,8 +62,8 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
         }
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($user);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
         return true;
@@ -78,8 +78,8 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     public function delete(User $user)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
-        $this->getEntityManager()->remove($user);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->remove($user);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
         return true;
@@ -90,23 +90,23 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager instanceof EntityManager) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManager()));
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return UserAdmin
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
         return $this;
     }
 

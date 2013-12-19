@@ -1,6 +1,8 @@
 <?php
 namespace AtansUser;
 
+use AtansUser\Controller\UserController;
+
 $title = $this->translate('User login', __NAMESPACE__);
 $this->headTitle($title);
 
@@ -22,7 +24,7 @@ if ($this->redirect) {
                     <?php echo $this->escapeHtml($title) ?>
                 </div>
                 <div class="panel-body">
-                    <?php echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-login')) ?>
+                    <?php echo $this->render('alert/bootstrap', array('namespace' => UserController::FLASHMESSENGER_LOGIN_NAMESPACE)) ?>
 
                     <?php foreach ($form as $element):?>
                         <?php $elementMessages = $element->getMessages(); ?>

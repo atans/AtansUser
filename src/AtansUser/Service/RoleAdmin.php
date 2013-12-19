@@ -2,6 +2,7 @@
 namespace AtansUser\Service;
 
 use AtansUser\Entity\Role;
+use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -12,7 +13,12 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * @var EntityManager
      */
-    protected $entityManager;
+    protected $objectManager;
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     /**
      * @var ServiceLocatorInterface
@@ -28,8 +34,8 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     public function add(Role $role)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
-        $this->getEntityManager()->persist($role);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($role);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('role' => $role));
 
         return true;
@@ -44,8 +50,8 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     public function edit(Role $role)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
-        $this->getEntityManager()->persist($role);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($role);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('role' => $role));
 
         return true;
@@ -60,8 +66,8 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     public function delete(Role $role)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
-        $this->getEntityManager()->remove($role);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->remove($role);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('role' => $role));
 
         return true;
@@ -72,23 +78,48 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager instanceof EntityManager) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManager()));
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return UserAdmin
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return ModuleOptions
+     */
+    public function getOptions()
+    {
+        if (! $this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atansuser_module_options'));
+        }
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param  ModuleOptions $options
+     * @return RoleAdmin
+     */
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
         return $this;
     }
 

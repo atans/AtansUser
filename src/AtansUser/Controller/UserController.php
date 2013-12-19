@@ -16,18 +16,16 @@ use Zend\View\Model\ViewModel;
 
 class UserController extends AbstractActionController
 {
-    const ROUTE_LOGIN           = 'atansuser/login';
-    const ROUTE_LOGOUT          = 'atansuser/logout';
-    const ROUTE_REGISTER        = 'atansuser/register';
-    const ROUTE_CHANGE_EMAIL    = 'atansuser/change-email';
-    const ROUTE_CHANGE_PASSWORD = 'atansuser/change-password';
-
-    const CONTROLLER_NAME = 'AtansUser\Controller\User';
-
-    /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
+    const ROUTE_LOGIN                              = 'atansuser/login';
+    const ROUTE_LOGOUT                             = 'atansuser/logout';
+    const ROUTE_REGISTER                           = 'atansuser/register';
+    const ROUTE_CHANGE_EMAIL                       = 'atansuser/change-email';
+    const ROUTE_CHANGE_PASSWORD                    = 'atansuser/change-password';
+    const CONTROLLER_NAME                          = 'AtansUser\Controller\User';
+    const FLASHMESSENGER_LOGIN_NAMESPACE           = 'atansuser-user-login';
+    const FLASHMESSENGER_CHANGE_EMAIL_NAMESPACE    = 'atansuser-user-change-email';
+    const FLASHMESSENGER_CHANGE_PASSWORD_NAMESPACE = 'atansuser-user-change-password';
+    const TRANSLATOR_TEXT_DOMAIN                   = 'AtansUser';
 
     /**
      * @var AuthenticationService
@@ -169,7 +167,7 @@ class UserController extends AbstractActionController
         }
 
         $this->flashMessenger()
-             ->setNamespace('atansuser-user-login')
+             ->setNamespace(static::FLASHMESSENGER_LOGIN_NAMESPACE)
              ->addSuccessMessage($translator->translate('Your account has been successfully registered.'));
 
 
@@ -190,7 +188,7 @@ class UserController extends AbstractActionController
         $credential = $request->getPost('credential');
         $redirect   = $request->getPost('redirect', $request->getQuery('redirect', false));
 
-        $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-login');
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_LOGIN_NAMESPACE);
         $translator     = $this->getServiceLocator()->get('Translator');
 
         $authService = $this->getAuthenticationService();
@@ -304,7 +302,7 @@ class UserController extends AbstractActionController
         }
 
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-email');
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_CHANGE_EMAIL_NAMESPACE);
 
         if (! $this->getUserService()->changeEmail($form->getData())) {
             $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
@@ -343,7 +341,7 @@ class UserController extends AbstractActionController
         }
 
         $translator     = $this->getServiceLocator()->get('Translator');
-        $flashMessenger = $this->flashMessenger()->setNamespace('atansuser-user-change-password');
+        $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_CHANGE_PASSWORD_NAMESPACE);
 
         if (! $this->getUserService()->changePassword($form->getData())) {
             $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));

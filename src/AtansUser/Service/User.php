@@ -19,16 +19,16 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     protected $authenticationService;
 
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var array
      */
     protected $entities = array(
         'Role' => 'AtansUser\Entity\Role',
     );
+
+    /**
+     * @var EntityManager
+     */
+    protected $objectManager;
 
     /**
      * @var ModuleOptions
@@ -65,8 +65,8 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $currentUser->setEmail($data['newEmail']);
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
-        $this->getEntityManager()->persist($currentUser);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($currentUser);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $currentUser));
 
         return true;
@@ -96,8 +96,8 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         $currentUser->setPassword($password);
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $currentUser));
-        $this->getEntityManager()->persist($currentUser);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($currentUser);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $currentUser));
 
         return true;
@@ -118,7 +118,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
             return false;
         }
 
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->getObjectManager();
         $user          = $form->getData();
 
         $bcrypt = new Bcrypt();
@@ -140,8 +140,8 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
         }
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->getObjectManager()->persist($user);
+        $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
         return $user;
@@ -177,23 +177,23 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager instanceof EntityManager) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManager()));
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return User
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
         return $this;
     }
 

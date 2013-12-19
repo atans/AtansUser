@@ -1,6 +1,8 @@
 <?php
 namespace AtansUser;
 
+use AtansUser\Controller\UserController;
+
 $title = $this->translate('Change email', __NAMESPACE__);
 $this->headTitle($title);
 
@@ -8,7 +10,7 @@ $form = $this->form;
 $form->setAttribute('action', $this->url('atansuser/change-email'));
 $form->setAttribute('class', 'form-horizontal');
 ?>
-<?php echo $this->render('alert/bootstrap', array('namespace' => 'atansuser-user-change-email'))?>
+<?php echo $this->render('alert/bootstrap', array('namespace' => UserController::FLASHMESSENGER_CHANGE_EMAIL_NAMESPACE))?>
 
 <h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
