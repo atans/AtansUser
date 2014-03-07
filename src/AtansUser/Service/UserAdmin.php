@@ -37,6 +37,10 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     {
         $user->setCreated(new DateTime());
 
+        $bcrypt = new Bcrypt();
+        $bcrypt->setCost($this->getOptions()->getPasswordCost());
+        $user->setPassword($bcrypt->create($user->getPassword()));
+
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
         $this->getObjectManager()->persist($user);
         $this->getObjectManager()->flush();
