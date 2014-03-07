@@ -3,6 +3,8 @@ namespace AtansUser;
 
 use AtansUser\Entity\User;
 
+$user = $this->user;
+
 switch ($user->getStatus()) {
     case User::STATUS_ACTIVE :
         $status = $this->translate('Active', __NAMESPACE__);
@@ -21,7 +23,7 @@ switch ($user->getStatus()) {
         $statusClass = ' label-danger';
 }
 
-$roles = $user->getRoles()
+$roles = $user->getRoles();
 ?>
 <tr id="user-<?php echo $this->escapeHtmlAttr($user->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($user->getId()) ?>">
     <td>

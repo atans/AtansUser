@@ -10,6 +10,7 @@ $form->prepare();
 ?>
 
 <h4 class="page-header">
+    <span class="glyphicon glyphicon-plus"></span>
     <?php echo $this->escapeHtml($title) ?>
 
     <small class="pull-right">
@@ -17,7 +18,7 @@ $form->prepare();
             <?php echo $this->translate('User Management', __NAMESPACE__) ?>
         </a>
         &gt;
-        <a href="<?php echo $this->url('zfcadmin/user')?>">
+        <a href="<?php echo $this->url('zfcadmin/user/permission')?>">
             <?php echo $this->translate('Permission Management', __NAMESPACE__) ?>
         </a>
         &gt;

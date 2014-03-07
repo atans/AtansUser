@@ -8,12 +8,7 @@ $form->prepare();
 <?php echo $this->form()->openTag($form) ?>
 
     <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-addon">
-                <?php echo $this->translate('Page size', __NAMESPACE__) ?>
-            </div>
-            <?php echo $this->formElement($form->get('size')) ?>
-        </div>
+        <?php echo $this->formElement($form->get('size')) ?>
     </div>
 
     <div class="form-group">
@@ -21,14 +16,10 @@ $form->prepare();
     </div>
 
     <div class="form-group">
-        <div class="input-group">
-            <?php echo $this->formElement($form->get('query')) ?>
-            <div class="input-group-btn">
-                <button class="btn btn-default">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </div>
-        </div>
+        <?php echo $this->formElement($form->get('query')) ?>
+        <button class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
     </div>
 
 <?php echo $this->form()->closeTag() ?>
