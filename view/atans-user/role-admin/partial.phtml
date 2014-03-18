@@ -1,5 +1,10 @@
 <?php
-namespace AtansUser;
+use AtansUser\Module;
+
+/**
+ * @var \AtansUser\Entity\Role $role
+ */
+$role = $this->role;
 
 $permissions = $role->getPermissions();
 ?>
@@ -18,7 +23,7 @@ $permissions = $role->getPermissions();
             </span>
         <?php else: ?>
             <div class="label label-warning">
-                <?php echo $this->translate('None', __NAMESPACE__) ?>
+                <?php echo $this->translate('None', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </div>
         <?php endif ?>
     </td>
@@ -36,7 +41,7 @@ $permissions = $role->getPermissions();
             </ul>
         <?php else: ?>
             <span class="label label-warning">
-                <?php echo $this->translate('None', __NAMESPACE__) ?>
+                <?php echo $this->translate('None', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </span>
         <?php endif ?>
     </td>

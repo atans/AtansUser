@@ -17,7 +17,7 @@ class ModuleOptions extends AbstractOptions implements
     /**
      * @var string
      */
-    protected $objectManager = 'doctrine.entitymanager.orm_default';
+    protected $objectManagerName = 'doctrine.entitymanager.orm_default';
 
     /**
      * @var bool
@@ -82,24 +82,23 @@ class ModuleOptions extends AbstractOptions implements
     /**
      * Set objectManager
      *
-     * @param  string $objectManager
+     * @param  string $objectManagerName
      * @return ModuleOptions
      */
-    public function setObjectManager($objectManager)
+    public function setObjectManagerName($objectManagerName)
     {
-        $this->objectManager = $objectManager;
-
+        $this->objectManagerName = $objectManagerName;
         return $this;
     }
 
     /**
-     * Get objectManager
+     * Get objectManagerName
      *
      * @return string
      */
-    public function getObjectManager()
+    public function getObjectManagerName()
     {
-        return $this->objectManager;
+        return $this->objectManagerName;
     }
 
 

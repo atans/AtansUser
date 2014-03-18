@@ -1,10 +1,19 @@
 <?php
-namespace AtansUser;
-
 use AtansUser\Controller\PermissionAdminController;
+use AtansUser\Module;
 
-$title = $this->translate('Permission Management', __NAMESPACE__);
+$title = $this->translate('Permission Management', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
+
+/**
+ * @var \Zend\Form\Form $form
+ */
+$form = $this->form;
+
+/**
+ * @var \Zend\Paginator\Paginator $paginator
+ */
+$paginator = $this->paginator;
 
 echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminController::FLASHMESSENGER_NAMESPACE));
 ?>
@@ -14,7 +23,7 @@ echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminContro
 
     <small class="pull-right">
         <a href="<?php echo $this->url('zfcadmin/user')?>">
-            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+            <?php echo $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
         &gt;
         <?php echo $this->escapeHtml($title) ?>
@@ -25,7 +34,7 @@ echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminContro
     <div class="panel-heading">
         <a class="btn btn-default btn-sm" href="<?php echo $this->url('zfcadmin/user/permission/add') ?>">
             <i class="glyphicon glyphicon-plus"></i>
-            <?php echo $this->translate('Add permission', __NAMESPACE__) ?>
+            <?php echo $this->translate('Add permission', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
     </div>
     <?php if (count($paginator) > 0) : ?>
@@ -37,9 +46,9 @@ echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminContro
             <thead>
             <tr>
                 <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                <th class="col-lg-4 col-md-4 col-sm-4"><?php echo $this->translate('Permission name', __NAMESPACE__) ?></th>
-                <th class="col-lg-5 col-md-5 col-sm-5"><?php echo $this->translate('Roles', __NAMESPACE__) ?></th>
-                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', __NAMESPACE__) ?></th>
+                <th class="col-lg-4 col-md-4 col-sm-4"><?php echo $this->translate('Permission name', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-lg-5 col-md-5 col-sm-5"><?php echo $this->translate('Roles', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
             </tr>
             </thead>
             <tbody>
@@ -56,24 +65,22 @@ echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminContro
         <br>
 
         <div class="alert alert-info">
-            <?php echo $this->translate('Could not find any permissions', __NAMESPACE__) ?>
+            <?php echo $this->translate('Could not find any permissions', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </div>
     </div>
     <?php endif ?>
 </div>
 
 <?php
-if (count($this->paginator)) {
-    echo $this->paginationControl(
-        $this->paginator,
-        'Sliding',
-        'pagination/query',
-        array(
-            'route' => 'zfcadmin/user/permission',
-            'options' => array(
-                'query' => $form->getData(),
-            ),
-        )
-    );
-}
+echo $this->paginationControl(
+    $paginator,
+    'Sliding',
+    'pagination/query',
+    array(
+        'route' => 'zfcadmin/user/permission',
+        'options' => array(
+            'query' => $form->getData(),
+        ),
+    )
+);
 ?>

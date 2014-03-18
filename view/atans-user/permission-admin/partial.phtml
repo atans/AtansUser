@@ -1,5 +1,10 @@
 <?php
-namespace AtansUser;
+use AtansUser\Module;
+
+/**
+ * @var \AtansUser\Entity\Permission $permission
+ */
+$permission = $this->permission;
 ?>
 <tr id="permission-<?php echo $this->escapeHtmlAttr($permission->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($permission->getId()) ?>">
     <td>
@@ -23,7 +28,7 @@ namespace AtansUser;
             </ul>
         <?php else: ?>
             <span class="label label-warning">
-                <?php echo $this->translate('None', __NAMESPACE__) ?>
+                <?php echo $this->translate('None', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </span>
         <?php endif ?>
     </td>

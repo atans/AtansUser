@@ -2,6 +2,7 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\User;
+use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\User as UserService;
 use Zend\Authentication\AuthenticationService;
@@ -25,7 +26,6 @@ class UserController extends AbstractActionController
     const FLASHMESSENGER_LOGIN_NAMESPACE           = 'atansuser-user-login';
     const FLASHMESSENGER_CHANGE_EMAIL_NAMESPACE    = 'atansuser-user-change-email';
     const FLASHMESSENGER_CHANGE_PASSWORD_NAMESPACE = 'atansuser-user-change-password';
-    const TRANSLATOR_TEXT_DOMAIN                   = 'AtansUser';
 
     /**
      * @var AuthenticationService
@@ -217,23 +217,23 @@ class UserController extends AbstractActionController
         if (! $authResult->isValid()) {
             switch ($authResult->getCode()) {
                 case Result::FAILURE:
-                    $flashMessenger->addErrorMessage($translator->translate('Authentication Failure.', static::TRANSLATOR_TEXT_DOMAIN));
+                    $flashMessenger->addErrorMessage($translator->translate('Authentication Failure.', Module::TRANSLATOR_TEXT_DOMAIN));
                     break;
                 case Result::FAILURE_IDENTITY_NOT_FOUND:
-                    $flashMessenger->addErrorMessage($translator->translate('A record with the supplied identity could not be found.', static::TRANSLATOR_TEXT_DOMAIN));
+                    $flashMessenger->addErrorMessage($translator->translate('A record with the supplied identity could not be found.', Module::TRANSLATOR_TEXT_DOMAIN));
                     break;
                 case Result::FAILURE_IDENTITY_AMBIGUOUS:
-                    $flashMessenger->addErrorMessage($translator->translate('More than one record matches the supplied identity.', static::TRANSLATOR_TEXT_DOMAIN));
+                    $flashMessenger->addErrorMessage($translator->translate('More than one record matches the supplied identity.', Module::TRANSLATOR_TEXT_DOMAIN));
                     break;
                 case Result::FAILURE_CREDENTIAL_INVALID:
-                    $flashMessenger->addErrorMessage($translator->translate('Supplied credential is invalid.', static::TRANSLATOR_TEXT_DOMAIN));
+                    $flashMessenger->addErrorMessage($translator->translate('Supplied credential is invalid.', Module::TRANSLATOR_TEXT_DOMAIN));
                     break;
                 case Result::FAILURE_UNCATEGORIZED:
-                    $flashMessenger->addErrorMessage($translator->translate('Authentication uncategorized error.', static::TRANSLATOR_TEXT_DOMAIN));
+                    $flashMessenger->addErrorMessage($translator->translate('Authentication uncategorized error.', Module::TRANSLATOR_TEXT_DOMAIN));
                     break;
                 default:
                     $flashMessenger->addErrorMessage(sprintf(
-                        $translator->translate("Unknown authentication code: %d", static::TRANSLATOR_TEXT_DOMAIN),
+                        $translator->translate("Unknown authentication code: %d", Module::TRANSLATOR_TEXT_DOMAIN),
                         $authResult->getCode()
                     ));
             }
@@ -251,7 +251,7 @@ class UserController extends AbstractActionController
         if ($this->getOptions()->getEnableUserStatus()) {
             if (!in_array($user->getStatus(), $this->getOptions()->getAllowedLoginStatuses())) {
                 $authService->clearIdentity();
-                $flashMessenger->addErrorMessage($translator->translate('Your account is not active.', static::TRANSLATOR_TEXT_DOMAIN));
+                $flashMessenger->addErrorMessage($translator->translate('Your account is not active.', Module::TRANSLATOR_TEXT_DOMAIN));
                 return $this->redirect()->toRoute($this->getOptions()->getLogoutRedirectRoute());
             }
         }
@@ -305,12 +305,12 @@ class UserController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_CHANGE_EMAIL_NAMESPACE);
 
         if (! $this->getUserService()->changeEmail($form->getData())) {
-            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
+            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', Module::TRANSLATOR_TEXT_DOMAIN));
 
             return $this->redirect()->toRoute(static::ROUTE_CHANGE_EMAIL);
         }
 
-        $flashMessenger->addSuccessMessage($translator->translate('Email changed successfully.', static::TRANSLATOR_TEXT_DOMAIN));
+        $flashMessenger->addSuccessMessage($translator->translate('Email changed successfully.', Module::TRANSLATOR_TEXT_DOMAIN));
 
         return $this->redirect()->toRoute(static::ROUTE_CHANGE_EMAIL);
     }
@@ -344,12 +344,12 @@ class UserController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_CHANGE_PASSWORD_NAMESPACE);
 
         if (! $this->getUserService()->changePassword($form->getData())) {
-            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', static::TRANSLATOR_TEXT_DOMAIN));
+            $flashMessenger->addMessage($translator->translate('Your current password was incorrectly typed.', Module::TRANSLATOR_TEXT_DOMAIN));
 
             return $this->redirect()->toRoute(static::ROUTE_CHANGE_PASSWORD);
         }
 
-        $flashMessenger->addSuccessMessage($translator->translate('Password changed successfully.', static::TRANSLATOR_TEXT_DOMAIN));
+        $flashMessenger->addSuccessMessage($translator->translate('Password changed successfully.', Module::TRANSLATOR_TEXT_DOMAIN));
 
         return $this->redirect()->toRoute(static::ROUTE_CHANGE_PASSWORD);
     }

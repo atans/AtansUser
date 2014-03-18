@@ -1,26 +1,22 @@
 <?php
 namespace AtansUser\Form;
 
+use AtansUser\Module;
 use Zend\Form\Element;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
-
-    /**
      * @var ServiceManager
      */
     protected $serviceManager;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface
      */
     protected $translator;
 
@@ -52,7 +48,7 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
         $status = new Element\Select('status');
         $status->setAttribute('class', 'form-control')
                ->setOptions(array(
-                   'empty_option' => $this->getTranslator()->translate('Status', static::TRANSLATOR_TEXT_DOMAIN),
+                   'empty_option' => $this->getTranslator()->translate('Status', Module::TRANSLATOR_TEXT_DOMAIN),
                ))
                ->setValueOptions($serviceManager->get('atansuser_user_statuses'));
         $this->add($status);
@@ -119,11 +115,11 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
     /**
      * Get translator
      *
-     * @return Translator
+     * @return TranslatorInterface
      */
     public function getTranslator()
     {
-        if (! $this->translator instanceof Translator) {
+        if (! $this->translator instanceof TranslatorInterface) {
             $this->setTranslator($this->getServiceManager()->get('Translator'));
         }
         return $this->translator;
@@ -132,10 +128,10 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
     /**
      * Set translator
      *
-     * @param  Translator $translator
+     * @param  TranslatorInterface $translator
      * @return UserSearchForm
      */
-    public function setTranslator(Translator $translator)
+    public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
         return $this;

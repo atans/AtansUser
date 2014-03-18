@@ -153,7 +153,7 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
     public function getObjectManager()
     {
         if (! $this->objectManager) {
-            $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManager()));
+            $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
     }

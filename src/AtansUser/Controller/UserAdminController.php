@@ -2,6 +2,7 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\User;
+use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\UserAdmin as UserAdminService;
 use Zend\Authentication\AuthenticationService;
@@ -17,11 +18,6 @@ class UserAdminController extends AbstractActionController
      * @var string
      */
     const FLASHMESSENGER_NAMESPACE = 'atansuser-user-admin-index';
-
-    /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
      * @var AuthenticationService
@@ -64,7 +60,7 @@ class UserAdminController extends AbstractActionController
     public function indexAction()
     {
         $request       = $this->getRequest();
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
@@ -104,7 +100,7 @@ class UserAdminController extends AbstractActionController
                 $this->getUserAdminService()->add($user);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("User '%s' was successfully created", static::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("User '%s' was successfully created", Module::TRANSLATOR_TEXT_DOMAIN),
                     $user->getUsername()
                 ));
 
@@ -122,13 +118,13 @@ class UserAdminController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int)$this->params()->fromRoute('id');
         $translator     = $this->getServiceLocator()->get('Translator');
-        $objectManager  = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager  = $this->objectManager($this->getOptions()->getObjectManagerName());
         $request        = $this->getRequest();
 
         $user = $objectManager->find($this->entities['User'], $id);
         if (!$user) {
             $flashMessenger->addMessage(sprintf(
-                $translator->translate("User does not found '#%d'", static::TRANSLATOR_TEXT_DOMAIN),
+                $translator->translate("User does not found '#%d'", Module::TRANSLATOR_TEXT_DOMAIN),
                 $id
             ));
 
@@ -144,7 +140,7 @@ class UserAdminController extends AbstractActionController
                 $this->getUserAdminService()->edit($user, $data['newPassword']);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                     $translator->translate("User '%s' was successfully updated", static::TRANSLATOR_TEXT_DOMAIN),
+                     $translator->translate("User '%s' was successfully updated", Module::TRANSLATOR_TEXT_DOMAIN),
                      $user->getUsername()
                  ));
 
@@ -162,7 +158,7 @@ class UserAdminController extends AbstractActionController
     {
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int)$this->params()->fromRoute('id');
-        $objectManager  = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager  = $this->objectManager($this->getOptions()->getObjectManagerName());
         $request        = $this->getRequest();
         $translator     = $this->getServiceLocator()->get('Translator');
 
@@ -170,7 +166,7 @@ class UserAdminController extends AbstractActionController
         if (!$user) {
             $this->flashMessenger()
                 ->setNamespace(static::FLASHMESSENGER_NAMESPACE)
-                ->addMessage(sprintf($translator->translate("User does not found '#%d'", static::TRANSLATOR_TEXT_DOMAIN), $id));
+                ->addMessage(sprintf($translator->translate("User does not found '#%d'", Module::TRANSLATOR_TEXT_DOMAIN), $id));
 
             return $this->redirect()->toRoute('zfcadmin/user');
         }
@@ -181,7 +177,7 @@ class UserAdminController extends AbstractActionController
                 $this->getUserAdminService()->delete($user);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                     $translator->translate("User '%s' was successfully deleted", static::TRANSLATOR_TEXT_DOMAIN),
+                     $translator->translate("User '%s' was successfully deleted", Module::TRANSLATOR_TEXT_DOMAIN),
                      $user->getUsername()
                  ));
 

@@ -5,17 +5,17 @@ namespace AtansUser\Options;
 interface AtansUserInterface
 {
     /**
-     * Set objectManager
+     * Set objectManagerName
      *
-     * @param  string $objectManager
+     * @param  string $objectManagerName
      * @return ModuleOptions
      */
-    public function setObjectManager($objectManager);
+    public function setObjectManagerName($objectManagerName);
 
     /**
-     * Get objectManager
+     * Get objectManagerName
      *
      * @return string
      */
-    public function getObjectManager();
+    public function getObjectManagerName();
 }

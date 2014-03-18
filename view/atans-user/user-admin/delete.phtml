@@ -1,7 +1,7 @@
 <?php
-namespace AtansUser;
+use AtansUser\Module;
 
-$title = $this->translate('Delete user', __NAMESPACE__);
+$title = $this->translate('Delete user', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
 ?>
 
@@ -11,7 +11,7 @@ $this->headTitle($title);
 
     <small class="pull-right">
         <a href="<?php echo $this->url('zfcadmin/user')?>">
-            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+            <?php echo $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
         &gt; <?php echo $this->escapeHtml($title) ?>
     </small>
@@ -23,14 +23,14 @@ $this->headTitle($title);
 
     <div class="panel panel-default">
         <div class="panel-body">
-                <?php echo sprintf($this->translate("Are you sure you want to delete user '%s'?", __NAMESPACE__), $user->getUsername())?>
+                <?php echo sprintf($this->translate("Are you sure you want to delete user '%s'?", Module::TRANSLATOR_TEXT_DOMAIN), $user->getUsername())?>
         </div>
         <div class="panel-footer">
             <button class="btn btn-danger" type="submit">
-                <?php echo $this->translate('Delete', __NAMESPACE__) ?>
+                <?php echo $this->translate('Delete', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </button>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user') ?>">
-                <?php echo $this->translate('Cancel', __NAMESPACE__) ?>
+                <?php echo $this->translate('Cancel', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </a>
         </div>
     </div>

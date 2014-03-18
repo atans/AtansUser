@@ -6,6 +6,11 @@ use Zend\Validator\AbstractValidator;
 
 class Module
 {
+    /**
+     * Translator name space
+     */
+    const TRANSLATOR_TEXT_DOMAIN = __NAMESPACE__;
+
     public function onBootstrap(MvcEvent $e)
     {
         // Add translation file if default translator was defined
@@ -78,9 +83,9 @@ class Module
                     $translator = $sm->get('Translator');
 
                     return array(
-                        Entity\User::STATUS_ACTIVE   => $translator->translate('Active', __NAMESPACE__),
-                        Entity\User::STATUS_INACTIVE => $translator->translate('Inactive', __NAMESPACE__),
-                        Entity\User::STATUS_DELETED  => $translator->translate('Deleted', __NAMESPACE__),
+                        Entity\User::STATUS_ACTIVE   => $translator->translate('Active', self::TRANSLATOR_TEXT_DOMAIN),
+                        Entity\User::STATUS_INACTIVE => $translator->translate('Inactive', self::TRANSLATOR_TEXT_DOMAIN),
+                        Entity\User::STATUS_DELETED  => $translator->translate('Deleted', self::TRANSLATOR_TEXT_DOMAIN),
                     );
                  },
             ),

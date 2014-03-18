@@ -1,10 +1,14 @@
 <?php
-namespace AtansUser;
-
 use AtansUser\Controller\RoleAdminController;
+use AtansUser\Module;
 
-$title = $this->translate('Role Management', __NAMESPACE__);
+$title = $this->translate('Role Management', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
+
+/**
+ * @var \Zend\Form\Form $form
+ */
+$form = $this->form;
 
 echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::FLASHMESSENGER_NAMESPACE));
 ?>
@@ -13,7 +17,7 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
     <?php echo $this->escapeHtml($title) ?>
     <small class="pull-right">
         <a href="<?php echo $this->url('zfcadmin/user')?>">
-            <?php echo $this->translate('User Management', __NAMESPACE__) ?>
+            <?php echo $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
         &gt;
         <?php echo $this->escapeHtml($title) ?>
@@ -24,7 +28,7 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
     <div class="panel-heading">
         <a class="btn btn-default btn-sm" href="<?php echo $this->url('zfcadmin/user/role/add') ?>">
             <i class="glyphicon glyphicon-plus"></i>
-            <?php echo $this->translate('Add role', __NAMESPACE__) ?>
+            <?php echo $this->translate('Add role', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
     </div>
 <?php if (count($paginator) > 0) : ?>
@@ -35,10 +39,10 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
         <thead>
             <tr>
                 <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Role', __NAMESPACE__) ?></th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Parent role', __NAMESPACE__) ?></th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Permissions', __NAMESPACE__) ?></th>
-                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', __NAMESPACE__) ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Role', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Parent role', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Permissions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
             </tr>
         </thead>
         <tbody>
@@ -54,24 +58,22 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
         <?php echo $this->render('atans-user/role-admin/search-form', array('form' => $form)) ?>
         <br>
         <div class="alert alert-info">
-            <?php echo $this->translate('Could not find any roles', __NAMESPACE__) ?>
+            <?php echo $this->translate('Could not find any roles', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </div>
     </div>
 <?php endif ?>
 </div>
 
 <?php
-if (count($this->paginator)) {
-    echo $this->paginationControl(
-        $this->paginator,
-        'Sliding',
-        'pagination/query',
-        array(
-            'route' => 'zfcadmin/user/role',
-            'options' => array(
-                'query' => $form->getData(),
-            ),
-        )
-    );
-}
+echo $this->paginationControl(
+    $this->paginator,
+    'Sliding',
+    'pagination/query',
+    array(
+        'route' => 'zfcadmin/user/role',
+        'options' => array(
+            'query' => $form->getData(),
+        ),
+    )
+);
 ?>

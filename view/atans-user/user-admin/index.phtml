@@ -1,10 +1,14 @@
 <?php
-namespace AtansUser;
-
 use AtansUser\Controller\UserAdminController;
+use AtansUser\Module;
 
-$title = $this->translate('User Management', __NAMESPACE__);
+$title = $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
+
+/**
+ * @var \Zend\Form\Form $form
+ */
+$form = $this->form;
 ?>
 
 <?php echo $this->render('alert/bootstrap', array('namespace' => UserAdminController::FLASHMESSENGER_NAMESPACE))?>
@@ -19,16 +23,16 @@ $this->headTitle($title);
         <div class="btn-group btn-group-sm">
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/add') ?>">
                 <i class="glyphicon glyphicon-plus"></i>
-                <?php echo $this->translate('Add user', __NAMESPACE__) ?>
+                <?php echo $this->translate('Add user', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </a>
         </div>
 
         <div class="btn-group btn-group-sm pull-right">
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role') ?>">
-                <?php echo $this->escapeHtml($this->translate('Role Management', __NAMESPACE__)) ?>
+                <?php echo $this->escapeHtml($this->translate('Role Management', Module::TRANSLATOR_TEXT_DOMAIN)) ?>
             </a>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
-                <?php echo $this->escapeHtml($this->translate('Permission Management', __NAMESPACE__)) ?>
+                <?php echo $this->escapeHtml($this->translate('Permission Management', Module::TRANSLATOR_TEXT_DOMAIN)) ?>
             </a>
         </div>
     </div>
@@ -40,10 +44,10 @@ $this->headTitle($title);
             <thead>
                 <tr>
                     <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                    <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Username', __NAMESPACE__) ?></th>
-                    <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Roles', __NAMESPACE__) ?></th>
-                    <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Status', __NAMESPACE__) ?></th>
-                    <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', __NAMESPACE__) ?></th>
+                    <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Username', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                    <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Roles', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                    <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Status', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                    <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
                 </tr>
             </thead>
             <?php
@@ -60,24 +64,22 @@ $this->headTitle($title);
             <br>
 
             <div class="alert alert-info">
-                <?php echo $this->translate('Could not find any users', __NAMESPACE__) ?>
+                <?php echo $this->translate('Could not find any users', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </div>
         </div>
     <?php endif ?>
 </div>
 
 <?php
-if (count($this->paginator)) {
-    echo $this->paginationControl(
-        $this->paginator,
-        'Sliding',
-        'pagination/query',
-        array(
-            'route' => 'zfcadmin/user',
-            'options' => array(
-                'query' => $form->getData(),
-            ),
-        )
-    );
-}
+echo $this->paginationControl(
+    $this->paginator,
+    'Sliding',
+    'pagination/query',
+    array(
+        'route' => 'zfcadmin/user',
+        'options' => array(
+            'query' => $form->getData(),
+        ),
+    )
+);
 ?>

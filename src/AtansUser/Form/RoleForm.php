@@ -2,6 +2,7 @@
 namespace AtansUser\Form;
 
 use AtansUser\Entity\Role;
+use AtansUser\Module;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
 use DoctrineModule\Form\Element\ObjectSelect;
@@ -14,11 +15,6 @@ use ZfcBase\Form\ProvidesEventsForm;
 
 class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
-    /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
-
     /**
      * @var EntityManager
      */
@@ -66,7 +62,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
         $parent->setLabel("Parent role");
         $parent->setAttribute('class', 'form-control');
         $parent->setOptions(array(
-            'empty_option'   => sprintf('== %s ==', $translator->translate('None', static::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option'   => sprintf('== %s ==', $translator->translate('None', Module::TRANSLATOR_TEXT_DOMAIN)),
             'object_manager' => $entityManager,
             'target_class'   => 'AtansUser\Entity\Role',
             'property'       => 'name',

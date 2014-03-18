@@ -2,6 +2,7 @@
 namespace AtansUser\Controller;
 
 use AtansUser\Entity\Role;
+use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\RoleAdmin as RoleAdminService;
 use Zend\Form\Form;
@@ -15,11 +16,6 @@ class RoleAdminController extends AbstractActionController
      * @var string
      */
     const FLASHMESSENGER_NAMESPACE = 'atansuser-role-admin-index';
-
-    /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansUser';
 
     /**
      * @var array
@@ -51,7 +47,7 @@ class RoleAdminController extends AbstractActionController
     public function indexAction()
     {
         $request       = $this->getRequest();
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
@@ -90,7 +86,7 @@ class RoleAdminController extends AbstractActionController
                 $this->getRoleAdminService()->add($role);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("Role '%s' was successfully created", static::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("Role '%s' was successfully created", Module::TRANSLATOR_TEXT_DOMAIN),
                     $role->getName()
                 ));
 
@@ -108,12 +104,12 @@ class RoleAdminController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
-        $objectManager  = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager  = $this->objectManager($this->getOptions()->getObjectManagerName());
 
         $role = $objectManager->find($this->entities['Role'], $id);
         if (! $role) {
             $flashMessenger->addSuccessMessage(sprintf(
-                $translator->translate("Role does not found. '#%d'", static::TRANSLATOR_TEXT_DOMAIN),
+                $translator->translate("Role does not found. '#%d'", Module::TRANSLATOR_TEXT_DOMAIN),
                 $id
             ));
 
@@ -137,7 +133,7 @@ class RoleAdminController extends AbstractActionController
                 $this->getRoleAdminService()->edit($role);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                     $translator->translate("Role '%s' was successfully updated", static::TRANSLATOR_TEXT_DOMAIN),
+                     $translator->translate("Role '%s' was successfully updated", Module::TRANSLATOR_TEXT_DOMAIN),
                      $role->getName()
                  ));
 
@@ -156,12 +152,12 @@ class RoleAdminController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id            = (int) $this->params()->fromRoute('id', 0);
         $translator    = $this->getServiceLocator()->get('Translator');
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
 
         $role = $objectManager->find($this->entities['Role'], $id);
         if (! $role) {
             $flashMessenger->addMessage(sprintf(
-                $translator->translate("Role does not found. '#%d'", static::TRANSLATOR_TEXT_DOMAIN),
+                $translator->translate("Role does not found. '#%d'", Module::TRANSLATOR_TEXT_DOMAIN),
                 $id
             ));
 
@@ -175,7 +171,7 @@ class RoleAdminController extends AbstractActionController
                 $this->getRoleAdminService()->delete($role);
 
                 $flashMessenger->addSuccessMessage(sprintf(
-                    $translator->translate("Role '%s' was successfully deleted", static::TRANSLATOR_TEXT_DOMAIN),
+                    $translator->translate("Role '%s' was successfully deleted", Module::TRANSLATOR_TEXT_DOMAIN),
                     $role->getName()
                 ));
 
