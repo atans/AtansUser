@@ -3,7 +3,6 @@ namespace AtansUser\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Rbac\Role\HierarchicalRoleInterface;
 use ZfcRbac\Permission\PermissionInterface;
@@ -12,7 +11,7 @@ use ZfcRbac\Permission\PermissionInterface;
  * Role
  *
  * @ORM\Entity(repositoryClass="RoleRepository")
- * @ORM\Table(name="role", options={"collate"="utf8_general_ci"})
+ * @ORM\Table(name="atansuser_role", options={"collate"="utf8_general_ci"})
  * @package User\Entity
  */
 class Role implements HierarchicalRoleInterface
@@ -26,34 +25,28 @@ class Role implements HierarchicalRoleInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=48, unique=true)
      * @var string
      */
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * @var Role
-     */
-    protected $parent = null;
-
-    /**
-<<<<<<< HEAD
-     * @var HierarchicalRoleInterface[]|\Doctrine\Common\Collections\Collection
+     * @var Role[]|\Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HierarchicalRole")
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(
+     *  name="atansuser_role_children",
+     *  joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="child_id", referencedColumnName="id")}
+     * )
      */
-    protected $children = [];
+    protected $children = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
-=======
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions", fetch="LAZY")
->>>>>>> 9269d00e18f5f95816303e8caec08fb966682c3e
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions", fetch="EAGER")
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(
-     *  name="role_permission",
+     *  name="atansuser_role_permissions",
      *  joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
      *  inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
      * )
@@ -100,25 +93,92 @@ class Role implements HierarchicalRoleInterface
     }
 
     /**
-     * Get parent
-     *
-     * @return Role
+     * {@inheritDoc}
      */
-    public function getParent()
+    public function addChild(HierarchicalRoleInterface $child)
     {
-        return $this->parent;
+        $this->children[] = $child;
     }
 
     /**
-     * Set parent
+     * Add children
      *
-     * @param  string|Role $parent
+     * @param Collection $children
+     * @return $this
+     */
+    public function addChildren(Collection $children)
+    {
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
+        return $this;
+    }
+
+    /**
+     * For doctrine hydrator
+     *
+     * @param Collection $children
      * @return Role
      */
-    public function setParent($parent = null)
+    public function addChildrens(Collection $children)
     {
-        $this->parent = $parent;
+        $this->addChildren($children);
         return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param HierarchicalRoleInterface $child
+     * @return Role
+     */
+    public function removeChild(HierarchicalRoleInterface $child)
+    {
+        $this->children->removeElement($child);
+        return $this;
+    }
+
+    /**
+     *  Remove children
+     *
+     * @param  Collection $children
+     * @return Role
+     */
+    public function removeChildren(Collection $children)
+    {
+        foreach ($children as $child) {
+            $this->removeChild($child);
+        }
+        return $this;
+    }
+
+    /**
+     * For doctrine hydrator
+     *
+     * @param Collection $children
+     * @return Role
+     */
+    public function removeChildrens(Collection $children)
+    {
+        $this->removeChildren($children);
+        return $this;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasChildren()
+    {
+        return !$this->children->isEmpty();
     }
 
     /**
@@ -191,9 +251,14 @@ class Role implements HierarchicalRoleInterface
 
     public function hasPermission($permission)
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('name', (string) $permission));
-        $result   = $this->permissions->matching($criteria);
+        //$criteria = Criteria::create()->where(Criteria::expr()->eq('name', (string) $permission));
+        //$result   = $this->permissions->matching($criteria);
+        //return count($result) > 0;
+        return isset($this->permissions[(string) $permission]);
+    }
 
-        return count($result) > 0;
+    public function __toString()
+    {
+        return $this->name;
     }
 }

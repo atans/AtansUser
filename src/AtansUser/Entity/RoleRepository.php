@@ -49,8 +49,8 @@ class RoleRepository extends EntityRepository
         }
         $qb->addOrderBy('r.id', $order);
 
-        if (!isset($data['page']) || !isset($data['size'])) {
-            throw new Exception\InvalidArgumentException("'page' and 'size' are must be defined");
+        if (!isset($data['page']) || !isset($data['count'])) {
+            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
         }
 
         $paginator = new Paginator(new DoctrinePaginator(
@@ -58,7 +58,7 @@ class RoleRepository extends EntityRepository
         ));
 
         $paginator->setCurrentPageNumber($data['page'])
-            ->setItemCountPerPage($data['size']);
+                  ->setItemCountPerPage($data['count']);
 
         return $paginator;
     }

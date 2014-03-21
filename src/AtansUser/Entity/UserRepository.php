@@ -35,8 +35,8 @@ class UserRepository extends EntityRepository
         }
         $qb->addOrderBy('u.id', $order);
 
-        if (!isset($data['page']) || !isset($data['size'])) {
-            throw new Exception\InvalidArgumentException("'page' and 'size' are must be defined");
+        if (!isset($data['page']) || !isset($data['count'])) {
+            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
         }
 
         $paginator = new Paginator(new DoctrinePaginator(
@@ -44,7 +44,7 @@ class UserRepository extends EntityRepository
         ));
 
         $paginator->setCurrentPageNumber($data['page'])
-                  ->setItemCountPerPage($data['size']);
+                  ->setItemCountPerPage($data['count']);
 
         return $paginator;
     }

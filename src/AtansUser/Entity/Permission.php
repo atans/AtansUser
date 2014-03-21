@@ -11,7 +11,7 @@ use ZfcRbac\Permission\PermissionInterface;
  *
  * @ORM\Entity(repositoryClass="PermissionRepository")
  * @ORM\Table(
- *  name="permission",
+ *  name="atansuser_permission",
  *  options={"collate"="utf8_general_ci"}
  * )
  */
@@ -26,7 +26,7 @@ class Permission implements PermissionInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=32, nullable=true)
+     * @ORM\Column(type="string", length=128, nullable=true)
      * @var string
      */
     protected $name;

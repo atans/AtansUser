@@ -12,7 +12,7 @@ use ZfcRbac\Identity\IdentityInterface;
  *
  * @ORM\Entity(repositoryClass="UserRepository")
  * @ORM\Table(
- *  name="user",
+ *  name="atansuser_user",
  *  options={"collate"="utf8_general_ci"},
  *  indexes={
  *    @ORM\Index(name="username", columns={"username"}),
@@ -57,7 +57,7 @@ class User implements IdentityInterface
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(
-     *  name="user_role",
+     *  name="atansuser_user_roles",
      *  joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *  inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
