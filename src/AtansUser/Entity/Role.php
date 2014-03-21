@@ -4,7 +4,8 @@ namespace AtansUser\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Permissions\Rbac\AbstractRole;
+use Rbac\Role\HierarchicalRoleInterface;
+use ZfcRbac\Permission\PermissionInterface;
 
 /**
  * Role
@@ -13,7 +14,7 @@ use Zend\Permissions\Rbac\AbstractRole;
  * @ORM\Table(name="role", options={"collate"="utf8_general_ci"})
  * @package User\Entity
  */
-class Role extends AbstractRole
+class Role implements HierarchicalRoleInterface
 {
     /**
      * @ORM\Id
@@ -37,6 +38,13 @@ class Role extends AbstractRole
     protected $parent = null;
 
     /**
+     * @var HierarchicalRoleInterface[]|\Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HierarchicalRole")
+     */
+    protected $children = [];
+
+    /**
      * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(
@@ -50,6 +58,7 @@ class Role extends AbstractRole
 
     public function __construct()
     {
+        $this->children    = new ArrayCollection();
         $this->permissions = new ArrayCollection();
     }
 
@@ -120,7 +129,7 @@ class Role extends AbstractRole
     /**
      * Add a permission
      *
-     * @param  \ZfcRbac\Permission\PermissionInterface|string $permission
+     * @param  PermissionInterface|string $permission
      * @return void
      */
     public function addPermission($permission)
