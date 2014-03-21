@@ -204,7 +204,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
     public function getObjectManager()
     {
         if (! $this->objectManager instanceof EntityManager) {
-            $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManager()));
+            $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
     }
