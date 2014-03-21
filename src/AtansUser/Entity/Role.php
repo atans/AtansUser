@@ -3,6 +3,7 @@ namespace AtansUser\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Permissions\Rbac\AbstractRole;
 
@@ -37,7 +38,7 @@ class Role extends AbstractRole
     protected $parent = null;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions", fetch="LAZY")
      * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(
      *  name="role_permission",
@@ -170,8 +171,16 @@ class Role extends AbstractRole
     public function removePermissions(Collection $permissions)
     {
         foreach ($permissions as $permission) {
-            $this->permissions->removeElement($permission);
+            $this->removePermission($permission);
         }
         return $this;
+    }
+
+    public function hasPermission($permission)
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('name', (string) $permission));
+        $result   = $this->permissions->matching($criteria);
+
+        return count($result) > 0;
     }
 }
