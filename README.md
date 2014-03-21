@@ -1,5 +1,5 @@
 ## AtansUser
-A user registration, authentication and Role-based access control module
+A user registration, authentication, management and role-based access control module for Zend Framework 2
 
 ## Requirements
 - Zend Framework 2 (latest master)
@@ -41,8 +41,7 @@ return array(
 );
 ```
 
-2.copy `./vendor/atans/atans-user/config/atansuser.global.php.dist` to `./config/autoload/atansuser.global.php` and
-copy `./vendor/atans/atans-user/config/zfcrbac.global.php.dist` to `./config/autoload/zfcrbac.global.php`
+2.Copy `./vendor/atans/atans-user/config/atansuser.global.php.dist` to `./config/autoload/atansuser.global.php` and  `./vendor/atans/atans-user/config/zfcrbac.global.php.dist` to `./config/autoload/zfcrbac.global.php`
 
 3.Then Import the SQL schema located in `./vendor/atans/atans-user/data/schema.sql`
 
