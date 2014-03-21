@@ -125,6 +125,12 @@ class RoleAdminController extends AbstractActionController
         $form = $this->getRoleForm();
         $form->bind($role);
 
+        // Ignore self
+        $form->get('children')->getProxy()->setIsMethod(true)->setFindMethod(array(
+            'name'   => 'findAllWithoutId',
+            'params' => array('id' => $id),
+        ));
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
