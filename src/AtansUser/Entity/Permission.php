@@ -167,4 +167,12 @@ class Permission implements PermissionInterface
         }
         return $this;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
