@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2014-03-07 10:11+0800\n"
-"PO-Revision-Date: 2014-03-07 10:11+0800\n"
+"POT-Creation-Date: 2014-03-21 16:15+0800\n"
+"PO-Revision-Date: 2014-03-21 16:15+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: zh_TW\n"
@@ -15,77 +15,77 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../Module.php:81 ../view/atans-user/user-admin/partial.phtml:10
+#: ../Module.php:86 ../view/atans-user/user-admin/partial.phtml:12
 msgid "Active"
 msgstr "可用"
 
-#: ../Module.php:82 ../view/atans-user/user-admin/partial.phtml:14
+#: ../Module.php:87 ../view/atans-user/user-admin/partial.phtml:16
 msgid "Inactive"
 msgstr "停用"
 
-#: ../Module.php:83 ../view/atans-user/user-admin/partial.phtml:18
+#: ../Module.php:88 ../view/atans-user/user-admin/partial.phtml:20
 msgid "Deleted"
 msgstr "已刪除"
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:88
+#: ../src/AtansUser/Controller/PermissionAdminController.php:95
 #, php-format
 msgid "Permission '%s' was successfully created"
 msgstr "權限 '%s' 新增成功"
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:112
-#: ../src/AtansUser/Controller/PermissionAdminController.php:154
+#: ../src/AtansUser/Controller/PermissionAdminController.php:119
+#: ../src/AtansUser/Controller/PermissionAdminController.php:161
 #, php-format
 msgid "Permission does not found. '#%d'"
 msgstr "找不到權限。'#%d'"
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:130
+#: ../src/AtansUser/Controller/PermissionAdminController.php:137
 #, php-format
 msgid "Permission '%s' was successfully updated"
 msgstr "權限 '%s' 更新成功"
 
-#: ../src/AtansUser/Controller/PermissionAdminController.php:168
+#: ../src/AtansUser/Controller/PermissionAdminController.php:175
 #, php-format
 msgid "Permission '%s' was successfully deleted"
 msgstr "權限 '%s' 刪除成功"
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:93
+#: ../src/AtansUser/Controller/RoleAdminController.php:95
 #, php-format
 msgid "Role '%s' was successfully created"
 msgstr "角色 '%s' 新增成功"
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:116
-#: ../src/AtansUser/Controller/RoleAdminController.php:164
+#: ../src/AtansUser/Controller/RoleAdminController.php:118
+#: ../src/AtansUser/Controller/RoleAdminController.php:165
 #, php-format
 msgid "Role does not found. '#%d'"
 msgstr "找不到角色。'#%d'"
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:140
+#: ../src/AtansUser/Controller/RoleAdminController.php:141
 #, php-format
 msgid "Role '%s' was successfully updated"
 msgstr "角色 '%s' 更新成功"
 
-#: ../src/AtansUser/Controller/RoleAdminController.php:178
+#: ../src/AtansUser/Controller/RoleAdminController.php:179
 #, php-format
 msgid "Role '%s' was successfully deleted"
 msgstr "角色 '%s' 新增成功"
 
-#: ../src/AtansUser/Controller/UserAdminController.php:107
+#: ../src/AtansUser/Controller/UserAdminController.php:109
 #, php-format
 msgid "User '%s' was successfully created"
 msgstr "用戶 '%s' 新增成功"
 
-#: ../src/AtansUser/Controller/UserAdminController.php:131
-#: ../src/AtansUser/Controller/UserAdminController.php:173
+#: ../src/AtansUser/Controller/UserAdminController.php:133
+#: ../src/AtansUser/Controller/UserAdminController.php:175
 #, php-format
 msgid "User does not found '#%d'"
 msgstr "找不到用戶 '#%d'"
 
-#: ../src/AtansUser/Controller/UserAdminController.php:147
+#: ../src/AtansUser/Controller/UserAdminController.php:149
 #, php-format
 msgid "User '%s' was successfully updated"
 msgstr "用戶 '%s' 更新成功"
 
-#: ../src/AtansUser/Controller/UserAdminController.php:184
+#: ../src/AtansUser/Controller/UserAdminController.php:186
 #, php-format
 msgid "User '%s' was successfully deleted"
 msgstr "用戶 '%s' 刪除成功"
@@ -161,7 +161,7 @@ msgstr "重填新密碼"
 #: ../src/AtansUser/Form/LoginForm.php:18
 #: ../src/AtansUser/Form/RegisterForm.php:47
 #: ../src/AtansUser/Form/UserAddForm.php:61
-#: ../view/atans-user/user-admin/index.phtml:43
+#: ../view/atans-user/user-admin/index.phtml:47
 msgid "Username"
 msgstr "用戶名"
 
@@ -172,7 +172,7 @@ msgid "Password"
 msgstr "密碼"
 
 #: ../src/AtansUser/Form/PermissionForm.php:58
-#: ../view/atans-user/permission-admin/index.phtml:40
+#: ../view/atans-user/permission-admin/index.phtml:49
 msgid "Permission name"
 msgstr "權限名稱"
 
@@ -190,102 +190,94 @@ msgstr "電郵"
 msgid "Password verify"
 msgstr "重填密碼"
 
-#: ../src/AtansUser/Form/RoleForm.php:61
+#: ../src/AtansUser/Form/RoleForm.php:56
 msgid "Role name"
 msgstr "角色名稱"
 
-#: ../src/AtansUser/Form/RoleForm.php:66
-#: ../view/atans-user/role-admin/index.phtml:39
-msgid "Parent role"
-msgstr "父角色"
+#: ../src/AtansUser/Form/RoleForm.php:61
+#: ../view/atans-user/role-admin/index.phtml:43
+msgid "Children"
+msgstr "子角色"
 
-#: ../src/AtansUser/Form/RoleForm.php:69
-#: ../view/atans-user/permission-admin/partial.phtml:26
-#: ../view/atans-user/role-admin/partial.phtml:21
-#: ../view/atans-user/role-admin/partial.phtml:39
-#: ../view/atans-user/user-admin/partial.phtml:44
-msgid "None"
-msgstr "暫無"
-
-#: ../src/AtansUser/Form/RoleForm.php:78
-#: ../view/atans-user/role-admin/index.phtml:40
+#: ../src/AtansUser/Form/RoleForm.php:74
+#: ../view/atans-user/role-admin/index.phtml:44
 msgid "Permissions"
 msgstr "權限"
 
 #: ../src/AtansUser/Form/UserAddForm.php:76
-#: ../view/atans-user/permission-admin/index.phtml:41
+#: ../view/atans-user/permission-admin/index.phtml:50
 #: ../view/atans-user/user/index.phtml:49
-#: ../view/atans-user/user-admin/index.phtml:44
+#: ../view/atans-user/user-admin/index.phtml:48
 msgid "Roles"
 msgstr "角色"
 
 #: ../src/AtansUser/Form/UserAddForm.php:93
-#: ../src/AtansUser/Form/UserSearchForm.php:55
-#: ../view/atans-user/user-admin/index.phtml:45
+#: ../src/AtansUser/Form/UserSearchForm.php:51
+#: ../view/atans-user/user-admin/index.phtml:49
 msgid "Status"
 msgstr "狀態"
 
 #: ../view/atans-user/permission-admin/add.phtml:4
-#: ../view/atans-user/permission-admin/index.phtml:28
+#: ../view/atans-user/permission-admin/index.phtml:37
 msgid "Add permission"
 msgstr "新增權限"
 
-#: ../view/atans-user/permission-admin/add.phtml:18
-#: ../view/atans-user/permission-admin/delete.phtml:14
-#: ../view/atans-user/permission-admin/edit.phtml:18
-#: ../view/atans-user/permission-admin/index.phtml:17
-#: ../view/atans-user/role-admin/add.phtml:18
+#: ../view/atans-user/permission-admin/add.phtml:21
+#: ../view/atans-user/permission-admin/delete.phtml:19
+#: ../view/atans-user/permission-admin/edit.phtml:26
+#: ../view/atans-user/permission-admin/index.phtml:26
+#: ../view/atans-user/role-admin/add.phtml:21
 #: ../view/atans-user/role-admin/delete.phtml:14
-#: ../view/atans-user/role-admin/edit.phtml:18
-#: ../view/atans-user/role-admin/index.phtml:16
-#: ../view/atans-user/user-admin/add.phtml:18
+#: ../view/atans-user/role-admin/edit.phtml:21
+#: ../view/atans-user/role-admin/index.phtml:20
+#: ../view/atans-user/user-admin/add.phtml:21
 #: ../view/atans-user/user-admin/delete.phtml:14
 #: ../view/atans-user/user-admin/edit.phtml:18
-#: ../view/atans-user/user-admin/index.phtml:6
+#: ../view/atans-user/user-admin/index.phtml:5
 msgid "User Management"
 msgstr "用戶管理"
 
-#: ../view/atans-user/permission-admin/add.phtml:22
-#: ../view/atans-user/permission-admin/delete.phtml:18
-#: ../view/atans-user/permission-admin/edit.phtml:22
-#: ../view/atans-user/permission-admin/index.phtml:6
-#: ../view/atans-user/user-admin/index.phtml:31
+#: ../view/atans-user/permission-admin/add.phtml:25
+#: ../view/atans-user/permission-admin/delete.phtml:23
+#: ../view/atans-user/permission-admin/edit.phtml:30
+#: ../view/atans-user/permission-admin/index.phtml:5
+#: ../view/atans-user/user-admin/index.phtml:35
 msgid "Permission Management"
 msgstr "權限管理"
 
-#: ../view/atans-user/permission-admin/add.phtml:63
-#: ../view/atans-user/permission-admin/edit.phtml:63
-#: ../view/atans-user/role-admin/add.phtml:63
-#: ../view/atans-user/role-admin/edit.phtml:63
-#: ../view/atans-user/user/change-email.phtml:61
-#: ../view/atans-user/user/change-password.phtml:61
-#: ../view/atans-user/user-admin/add.phtml:58
+#: ../view/atans-user/permission-admin/add.phtml:66
+#: ../view/atans-user/permission-admin/edit.phtml:71
+#: ../view/atans-user/role-admin/add.phtml:66
+#: ../view/atans-user/role-admin/edit.phtml:66
+#: ../view/atans-user/user/change-email.phtml:63
+#: ../view/atans-user/user/change-password.phtml:63
+#: ../view/atans-user/user-admin/add.phtml:61
 #: ../view/atans-user/user-admin/edit.phtml:58
 msgid "Submit"
 msgstr "提交"
 
-#: ../view/atans-user/permission-admin/add.phtml:66
-#: ../view/atans-user/permission-admin/delete.phtml:37
-#: ../view/atans-user/permission-admin/edit.phtml:66
-#: ../view/atans-user/role-admin/add.phtml:66
+#: ../view/atans-user/permission-admin/add.phtml:69
+#: ../view/atans-user/permission-admin/delete.phtml:42
+#: ../view/atans-user/permission-admin/edit.phtml:74
+#: ../view/atans-user/role-admin/add.phtml:69
 #: ../view/atans-user/role-admin/delete.phtml:39
-#: ../view/atans-user/role-admin/edit.phtml:66
-#: ../view/atans-user/user-admin/add.phtml:61
+#: ../view/atans-user/role-admin/edit.phtml:69
+#: ../view/atans-user/user-admin/add.phtml:64
 #: ../view/atans-user/user-admin/delete.phtml:33
 #: ../view/atans-user/user-admin/edit.phtml:61
 msgid "Cancel"
 msgstr "取消"
 
-#: ../view/atans-user/permission-admin/delete.phtml:4
+#: ../view/atans-user/permission-admin/delete.phtml:9
 msgid "Delete permission"
 msgstr "刪除權限"
 
-#: ../view/atans-user/permission-admin/delete.phtml:30
+#: ../view/atans-user/permission-admin/delete.phtml:35
 #, php-format
 msgid "Are your sure you want to delete permission '%s'?"
 msgstr "確認要刪除權限 '%s'?"
 
-#: ../view/atans-user/permission-admin/delete.phtml:34
+#: ../view/atans-user/permission-admin/delete.phtml:39
 #: ../view/atans-user/role-admin/delete.phtml:36
 #: ../view/atans-user/user-admin/delete.phtml:30
 msgid "Delete"
@@ -295,26 +287,33 @@ msgstr "刪除"
 msgid "Edit permission"
 msgstr "修改權限"
 
-#: ../view/atans-user/permission-admin/index.phtml:42
-#: ../view/atans-user/role-admin/index.phtml:41
-#: ../view/atans-user/user-admin/index.phtml:46
+#: ../view/atans-user/permission-admin/index.phtml:51
+#: ../view/atans-user/role-admin/index.phtml:45
+#: ../view/atans-user/user-admin/index.phtml:50
 msgid "Actions"
 msgstr "操作"
 
-#: ../view/atans-user/permission-admin/index.phtml:59
+#: ../view/atans-user/permission-admin/index.phtml:68
 msgid "Could not find any permissions"
 msgstr "找不到任何權限"
 
+#: ../view/atans-user/permission-admin/partial.phtml:31
+#: ../view/atans-user/role-admin/partial.phtml:31
+#: ../view/atans-user/role-admin/partial.phtml:74
+#: ../view/atans-user/user-admin/partial.phtml:46
+msgid "None"
+msgstr "暫無"
+
 #: ../view/atans-user/role-admin/add.phtml:4
-#: ../view/atans-user/role-admin/index.phtml:27
+#: ../view/atans-user/role-admin/index.phtml:31
 msgid "Add role"
 msgstr "新增角色"
 
-#: ../view/atans-user/role-admin/add.phtml:22
+#: ../view/atans-user/role-admin/add.phtml:25
 #: ../view/atans-user/role-admin/delete.phtml:18
-#: ../view/atans-user/role-admin/edit.phtml:22
-#: ../view/atans-user/role-admin/index.phtml:6
-#: ../view/atans-user/user-admin/index.phtml:28
+#: ../view/atans-user/role-admin/edit.phtml:25
+#: ../view/atans-user/role-admin/index.phtml:5
+#: ../view/atans-user/user-admin/index.phtml:32
 msgid "Role Management"
 msgstr "角色管理"
 
@@ -331,26 +330,26 @@ msgstr "確認要刪除角色 '%s'?"
 msgid "Edit role"
 msgstr "修改角色"
 
-#: ../view/atans-user/role-admin/index.phtml:38
+#: ../view/atans-user/role-admin/index.phtml:42
 msgid "Role"
 msgstr "角色"
 
-#: ../view/atans-user/role-admin/index.phtml:57
+#: ../view/atans-user/role-admin/index.phtml:61
 msgid "Could not find any roles"
 msgstr "找不到任何角色"
 
-#: ../view/atans-user/user/change-email.phtml:6
+#: ../view/atans-user/user/change-email.phtml:5
 #: ../view/atans-user/user/index.phtml:30
 msgid "Change email"
 msgstr "修改電郵"
 
-#: ../view/atans-user/user/change-email.phtml:20
-#: ../view/atans-user/user/change-password.phtml:20
+#: ../view/atans-user/user/change-email.phtml:22
+#: ../view/atans-user/user/change-password.phtml:22
 #: ../view/atans-user/user/index.phtml:4
 msgid "User Home"
 msgstr "用戶首頁"
 
-#: ../view/atans-user/user/change-password.phtml:6
+#: ../view/atans-user/user/change-password.phtml:5
 #: ../view/atans-user/user/index.phtml:26
 msgid "Change password"
 msgstr "修改密碼"
@@ -364,11 +363,11 @@ msgstr "登出"
 msgid "Hello，%s"
 msgstr "你好，%s"
 
-#: ../view/atans-user/user/login.phtml:6
+#: ../view/atans-user/user/login.phtml:5
 msgid "User login"
 msgstr "用戶登入"
 
-#: ../view/atans-user/user/login.phtml:56
+#: ../view/atans-user/user/login.phtml:58
 msgid "Login"
 msgstr "登入"
 
@@ -376,12 +375,12 @@ msgstr "登入"
 msgid "User Register"
 msgstr "用戶註冊"
 
-#: ../view/atans-user/user/register.phtml:45
+#: ../view/atans-user/user/register.phtml:48
 msgid "Register"
 msgstr "註冊"
 
 #: ../view/atans-user/user-admin/add.phtml:4
-#: ../view/atans-user/user-admin/index.phtml:22
+#: ../view/atans-user/user-admin/index.phtml:26
 msgid "Add user"
 msgstr "新增用戶"
 
@@ -398,14 +397,17 @@ msgstr "確認要刪除用戶 '%s'?"
 msgid "Edit user"
 msgstr "修改用戶"
 
-#: ../view/atans-user/user-admin/index.phtml:63
+#: ../view/atans-user/user-admin/index.phtml:67
 msgid "Could not find any users"
 msgstr "找不到任何用戶"
 
-#: ../view/atans-user/user-admin/partial.phtml:22
+#: ../view/atans-user/user-admin/partial.phtml:24
 #, php-format
 msgid "Unknown status '%s'"
 msgstr "未知狀態 '%s'"
+
+#~ msgid "Parent role"
+#~ msgstr "父角色"
 
 #~ msgid "Page size"
 #~ msgstr "數量"
