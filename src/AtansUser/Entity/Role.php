@@ -18,7 +18,7 @@ class Role implements HierarchicalRoleInterface
 {
     /**
      * @ORM\Id
-     * @ORm\Column(name="id", type="integer", options={"unsigned"=true})
+     * @ORm\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @var int
      */
@@ -115,18 +115,6 @@ class Role implements HierarchicalRoleInterface
     }
 
     /**
-     * For doctrine hydrator
-     *
-     * @param Collection $children
-     * @return Role
-     */
-    public function addChildrens(Collection $children)
-    {
-        $this->addChildren($children);
-        return $this;
-    }
-
-    /**
      * Remove child
      *
      * @param HierarchicalRoleInterface $child
@@ -151,19 +139,6 @@ class Role implements HierarchicalRoleInterface
         }
         return $this;
     }
-
-    /**
-     * For doctrine hydrator
-     *
-     * @param Collection $children
-     * @return Role
-     */
-    public function removeChildrens(Collection $children)
-    {
-        $this->removeChildren($children);
-        return $this;
-    }
-
 
     /**
      * {@inheritDoc}
@@ -249,14 +224,20 @@ class Role implements HierarchicalRoleInterface
         return $this;
     }
 
+    /**
+     * Has permission
+     *
+     * @param mixed $permission
+     * @return bool
+     */
     public function hasPermission($permission)
     {
-        //$criteria = Criteria::create()->where(Criteria::expr()->eq('name', (string) $permission));
-        //$result   = $this->permissions->matching($criteria);
-        //return count($result) > 0;
         return isset($this->permissions[(string) $permission]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __toString()
     {
         return $this->name;

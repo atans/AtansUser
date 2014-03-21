@@ -9,6 +9,13 @@ use Zend\Paginator\Paginator;
 
 class UserRepository extends EntityRepository
 {
+    /**
+     * Pagination
+     *
+     * @param array $data
+     * @return Paginator
+     * @throws \AtansUser\Exception\InvalidArgumentException
+     */
     public function pagination(array $data)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

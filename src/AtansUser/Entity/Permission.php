@@ -19,7 +19,7 @@ class Permission implements PermissionInterface
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @var int
      */

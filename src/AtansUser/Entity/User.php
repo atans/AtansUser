@@ -15,8 +15,7 @@ use ZfcRbac\Identity\IdentityInterface;
  *  name="atansuser_user",
  *  options={"collate"="utf8_general_ci"},
  *  indexes={
- *    @ORM\Index(name="username", columns={"username"}),
- *    @ORM\Index(name="email", columns={"email"})
+ *    @ORM\Index(name="search_index", columns={"username", "email"})
  *  }
  * )
  */
@@ -169,22 +168,6 @@ class User implements IdentityInterface
         $this->password = $password;
         return $this;
     }
-
-    /**
-     * Get roles for RBAC
-     *
-     * @return array
-     */
-//    public function getRoles()
-//    {
-//        $roles = array();
-//        if (count($this->userRoles) > 0) {
-//            foreach ($this->userRoles as $userRole) {
-//                $roles[] = $userRole->getName();
-//            }
-//        }
-//        return $roles;
-//    }
 
     /**
      * Add role

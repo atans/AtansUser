@@ -9,17 +9,18 @@ use Zend\Paginator\Paginator;
 
 class RoleRepository extends EntityRepository
 {
+
     /**
      * Find all role without id
      *
-     * @param  null|int $id
+     * @param null|int $id
      * @return array
      */
-    public function findAllRoleWithoutId($id = null)
+    public function findAllWithoutId($id = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('r')
-            ->from($this->getEntityName(), 'r');
+           ->from($this->getEntityName(), 'r');
 
         if (!is_null($id) && is_int($id)) {
             $qb->where($qb->expr()->neq('r.id', ':id'))
@@ -29,6 +30,13 @@ class RoleRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Pagination
+     *
+     * @param array $data
+     * @return Paginator
+     * @throws \AtansUser\Exception\InvalidArgumentException
+     */
     public function pagination(array $data)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
