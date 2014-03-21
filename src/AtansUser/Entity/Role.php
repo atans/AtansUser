@@ -54,6 +54,10 @@ class Role implements HierarchicalRoleInterface
      */
     protected $permissions = null;
 
+
+    /**
+     * Init the Doctrine collection
+     */
     public function __construct()
     {
         $this->children    = new ArrayCollection();

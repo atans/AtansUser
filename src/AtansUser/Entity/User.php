@@ -76,6 +76,9 @@ class User implements IdentityInterface
      */
     protected $created;
 
+    /**
+     * Init the Doctrine collection
+     */
     public function __construct()
     {
         $this->roles = new ArrayCollection();

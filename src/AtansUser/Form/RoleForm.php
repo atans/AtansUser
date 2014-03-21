@@ -58,7 +58,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
         $this->add($name);
 
         $children = new ObjectMultiCheckbox('children');
-        $children->setLabel('Role children')
+        $children->setLabel('Children')
                  ->setLabelAttributes(array(
                      'class' => 'checkbox-inline'
                  ))
