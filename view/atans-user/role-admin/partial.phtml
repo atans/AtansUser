@@ -6,6 +6,7 @@ use AtansUser\Module;
  */
 $role = $this->role;
 
+$children    = $role->getChildren();
 $permissions = $role->getPermissions();
 ?>
 <tr id="role-<?php echo $this->escapeHtmlAttr($role->getId()) ?>" data-id="<?php echo $this->escapeHtmlAttr($role->getId()) ?>">
@@ -17,14 +18,18 @@ $permissions = $role->getPermissions();
 
     </td>
     <td>
-        <?php if ($parent = $role->getParent()): ?>
-            <span class="label label-success">
-                <?php echo $this->escapeHtml($parent->getName()) ?>
-            </span>
+        <?php if (count($children) > 0): ?>
+            <ul class="list-unstyled">
+                <?php foreach ($children as $child) :?>
+                    <li>
+                        <?php echo $this->escapeHtml($child->getName()) ?>
+                    </li>
+                <?php endforeach ?>
+            </ul>
         <?php else: ?>
-            <div class="label label-warning">
+            <span class="label label-warning">
                 <?php echo $this->translate('None', Module::TRANSLATOR_TEXT_DOMAIN) ?>
-            </div>
+            </span>
         <?php endif ?>
     </td>
     <td>
@@ -32,13 +37,38 @@ $permissions = $role->getPermissions();
             <ul class="list-unstyled">
                 <?php foreach ($permissions as $permission) :?>
                 <li>
-                    <?php echo $this->escapeHtml($permission->getName()) ?>
-                    <?php if ($description = $permission->getDescription()): ?>
-                        <small class="text-muted"><?php echo $this->escapeHtml($description) ?></small>
-                    <?php endif ?>
+                    <small>
+                        <?php echo $this->escapeHtml($permission->getName()) ?>
+                        <?php if ($description = $permission->getDescription()): ?>
+                            <span class="text-muted">
+                                <?php echo $this->escapeHtml($description) ?>
+                            </span>
+                        <?php endif ?>
+                    </small>
                 </li>
                 <?php endforeach ?>
             </ul>
+
+            <?php if (count($children) > 0): ?>
+                    <?php foreach ($children as $child) :?>
+                        <span class="glyphicon glyphicon-user"></span>
+                       <?php echo $this->escapeHtml($child->getName()) ?>
+                        <ul class="list-unstyled">
+                            <?php foreach ($child->getPermissions() as $permission) :?>
+                                <li>
+                                    <small>
+                                        <?php echo $this->escapeHtml($permission->getName()) ?>
+                                        <?php if ($description = $permission->getDescription()): ?>
+                                            <span class="text-muted">
+                                                <?php echo $this->escapeHtml($description) ?>
+                                            </span>
+                                        <?php endif ?>
+                                    </small>
+                                </li>
+                            <?php endforeach ?>
+                        </ul>
+                    <?php endforeach ?>
+            <?php endif ?>
         <?php else: ?>
             <span class="label label-warning">
                 <?php echo $this->translate('None', Module::TRANSLATOR_TEXT_DOMAIN) ?>

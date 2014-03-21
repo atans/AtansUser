@@ -38,11 +38,11 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Role', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Parent role', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
-                <th class="col-lg-3 col-md-3 col-sm-3"><?php echo $this->translate('Permissions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
-                <th class="col-lg-2 col-md-2 col-sm-2"><?php echo $this->translate('Actions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-xs-1">#</th>
+                <th class="col-xs-2"><?php echo $this->translate('Role', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-xs-2"><?php echo $this->translate('Children', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-xs-5"><?php echo $this->translate('Permissions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
+                <th class="col-xs-2"><?php echo $this->translate('Actions', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
             </tr>
         </thead>
         <tbody>

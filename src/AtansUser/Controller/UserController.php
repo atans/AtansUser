@@ -55,14 +55,14 @@ class UserController extends AbstractActionController
     protected $loginForm;
 
     /**
-     * @var Form
-     */
-    protected $registerForm;
-
-    /**
      * @var ModuleOptions
      */
     protected $options;
+
+    /**
+     * @var Form
+     */
+    protected $registerForm;
 
     /**
      * @var UserService

@@ -4,7 +4,7 @@ namespace AtansUser\Service;
 use AtansUser\Entity\User;
 use AtansUser\Options\ModuleOptions;
 use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -18,7 +18,7 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     protected $options;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -92,11 +92,11 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
             $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
@@ -105,10 +105,10 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Set entityManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return UserAdmin
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;

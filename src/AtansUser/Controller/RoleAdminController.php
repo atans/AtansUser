@@ -5,6 +5,7 @@ use AtansUser\Entity\Role;
 use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\RoleAdmin as RoleAdminService;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -30,6 +31,11 @@ class RoleAdminController extends AbstractActionController
     protected $options;
 
     /**
+     * @var EntityManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * @var Form
      */
     protected $roleForm;
@@ -47,11 +53,11 @@ class RoleAdminController extends AbstractActionController
     public function indexAction()
     {
         $request       = $this->getRequest();
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
+        $objectManager = $this->getObjectManager();
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
-            'size'   => $request->getQuery('size', 10),
+            'count'  => $request->getQuery('count', 10),
             'query'  => $request->getQuery('query', ''),
             'order'  => $request->getQuery('order', 'DESC'),
         );
@@ -104,7 +110,7 @@ class RoleAdminController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
-        $objectManager  = $this->objectManager($this->getOptions()->getObjectManagerName());
+        $objectManager  = $this->getObjectManager();
 
         $role = $objectManager->find($this->entities['Role'], $id);
         if (! $role) {
@@ -118,13 +124,6 @@ class RoleAdminController extends AbstractActionController
 
         $form = $this->getRoleForm();
         $form->bind($role);
-
-        $parentProxy = $form->get('parent')->getProxy();
-        $parentProxy->setIsMethod(true)
-                    ->setFindMethod(array(
-                        'name'   => 'findAllRoleWithoutId',
-                        'params' => array('id' => $id),
-                    ));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -152,7 +151,7 @@ class RoleAdminController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id            = (int) $this->params()->fromRoute('id', 0);
         $translator    = $this->getServiceLocator()->get('Translator');
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
+        $objectManager = $this->getObjectManager();
 
         $role = $objectManager->find($this->entities['Role'], $id);
         if (! $role) {
@@ -206,6 +205,31 @@ class RoleAdminController extends AbstractActionController
     public function setOptions(ModuleOptions $options)
     {
         $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get objectManager
+     *
+     * @return EntityManagerInterface
+     */
+    public function getObjectManager()
+    {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * Set objectManager
+     *
+     * @param  EntityManagerInterface $objectManager
+     * @return RoleAdminController
+     */
+    public function setObjectManager(EntityManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
         return $this;
     }
 

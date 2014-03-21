@@ -3,7 +3,7 @@ namespace AtansUser\Service;
 
 use AtansUser\Options\ModuleOptions;
 use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Form\Form;
@@ -26,7 +26,7 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     );
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -175,11 +175,11 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
             $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
@@ -188,10 +188,10 @@ class User extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Set entityManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return User
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;

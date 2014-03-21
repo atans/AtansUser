@@ -3,7 +3,7 @@ namespace AtansUser\Service;
 
 use AtansUser\Entity\Role;
 use AtansUser\Options\ModuleOptions;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
@@ -11,7 +11,7 @@ use ZfcBase\EventManager\EventProvider;
 class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -76,11 +76,11 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
             $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
@@ -89,10 +89,10 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Set entityManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return UserAdmin
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;

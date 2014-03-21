@@ -19,10 +19,10 @@ class RoleSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
         $page = new Element\Text('page');
         $this->add($page);
 
-        $size = new Element\Text('size');
-        $size->setAttribute('class', 'form-control');
-        $size->setAttribute('style', 'width: 60px;');
-        $this->add($size);
+        $count = new Element\Text('count');
+        $count->setAttribute('class', 'form-control');
+        $count->setAttribute('style', 'width: 80px;');
+        $this->add($count);
 
         $query = new Element\Text('query');
         $query->setAttribute('class', 'form-control');
@@ -46,7 +46,7 @@ class RoleSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
                     array('name' => 'Int'),
                 ),
             ),
-            'size' => array(
+            'count' => array(
                 'required' => false,
                 'filters' => array(
                     array('name' => 'Int'),

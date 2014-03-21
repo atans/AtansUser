@@ -5,6 +5,7 @@ use AtansUser\Entity\User;
 use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\UserAdmin as UserAdminService;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
 use Zend\Form\FormInterface;
@@ -38,6 +39,11 @@ class UserAdminController extends AbstractActionController
     protected $options;
 
     /**
+     * @var EntityManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * @var Form
      */
     protected $userAddForm;
@@ -60,11 +66,11 @@ class UserAdminController extends AbstractActionController
     public function indexAction()
     {
         $request       = $this->getRequest();
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
+        $objectManager = $this->getObjectManager();
 
         $data = array(
             'page'   => $request->getQuery('page', 1),
-            'size'   => $request->getQuery('size', 10),
+            'count'  => $request->getQuery('count', $this->getOptions()->getUserAdminCountPerPage()),
             'query'  => $request->getQuery('query', ''),
             'status' => $request->getQuery('status', ''),
             'order'  => $request->getQuery('order', 'DESC'),
@@ -118,7 +124,7 @@ class UserAdminController extends AbstractActionController
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int)$this->params()->fromRoute('id');
         $translator     = $this->getServiceLocator()->get('Translator');
-        $objectManager  = $this->objectManager($this->getOptions()->getObjectManagerName());
+        $objectManager  = $this->getObjectManager();
         $request        = $this->getRequest();
 
         $user = $objectManager->find($this->entities['User'], $id);
@@ -158,7 +164,7 @@ class UserAdminController extends AbstractActionController
     {
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int)$this->params()->fromRoute('id');
-        $objectManager  = $this->objectManager($this->getOptions()->getObjectManagerName());
+        $objectManager  = $this->getObjectManager();
         $request        = $this->getRequest();
         $translator     = $this->getServiceLocator()->get('Translator');
 
@@ -239,6 +245,32 @@ class UserAdminController extends AbstractActionController
         $this->options = $options;
         return $this;
     }
+
+    /**
+     * Get objectManager
+     *
+     * @return EntityManagerInterface
+     */
+    public function getObjectManager()
+    {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * Set objectManager
+     *
+     * @param  EntityManagerInterface $objectManager
+     * @return UserAdminController
+     */
+    public function setObjectManager(EntityManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+        return $this;
+    }
+
 
     /**
      * Get userAddForm

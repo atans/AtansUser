@@ -1,11 +1,10 @@
 <?php
 namespace AtansUser\Form;
 
+use AtansUser\Entity\Permission;
 use AtansUser\Entity\Role;
-use AtansUser\Module;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
-use DoctrineModule\Form\Element\ObjectSelect;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Validator\UniqueObject;
 use Zend\Form\Element;
@@ -16,7 +15,7 @@ use ZfcBase\Form\ProvidesEventsForm;
 class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $entityManager;
 
@@ -58,32 +57,33 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
              ->setAttribute('class', 'form-control');
         $this->add($name);
 
-        $parent = new ObjectSelect('parent');
-        $parent->setLabel("Parent role");
-        $parent->setAttribute('class', 'form-control');
-        $parent->setOptions(array(
-            'empty_option'   => sprintf('== %s ==', $translator->translate('None', Module::TRANSLATOR_TEXT_DOMAIN)),
-            'object_manager' => $entityManager,
-            'target_class'   => 'AtansUser\Entity\Role',
-            'property'       => 'name',
-
-        ));
-        $this->add($parent);
+        $children = new ObjectMultiCheckbox('children');
+        $children->setLabel('Role children')
+                 ->setLabelAttributes(array(
+                     'class' => 'checkbox-inline'
+                 ))
+                 ->setOptions(array(
+                     'use_hidden_element' => true,
+                     'object_manager'     => $entityManager,
+                     'target_class'       => 'AtansUser\Entity\Role',
+                     'fields'           => 'name',
+                 ));
+        $this->add($children);
 
         $permissions = new ObjectMultiCheckbox('permissions');
         $permissions->setLabel('Permissions')
                     ->setLabelAttributes(array(
-                        'class' => 'checkbox-inline'
+                        'class' => 'checkbox-inline',
+                        'style' => 'display:block; margin-left: 0;',
                     ))
                     ->setOptions(array(
                         'use_hidden_element' => true,
                         'object_manager'     => $entityManager,
                         'target_class'       => 'AtansUser\Entity\Permission',
-                        'property'           => 'name',
-                        'is_method'          => true,
-                        'find_method'        => array(
-                            'name' => 'findAll',
-                        ),
+                        'fields'           => 'name',
+                        'label_generator' => function (Permission $permission) {
+                            return sprintf('%s %s', $permission->getDescription(), $permission->getName());
+                        }
                     ));
 
         $this->add($permissions);
@@ -121,7 +121,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                         'options' => array(
                             'object_manager'    => $entityManager,
                             'object_repository' => $entityManager->getRepository($this->entities['Role']),
-                            'fields'            => 'name',
+                            'fields' => 'name',
                             'messages' => array(
                                 UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The role name already in use',
                             ),
@@ -129,7 +129,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                     ),
                 ),
             ),
-            'parent' => array(
+            'children' => array(
                 'required' => false,
             ),
             'permissions' => array(
@@ -141,11 +141,11 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getEntityManager()
     {
-        if (! $this->entityManager) {
+        if (! $this->entityManager instanceof EntityManagerInterface) {
             $this->setEntityManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
         }
         return $this->entityManager;
@@ -154,10 +154,10 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManagerInterface $entityManager
      * @return RoleForm
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setEntityManager(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         return $this;

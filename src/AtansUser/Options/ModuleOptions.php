@@ -10,14 +10,24 @@ class ModuleOptions extends AbstractOptions implements
     UserOptionsInterface
 {
     /**
-     * Turn off strict options mode
-     */
-    protected $__strictMode__ = false;
-
-    /**
      * @var string
      */
     protected $objectManagerName = 'doctrine.entitymanager.orm_default';
+
+    /**
+     * @var int
+     */
+    protected $userAdminCountPerPage = 10;
+
+    /**
+     * @var int
+     */
+    protected $roleAdminCountPerPage = 10;
+
+    /**
+     * @var int
+     */
+    protected $permissionAdminCountPerPage = 10;
 
     /**
      * @var bool
@@ -101,6 +111,71 @@ class ModuleOptions extends AbstractOptions implements
         return $this->objectManagerName;
     }
 
+    /**
+     * Get userAdminCountPerPage
+     *
+     * @return int
+     */
+    public function getUserAdminCountPerPage()
+    {
+        return $this->userAdminCountPerPage;
+    }
+
+    /**
+     * Set userAdminCountPerPage
+     *
+     * @param  int $userAdminCountPerPage
+     * @return ModuleOptions
+     */
+    public function setUserAdminCountPerPage($userAdminCountPerPage)
+    {
+        $this->userAdminCountPerPage = (int) $userAdminCountPerPage;
+        return $this;
+    }
+
+    /**
+     * Get roleAdminCountPerPage
+     *
+     * @return int
+     */
+    public function getRoleAdminCountPerPage()
+    {
+        return $this->roleAdminCountPerPage;
+    }
+
+    /**
+     * Set roleAdminCountPerPage
+     *
+     * @param  int $roleAdminCountPerPage
+     * @return ModuleOptions
+     */
+    public function setRoleAdminCountPerPage($roleAdminCountPerPage)
+    {
+        $this->roleAdminCountPerPage = (int) $roleAdminCountPerPage;
+        return $this;
+    }
+
+    /**
+     * Get permissionAdminCountPerPage
+     *
+     * @return int
+     */
+    public function getPermissionAdminCountPerPage()
+    {
+        return $this->permissionAdminCountPerPage;
+    }
+
+    /**
+     * Set permissionAdminCountPerPage
+     *
+     * @param  int $permissionAdminCountPerPage
+     * @return ModuleOptions
+     */
+    public function setPermissionAdminCountPerPage($permissionAdminCountPerPage)
+    {
+        $this->permissionAdminCountPerPage = (int) $permissionAdminCountPerPage;
+        return $this;
+    }
 
     /**
      * Set enable user registration
