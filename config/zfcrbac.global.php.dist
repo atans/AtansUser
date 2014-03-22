@@ -92,7 +92,7 @@ return [
             /**
              * Set the template name to render
              */
-            'template' => 'error/deny'
+            // 'template' => 'error/403'
         ],
 
         /**
