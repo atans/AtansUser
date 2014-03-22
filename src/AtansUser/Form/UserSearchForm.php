@@ -47,10 +47,8 @@ class UserSearchForm extends ProvidesEventsForm implements InputFilterProviderIn
 
         $status = new Element\Select('status');
         $status->setAttribute('class', 'form-control')
-               ->setOptions(array(
-                   'empty_option' => $this->getTranslator()->translate('Status', Module::TRANSLATOR_TEXT_DOMAIN),
-               ))
-               ->setValueOptions($serviceManager->get('atansuser_user_statuses'));
+               ->setEmptyOption($this->getTranslator()->translate('Status', Module::TRANSLATOR_TEXT_DOMAIN))
+               ->setValueOptions($serviceManager->get('atansuser_user_status_value_options'));
         $this->add($status);
 
         $this->getEventManager()->trigger('init', $this);

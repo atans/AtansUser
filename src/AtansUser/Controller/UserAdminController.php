@@ -10,6 +10,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
 use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
+use ZfcRbac\Exception\UnauthorizedException;
 
 class UserAdminController extends AbstractActionController
 {
@@ -18,12 +19,7 @@ class UserAdminController extends AbstractActionController
      *
      * @var string
      */
-    const FLASHMESSENGER_NAMESPACE = 'atansuser-user-admin-index';
-
-    /**
-     * @var AuthenticationService
-     */
-    protected $authenticationService;
+    const FLASHMESSENGER_NAMESPACE = 'atansuser-admin-user-index';
 
     /**
      * @var array
@@ -65,6 +61,10 @@ class UserAdminController extends AbstractActionController
 
     public function indexAction()
     {
+        if (! $this->isGranted('atansuser.admin.user.index')) {
+            throw new UnauthorizedException();
+        }
+
         $request       = $this->getRequest();
         $objectManager = $this->getObjectManager();
 
@@ -85,11 +85,16 @@ class UserAdminController extends AbstractActionController
         return array(
             'form'      => $form,
             'paginator' => $paginator,
+            'statuses'  => $this->getServiceLocator()->get('atansuser_user_status_value_options'),
         );
     }
 
     public function addAction()
     {
+        if (! $this->isGranted('atansuser.admin.user.add')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $request        = $this->getRequest();
         $translator     = $this->getServiceLocator()->get('Translator');
@@ -121,6 +126,10 @@ class UserAdminController extends AbstractActionController
 
     public function editAction()
     {
+        if (! $this->isGranted('atansuser.admin.user.edit')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int)$this->params()->fromRoute('id');
         $translator     = $this->getServiceLocator()->get('Translator');
@@ -162,6 +171,10 @@ class UserAdminController extends AbstractActionController
 
     public function deleteAction()
     {
+        if (! $this->isGranted('atansuser.admin.user.delete')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int)$this->params()->fromRoute('id');
         $objectManager  = $this->getObjectManager();
@@ -194,31 +207,6 @@ class UserAdminController extends AbstractActionController
         return array(
             'user' => $user,
         );
-    }
-
-    /**
-     * Get authenticationService
-     *
-     * @return AuthenticationService
-     */
-    public function getAuthenticationService()
-    {
-        if (! $this->authenticationService instanceof AuthenticationService) {
-            $this->setAuthenticationService($this->getServiceLocator()->get('Zend\Authentication\AuthenticationService'));
-        }
-        return $this->authenticationService;
-    }
-
-    /**
-     * Set authenticationService
-     *
-     * @param  AuthenticationService $authenticationService
-     * @return UserController
-     */
-    public function setAuthenticationService(AuthenticationService $authenticationService)
-    {
-        $this->authenticationService = $authenticationService;
-        return $this;
     }
 
     /**

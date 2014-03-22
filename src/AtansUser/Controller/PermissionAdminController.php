@@ -8,6 +8,7 @@ use AtansUser\Service\PermissionAdmin as PermissionAdminService;
 use Doctrine\ORM\EntityManagerInterface;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use ZfcRbac\Exception\UnauthorizedException;
 
 class PermissionAdminController extends AbstractActionController
 {
@@ -16,7 +17,7 @@ class PermissionAdminController extends AbstractActionController
      *
      * @var string
      */
-    const FLASHMESSENGER_NAMESPACE = 'atansuser-permission-admin-index';
+    const FLASHMESSENGER_NAMESPACE = 'atansuser-admin-permission-index';
 
     /**
      * @var array
@@ -52,6 +53,10 @@ class PermissionAdminController extends AbstractActionController
 
     public function indexAction()
     {
+        if (! $this->isGranted('atansuser.admin.permission.index')) {
+            throw new UnauthorizedException();
+        }
+
         $request        = $this->getRequest();
         $objectManger   = $this->getObjectManager();
 
@@ -76,6 +81,10 @@ class PermissionAdminController extends AbstractActionController
 
     public function addAction()
     {
+        if (! $this->isGranted('atansuser.admin.permission.add')) {
+            throw new UnauthorizedException();
+        }
+
         $translator     = $this->getServiceLocator()->get('Translator');
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
 
@@ -107,6 +116,10 @@ class PermissionAdminController extends AbstractActionController
 
     public function editAction()
     {
+        if (! $this->isGranted('atansuser.admin.permission.edit')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
@@ -150,6 +163,10 @@ class PermissionAdminController extends AbstractActionController
 
     public function deleteAction()
     {
+        if (! $this->isGranted('atansuser.admin.permission.delete')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');

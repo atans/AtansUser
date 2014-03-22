@@ -8,6 +8,7 @@ use AtansUser\Service\RoleAdmin as RoleAdminService;
 use Doctrine\ORM\EntityManagerInterface;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use ZfcRbac\Exception\UnauthorizedException;
 
 class RoleAdminController extends AbstractActionController
 {
@@ -16,7 +17,7 @@ class RoleAdminController extends AbstractActionController
      *
      * @var string
      */
-    const FLASHMESSENGER_NAMESPACE = 'atansuser-role-admin-index';
+    const FLASHMESSENGER_NAMESPACE = 'atansuser-admin-role-index';
 
     /**
      * @var array
@@ -52,6 +53,10 @@ class RoleAdminController extends AbstractActionController
 
     public function indexAction()
     {
+        if (! $this->isGranted('atansuser.admin.role.index')) {
+            throw new UnauthorizedException();
+        }
+
         $request       = $this->getRequest();
         $objectManager = $this->getObjectManager();
 
@@ -76,6 +81,10 @@ class RoleAdminController extends AbstractActionController
 
     public function addAction()
     {
+        if (! $this->isGranted('atansuser.admin.role.add')) {
+            throw new UnauthorizedException();
+        }
+
         $translator     = $this->getServiceLocator()->get('Translator');
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
 
@@ -107,6 +116,10 @@ class RoleAdminController extends AbstractActionController
 
     public function editAction()
     {
+        if (! $this->isGranted('atansuser.admin.role.edit')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id             = (int) $this->params()->fromRoute('id', 0);
         $translator     = $this->getServiceLocator()->get('Translator');
@@ -154,6 +167,10 @@ class RoleAdminController extends AbstractActionController
 
     public function deleteAction()
     {
+        if (! $this->isGranted('atansuser.admin.role.delete')) {
+            throw new UnauthorizedException();
+        }
+
         $flashMessenger = $this->flashMessenger()->setNamespace(static::FLASHMESSENGER_NAMESPACE);
         $id            = (int) $this->params()->fromRoute('id', 0);
         $translator    = $this->getServiceLocator()->get('Translator');

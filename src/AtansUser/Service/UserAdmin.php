@@ -9,6 +9,8 @@ use Zend\Crypt\Password\Bcrypt;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
+use ZfcRbac\Exception\UnauthorizedException;
+use ZfcRbac\Service\AuthorizationService;
 
 class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
@@ -16,6 +18,11 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
      * @var ModuleOptions
      */
     protected $options;
+
+    /**
+     * @var AuthorizationService
+     */
+    protected $authorizationService;
 
     /**
      * @var EntityManagerInterface
@@ -30,11 +37,16 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Add user
      *
-     * @param User $user
-     * @return bool
+     * @param  User $user
+     * @return UserAdmin
+     * @throws UnauthorizedException
      */
     public function add(User $user)
     {
+        if (! $this->getAuthorizationService()->isGranted('atansuser.admin.user.add')) {
+            throw new UnauthorizedException();
+        }
+
         $user->setCreated(new DateTime());
 
         $bcrypt = new Bcrypt();
@@ -46,7 +58,7 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
         $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
-        return true;
+        return $this;
     }
 
     /**
@@ -54,10 +66,15 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
      *
      * @param User $user
      * @param string $newPassword
-     * @return bool
+     * @return UserAdmin
+     * @throws UnauthorizedException
      */
     public function edit(User $user, $newPassword)
     {
+        if (! $this->getAuthorizationService()->isGranted('atansuser.admin.user.edit')) {
+            throw new UnauthorizedException();
+        }
+
         // Update new password
         if (strlen($newPassword) > 0) {
             $bcrypt = new Bcrypt();
@@ -70,23 +87,53 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
         $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
-        return true;
+        return $this;
     }
 
     /**
      * Delete user
      *
      * @param  User $user
-     * @return bool
+     * @return UserAdmin
+     * @throws UnauthorizedException
      */
     public function delete(User $user)
     {
+        if (! $this->getAuthorizationService()->isGranted('atansuser.admin.user.delete')) {
+            throw new UnauthorizedException();
+        }
+
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
         $this->getObjectManager()->remove($user);
         $this->getObjectManager()->flush();
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('user' => $user));
 
-        return true;
+        return $this;
+    }
+
+    /**
+     * Get authorizationService
+     *
+     * @return AuthorizationService
+     */
+    public function getAuthorizationService()
+    {
+        if (! $this->authorizationService instanceof AuthorizationService) {
+            $this->setAuthorizationService($this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService'));
+        }
+        return $this->authorizationService;
+    }
+
+    /**
+     * Set authorizationService
+     *
+     * @param  AuthorizationService $authorizationService
+     * @return UserAdmin
+     */
+    public function setAuthorizationService(AuthorizationService $authorizationService)
+    {
+        $this->authorizationService = $authorizationService;
+        return $this;
     }
 
     /**

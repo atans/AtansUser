@@ -79,7 +79,7 @@ class Module
                 'Zend\Authentication\AuthenticationService' => function ($sm) {
                     return $sm->get('doctrine.authenticationservice.orm_default');
                 },
-                'atansuser_user_statuses' => function ($sm) {
+                'atansuser_user_status_value_options' => function ($sm) {
                     $translator = $sm->get('Translator');
 
                     return array(

@@ -76,13 +76,18 @@ $permissions = $role->getPermissions();
         <?php endif ?>
     </td>
     <td>
-        <div class="btn-group">
+        <div class="btn-group btn-group-sm">
+            <?php if ($this->isGranted('atansuser.admin.role.edit')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role/edit', array('id' => $role->getId())) ?>">
                 <i class="glyphicon glyphicon-edit"></i>
             </a>
+            <?php endif ?>
+
+            <?php if ($this->isGranted('atansuser.admin.role.delete')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role/delete', array('id' => $role->getId())) ?>">
-                <i class="glyphicon glyphicon-remove"></i>
+                <i class="glyphicon glyphicon-trash"></i>
             </a>
+            <?php endif ?>
         </div>
     </td>
 </tr>

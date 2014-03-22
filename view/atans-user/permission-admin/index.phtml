@@ -2,7 +2,7 @@
 use AtansUser\Controller\PermissionAdminController;
 use AtansUser\Module;
 
-$title = $this->translate('Permission Management', Module::TRANSLATOR_TEXT_DOMAIN);
+$title = $this->translate('Permission management', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
 
 /**
@@ -14,16 +14,16 @@ $form = $this->form;
  * @var \Zend\Paginator\Paginator $paginator
  */
 $paginator = $this->paginator;
-
-echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminController::FLASHMESSENGER_NAMESPACE));
 ?>
+
+<?php echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminController::FLASHMESSENGER_NAMESPACE)) ?>
 
 <h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
 
     <small class="pull-right">
         <a href="<?php echo $this->url('zfcadmin/user')?>">
-            <?php echo $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
+            <?php echo $this->translate('User management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
         &gt;
         <?php echo $this->escapeHtml($title) ?>
@@ -32,12 +32,14 @@ echo $this->render('alert/bootstrap', array('namespace' => PermissionAdminContro
 
 <div class="panel panel-default">
     <div class="panel-heading">
+        <?php if ($this->isGranted('atansuser.admin.permission.add')): ?>
         <a class="btn btn-default btn-sm" href="<?php echo $this->url('zfcadmin/user/permission/add') ?>">
             <i class="glyphicon glyphicon-plus"></i>
             <?php echo $this->translate('Add permission', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
+        <?php endif ?>
     </div>
-    <?php if (count($paginator) > 0) : ?>
+    <?php if ($paginator->getCurrentItemCount() > 0) : ?>
         <div class="panel-body">
             <?php echo $this->render('atans-user/permission-admin/search-form', array('form' => $form)) ?>
         </div>

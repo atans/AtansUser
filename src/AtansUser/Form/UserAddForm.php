@@ -95,7 +95,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
                    'class' => 'radio-inline',
                ))
                ->setOptions(array(
-                   'value_options' => $serviceManager->get('atansuser_user_statuses'),
+                   'value_options' => $serviceManager->get('atansuser_user_status_value_options'),
                ));
         $this->add($status);
 

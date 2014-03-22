@@ -2,22 +2,26 @@
 use AtansUser\Controller\RoleAdminController;
 use AtansUser\Module;
 
-$title = $this->translate('Role Management', Module::TRANSLATOR_TEXT_DOMAIN);
+$title = $this->translate('Role management', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
 
 /**
  * @var \Zend\Form\Form $form
  */
 $form = $this->form;
-
-echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::FLASHMESSENGER_NAMESPACE));
+/**
+ * @var \Zend\Paginator\Paginator $paginator
+ */
+$paginator = $this->paginator;
 ?>
+
+<?php echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::FLASHMESSENGER_NAMESPACE)) ?>
 
 <h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
     <small class="pull-right">
         <a href="<?php echo $this->url('zfcadmin/user')?>">
-            <?php echo $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
+            <?php echo $this->translate('User management', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
         &gt;
         <?php echo $this->escapeHtml($title) ?>
@@ -26,18 +30,20 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
 
 <div class="panel panel-default">
     <div class="panel-heading">
+        <?php if ($this->isGranted('atansuser.admin.role.add')): ?>
         <a class="btn btn-default btn-sm" href="<?php echo $this->url('zfcadmin/user/role/add') ?>">
             <i class="glyphicon glyphicon-plus"></i>
             <?php echo $this->translate('Add role', Module::TRANSLATOR_TEXT_DOMAIN) ?>
         </a>
+        <?php endif ?>
     </div>
-<?php if (count($paginator) > 0) : ?>
+<?php if ($paginator->getCurrentItemCount() > 0) : ?>
     <div class="panel-body">
         <?php echo $this->render('atans-user/role-admin/search-form', array('form' => $form)) ?>
     </div>
     <table class="table table-bordered table-hover">
         <thead>
-            <tr>
+            <tr class="active">
                 <th class="col-xs-1">#</th>
                 <th class="col-xs-2"><?php echo $this->translate('Role', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
                 <th class="col-xs-2"><?php echo $this->translate('Children', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
@@ -66,7 +72,7 @@ echo $this->render('alert/bootstrap', array('namespace' => RoleAdminController::
 
 <?php
 echo $this->paginationControl(
-    $this->paginator,
+    $paginator,
     'Sliding',
     'pagination/query',
     array(

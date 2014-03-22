@@ -33,13 +33,18 @@ $permission = $this->permission;
         <?php endif ?>
     </td>
     <td>
-        <div class="btn-group">
+        <div class="btn-group btn-group-sm">
+            <?php if ($this->isGranted('atansuser.admin.permission.edit')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission/edit', array('id' => $permission->getId())) ?>">
                 <i class="glyphicon glyphicon-edit"></i>
             </a>
+            <?php endif ?>
+
+            <?php if ($this->isGranted('atansuser.admin.permission.delete')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission/delete', array('id' => $permission->getId())) ?>">
-                <i class="glyphicon glyphicon-remove"></i>
+                <i class="glyphicon glyphicon-trash"></i>
             </a>
+            <?php endif ?>
         </div>
     </td>
 </tr>

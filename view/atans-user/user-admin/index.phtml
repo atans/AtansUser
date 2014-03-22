@@ -2,13 +2,18 @@
 use AtansUser\Controller\UserAdminController;
 use AtansUser\Module;
 
-$title = $this->translate('User Management', Module::TRANSLATOR_TEXT_DOMAIN);
+$title = $this->translate('User management', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
 
 /**
  * @var \Zend\Form\Form $form
  */
 $form = $this->form;
+
+/**
+ * @var \Zend\Paginator\Paginator $paginator
+ */
+$paginator = $this->paginator;
 ?>
 
 <?php echo $this->render('alert/bootstrap', array('namespace' => UserAdminController::FLASHMESSENGER_NAMESPACE))?>
@@ -21,22 +26,29 @@ $form = $this->form;
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="btn-group btn-group-sm">
+            <?php if ($this->isGranted('atansuser.admin.user.add')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/add') ?>">
                 <i class="glyphicon glyphicon-plus"></i>
                 <?php echo $this->translate('Add user', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </a>
+            <?php endif ?>
         </div>
 
         <div class="btn-group btn-group-sm pull-right">
+            <?php if ($this->isGranted('atansuser.admin.role.index')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/role') ?>">
-                <?php echo $this->escapeHtml($this->translate('Role Management', Module::TRANSLATOR_TEXT_DOMAIN)) ?>
+                <?php echo $this->escapeHtml($this->translate('Role management', Module::TRANSLATOR_TEXT_DOMAIN)) ?>
             </a>
+            <?php endif ?>
+
+            <?php if ($this->isGranted('atansuser.admin.permission.index')): ?>
             <a class="btn btn-default" href="<?php echo $this->url('zfcadmin/user/permission') ?>">
-                <?php echo $this->escapeHtml($this->translate('Permission Management', Module::TRANSLATOR_TEXT_DOMAIN)) ?>
+                <?php echo $this->escapeHtml($this->translate('Permission management', Module::TRANSLATOR_TEXT_DOMAIN)) ?>
             </a>
+            <?php endif ?>
         </div>
     </div>
-    <?php if (count($paginator) > 0) : ?>
+    <?php if ($paginator->getCurrentItemCount() > 0) : ?>
         <div class="panel-body">
             <?php echo $this->render('atans-user/user-admin/search-form', array('form' => $form)) ?>
         </div>
@@ -52,7 +64,10 @@ $form = $this->form;
             </thead>
             <?php
             foreach ($paginator as $user) {
-                echo $this->partial('atans-user/user-admin/partial', array('user' => $user));
+                echo $this->partial('atans-user/user-admin/partial', array(
+                    'user'     => $user,
+                    'statuses' => $this->statuses,
+                ));
             }
             ?>
         </table>
@@ -72,7 +87,7 @@ $form = $this->form;
 
 <?php
 echo $this->paginationControl(
-    $this->paginator,
+    $paginator,
     'Sliding',
     'pagination/query',
     array(
