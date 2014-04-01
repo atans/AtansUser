@@ -43,7 +43,6 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
         $this->setAttribute('class', 'form-horizontal');
 
         $this->setServiceManager($serviceManager);
-        $translator = $serviceManager->get('Translator');
 
         $entityManager = $this->getEntityManager();
         $this->setHydrator(new DoctrineHydrator($entityManager))
