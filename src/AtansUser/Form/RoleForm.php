@@ -66,7 +66,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                      'use_hidden_element' => true,
                      'object_manager'     => $entityManager,
                      'target_class'       => 'AtansUser\Entity\Role',
-                     'fields'           => 'name',
+                     'property'           => 'name',
                  ));
         $this->add($children);
 
@@ -80,7 +80,15 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                         'use_hidden_element' => true,
                         'object_manager'     => $entityManager,
                         'target_class'       => 'AtansUser\Entity\Permission',
-                        'fields'           => 'name',
+                        'property'             => 'name',
+                        'is_method' => true,
+                        'find_method' => array(
+                            'name'   => 'findBy',
+                            'params' => array(
+                                'criteria' => array(),
+                                'orderBy' => array('name' => 'ASC'),
+                            ),
+                        ),
                         'label_generator' => function (Permission $permission) {
                             return sprintf('%s %s', $permission->getDescription(), $permission->getName());
                         }
