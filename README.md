@@ -5,7 +5,6 @@ A user registration, authentication, management and role-based access control mo
 - Zend Framework 2 (latest master)
 - ZfcRbac (~2.1.2)
 
-
 Installation
 ============
 
