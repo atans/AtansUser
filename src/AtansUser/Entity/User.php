@@ -60,7 +60,7 @@ class User implements IdentityInterface
      *  joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *  inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
-     * @var Role[]
+     * @var Role[]|Collection
      */
     protected $roles;
 
