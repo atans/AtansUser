@@ -20,7 +20,7 @@ use ZfcRbac\Identity\IdentityInterface;
  * )
  */
 
-class User implements IdentityInterface
+class User implements IdentityInterface, UserInterface
 {
     const STATUS_ACTIVE   = 'active';
     const STATUS_DELETED  = 'deleted';
