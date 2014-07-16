@@ -12,16 +12,19 @@ class PermissionRepository extends EntityRepository
     /**
      * Pagination
      *
-     * @param array $data
+     * @param  array $data
      * @return Paginator
      * @throws \AtansUser\Exception\InvalidArgumentException
      */
     public function pagination(array $data)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        if (!isset($data['page']) || !isset($data['count'])) {
+            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
+        }
 
-        $qb->select('p')
-            ->from($this->getEntityName(), 'p');
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->select('p');
 
         if (isset($data['query']) && strlen($queryString = trim($data['query']))) {
             $qb->andWhere($qb->expr()->orX(
@@ -36,10 +39,6 @@ class PermissionRepository extends EntityRepository
             $order = $data['order'];
         }
         $qb->addOrderBy('p.id', $order);
-
-        if (!isset($data['page']) || !isset($data['count'])) {
-            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
-        }
 
         $paginator = new Paginator(new DoctrinePaginator(
             new ORMPaginator($qb)

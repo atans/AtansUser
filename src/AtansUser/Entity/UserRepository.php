@@ -12,20 +12,22 @@ class UserRepository extends EntityRepository
     /**
      * Pagination
      *
-     * @param array $data
+     * @param  array $data
      * @return Paginator
      * @throws \AtansUser\Exception\InvalidArgumentException
      */
     public function pagination(array $data)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        if (!isset($data['page']) || !isset($data['count'])) {
+            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
+        }
 
-        $qb->select('u')
-            ->from($this->getEntityName(), 'u');
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u');
 
         if (isset($data['status']) && strlen($data['status']) > 0) {
             $qb->andWhere($qb->expr()->eq('u.status', ':status'))
-               ->setParameter('status', $data['status']);
+                ->setParameter('status', $data['status']);
         }
 
         if (isset($data['query']) && strlen($queryString = trim($data['query']))) {
@@ -42,16 +44,12 @@ class UserRepository extends EntityRepository
         }
         $qb->addOrderBy('u.id', $order);
 
-        if (!isset($data['page']) || !isset($data['count'])) {
-            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
-        }
-
         $paginator = new Paginator(new DoctrinePaginator(
             new ORMPaginator($qb)
         ));
 
         $paginator->setCurrentPageNumber($data['page'])
-                  ->setItemCountPerPage($data['count']);
+            ->setItemCountPerPage($data['count']);
 
         return $paginator;
     }

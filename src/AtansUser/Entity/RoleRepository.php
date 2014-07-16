@@ -13,18 +13,18 @@ class RoleRepository extends EntityRepository
     /**
      * Find all role without id
      *
-     * @param null|int $id
+     * @param  null|int $id
      * @return array
      */
     public function findAllWithoutId($id = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('r')
-           ->from($this->getEntityName(), 'r');
+            ->from($this->getEntityName(), 'r');
 
         if (!is_null($id) && is_int($id)) {
             $qb->where($qb->expr()->neq('r.id', ':id'))
-               ->setParameter('id', $id);
+                ->setParameter('id', $id);
         }
 
         return $qb->getQuery()->getResult();
@@ -33,16 +33,19 @@ class RoleRepository extends EntityRepository
     /**
      * Pagination
      *
-     * @param array $data
+     * @param  array $data
      * @return Paginator
      * @throws \AtansUser\Exception\InvalidArgumentException
      */
     public function pagination(array $data)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        if (!isset($data['page']) || !isset($data['count'])) {
+            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
+        }
 
-        $qb->select('r')
-            ->from($this->getEntityName(), 'r');
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->select('r');
 
         if (isset($data['query']) && strlen($queryString = trim($data['query']))) {
             $qb->andWhere($qb->expr()->orX(
@@ -57,16 +60,12 @@ class RoleRepository extends EntityRepository
         }
         $qb->addOrderBy('r.id', $order);
 
-        if (!isset($data['page']) || !isset($data['count'])) {
-            throw new Exception\InvalidArgumentException("'page' and 'count' are must be defined");
-        }
-
         $paginator = new Paginator(new DoctrinePaginator(
             new ORMPaginator($qb)
         ));
 
         $paginator->setCurrentPageNumber($data['page'])
-                  ->setItemCountPerPage($data['count']);
+            ->setItemCountPerPage($data['count']);
 
         return $paginator;
     }
