@@ -1,7 +1,7 @@
 <?php
 namespace AtansUser\Form;
 
-use AtansLogger\Options\ModuleOptions;
+use AtansUser\Options\ModuleOptions;
 use AtansUser\Entity\User;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Form\Element\ObjectMultiCheckbox;
