@@ -52,51 +52,51 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
 
         $objectManager = $this->getObjectManager();
         $this->setHydrator(new DoctrineObject($objectManager))
-             ->setObject(new User());
+            ->setObject(new User());
 
         $id = new Element\Hidden('id');
         $this->add($id);
 
         $username = new Element\Text('username');
         $username->setLabel('Username')
-                 ->setAttribute('class', 'form-control');
+            ->setAttribute('class', 'form-control');
         $this->add($username);
 
         $email = new Element\Email('email');
         $email->setLabel('Email')
-              ->setAttribute('class', 'form-control');
+            ->setAttribute('class', 'form-control');
         $this->add($email);
 
         $password = new Element\Password('password');
         $password->setLabel('Password')
-                 ->setAttribute('class', 'form-control');
+            ->setAttribute('class', 'form-control');
         $this->add($password);
 
         $userRoles = new ObjectMultiCheckbox('roles');
         $userRoles->setLabel('Roles')
-                  ->setLabelAttributes(array(
-                      'class' => 'checkbox-inline'
-                  ))
-                  ->setOptions(array(
-                      'use_hidden_element' => true,
-                      'object_manager' => $objectManager,
-                      'target_class'   => 'AtansUser\Entity\Role',
-                      'property'       => 'name',
-                      'is_method'      => true,
-                      'find_method'    => array(
-                          'name' => 'findAll',
-                      ),
-                  ));
+            ->setLabelAttributes(array(
+                'class' => 'checkbox-inline'
+            ))
+            ->setOptions(array(
+                'use_hidden_element' => true,
+                'object_manager'     => $objectManager,
+                'target_class'       => 'AtansUser\Entity\Role',
+                'property'           => 'name',
+                'is_method'          => true,
+                'find_method'        => array(
+                    'name' => 'findAll',
+                ),
+            ));
         $this->add($userRoles);
 
         $status = new Element\Radio('status');
         $status->setLabel('Status')
-               ->setLabelAttributes(array(
-                   'class' => 'radio-inline',
-               ))
-               ->setOptions(array(
-                   'value_options' => $serviceManager->get('atansuser_user_status_value_options'),
-               ));
+            ->setLabelAttributes(array(
+                'class' => 'radio-inline',
+            ))
+            ->setOptions(array(
+                'value_options' => $serviceManager->get('atansuser_user_status_value_options'),
+            ));
         $this->add($status);
 
         $this->getEventManager()->trigger('init', $this);
@@ -113,43 +113,45 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
         $objectManager = $this->getObjectManager();
 
         return array(
-            'id' => array(
+            'id'       => array(
                 'required' => true,
-                'filters' => array(
+                'filters'  => array(
                     array('name' => 'int'),
                 ),
             ),
             'username' => array(
-                'requred' => true,
-                'filters' => array(
+                'required'    => true,
+                'filters'    => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name' => 'DoctrineModule\Validator\UniqueObject',
+                        'name'    => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
+                            'use_context'       => true,
                             'object_manager'    => $objectManager,
                             'object_repository' => $objectManager->getRepository($this->entities['User']),
-                            'fields' => array('username'),
-                            'messages' => array(
+                            'fields'            => array('username'),
+                            'messages'          => array(
                                 UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The username already taken',
                             ),
                         ),
                     ),
                 ),
             ),
-            'email' => array(
-                'required' => true,
+            'email'    => array(
+                'required'   => true,
                 'validators' => array(
                     array('name' => 'EmailAddress'),
                     array(
-                        'name' => 'DoctrineModule\Validator\UniqueObject',
+                        'name'    => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
+                            'use_context'       => true,
                             'object_manager'    => $objectManager,
                             'object_repository' => $objectManager->getRepository($this->entities['User']),
-                            'fields' => array('email'),
-                            'messages' => array(
+                            'fields'            => array('email'),
+                            'messages'          => array(
                                 UniqueObject::ERROR_OBJECT_NOT_UNIQUE => 'The email already taken',
                             ),
                         ),
@@ -158,14 +160,14 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
             ),
             'password' => array(
                 'required' => true,
-                'filters' => array(
+                'filters'  => array(
                     array('name' => 'StringTrim'),
                 ),
             ),
-            'roles' => array(
+            'roles'    => array(
                 'required' => false,
             ),
-            'status' => array(
+            'status'   => array(
                 'required' => true,
             ),
         );
@@ -181,6 +183,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
         if (! $this->moduleOptions instanceof ModuleOptions) {
             $this->setModuleOptions($this->getServiceManager()->get('atansuser_module_options'));
         }
+
         return $this->moduleOptions;
     }
 
@@ -193,6 +196,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
     public function setModuleOptions(ModuleOptions $moduleOptions)
     {
         $this->moduleOptions = $moduleOptions;
+
         return $this;
     }
 
@@ -206,6 +210,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
         if (! $this->objectManager instanceof EntityManager) {
             $this->setObjectManager($this->getServiceManager()->get($this->getModuleOptions()->getObjectManagerName()));
         }
+
         return $this->objectManager;
     }
 
@@ -218,6 +223,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
     public function setObjectManager(EntityManager $objectManager)
     {
         $this->objectManager = $objectManager;
+
         return $this;
     }
 
@@ -240,6 +246,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
     public function setServiceManager($serviceManager)
     {
         $this->serviceManager = $serviceManager;
+
         return $this;
     }
 }
