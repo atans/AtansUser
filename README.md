@@ -50,3 +50,7 @@ Login
 Visit `http://pathtozf/user/login`
 Username: admin
 password: atansuser
+
+Checking permissions in a controller or in a view
+=================================================
+See: ZF-Commons/zfc-rbac [06. Using the Authorization Service.] (https://github.com/ZF-Commons/zfc-rbac/blob/master/docs/06.%20Using%20the%20Authorization%20Service.md#checking-permissions-in-a-controller-or-in-a-view)
