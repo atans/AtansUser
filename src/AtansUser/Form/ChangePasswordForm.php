@@ -48,14 +48,6 @@ class ChangePasswordForm extends ProvidesEventsForm implements InputFilterProvid
                 'filters' => array(
                     array('name' => 'StringTrim'),
                 ),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'min' => 6,
-                        ),
-                    ),
-                ),
             ),
             'newCredential' => array(
                 'required' => true,
