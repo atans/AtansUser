@@ -126,6 +126,7 @@ class RoleForm extends ProvidesEventsForm implements InputFilterProviderInterfac
                     array(
                         'name' => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
+                            'use_context' => true,
                             'object_manager'    => $entityManager,
                             'object_repository' => $entityManager->getRepository($this->entities['Role']),
                             'fields' => 'name',
