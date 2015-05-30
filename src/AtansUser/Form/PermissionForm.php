@@ -100,6 +100,7 @@ class PermissionForm extends ProvidesEventsForm implements InputFilterProviderIn
                     array(
                         'name' => 'DoctrineModule\Validator\UniqueObject',
                         'options' => array(
+                            'use_context' => true,
                             'object_manager'    => $objectManager,
                             'object_repository' => $objectManager->getRepository($this->entities['Permission']),
                             'fields' => 'name',
