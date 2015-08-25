@@ -1,7 +1,6 @@
 <?php
 namespace AtansUser\Service;
 
-use AtansUser\Entity\User;
 use AtansUser\Options\ModuleOptions;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +10,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
 use ZfcRbac\Exception\UnauthorizedException;
 use ZfcRbac\Service\AuthorizationService;
+use ZfcRbac\Identity\IdentityInterface;
 
 class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
@@ -37,11 +37,11 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Add user
      *
-     * @param  User $user
+     * @param  ZfcRbac\Identity\IdentityInterface $user
      * @return UserAdmin
      * @throws UnauthorizedException
      */
-    public function add(User $user)
+    public function add(IdentityInterface $user)
     {
         if (! $this->getAuthorizationService()->isGranted('atansuser.admin.user.add')) {
             throw new UnauthorizedException();
@@ -64,12 +64,12 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Edit user
      *
-     * @param User $user
+     * @param ZfcRbac\Identity\IdentityInterface $user
      * @param string $newPassword
      * @return UserAdmin
      * @throws UnauthorizedException
      */
-    public function edit(User $user, $newPassword)
+    public function edit(IdentityInterface $user, $newPassword)
     {
         if (! $this->getAuthorizationService()->isGranted('atansuser.admin.user.edit')) {
             throw new UnauthorizedException();
@@ -93,11 +93,11 @@ class UserAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Delete user
      *
-     * @param  User $user
+     * @param  ZfcRbac\Identity\IdentityInterface $user
      * @return UserAdmin
      * @throws UnauthorizedException
      */
-    public function delete(User $user)
+    public function delete(IdentityInterface $user)
     {
         if (! $this->getAuthorizationService()->isGranted('atansuser.admin.user.delete')) {
             throw new UnauthorizedException();

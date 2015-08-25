@@ -1,13 +1,13 @@
 <?php
 namespace AtansUser\Service;
 
-use AtansUser\Entity\Permission;
 use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
+use ZfcRbac\Permission\PermissionInterface;
 
 class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
@@ -29,10 +29,10 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     /**
      * Add permission
      *
-     * @param Permission $permission
+     * @param ZfcRbac\Permission\PermissionInterface $permission
      * @return bool
      */
-    public function add(Permission $permission)
+    public function add(PermissionInterface $permission)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
         $this->getObjectManager()->persist($permission);
@@ -45,10 +45,10 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     /**
      * Edit permission
      *
-     * @param Permission $permission
+     * @param ZfcRbac\Permission\PermissionInterface $permission
      * @return bool
      */
-    public function edit(Permission $permission)
+    public function edit(PermissionInterface $permission)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
         $this->getObjectManager()->persist($permission);
@@ -61,10 +61,10 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     /**
      * Delete permission
      *
-     * @param Permission $permission
+     * @param ZfcRbac\Permission\PermissionInterface $permission
      * @return bool
      */
-    public function delete(Permission $permission)
+    public function delete(PermissionInterface $permission)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
         $this->getObjectManager()->remove($permission);

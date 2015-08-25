@@ -1,12 +1,12 @@
 <?php
 namespace AtansUser\Service;
 
-use AtansUser\Entity\Role;
 use AtansUser\Options\ModuleOptions;
 use Doctrine\ORM\EntityManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
+use Rbac\Role\HierarchicalRoleInterface;
 
 class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
@@ -28,10 +28,10 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Add role
      *
-     * @param Role $role
+     * @param Rbac\Role\HierarchicalRoleInterface $role
      * @return bool
      */
-    public function add(Role $role)
+    public function add(HierarchicalRoleInterface $role)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
         $this->getObjectManager()->persist($role);
@@ -44,10 +44,10 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Edit role
      *
-     * @param Role $role
+     * @param Rbac\Role\HierarchicalRoleInterface $role
      * @return bool
      */
-    public function edit(Role $role)
+    public function edit(HierarchicalRoleInterface $role)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
         $this->getObjectManager()->persist($role);
@@ -60,10 +60,10 @@ class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
     /**
      * Delete role
      *
-     * @param  Role $role
+     * @param  Rbac\Role\HierarchicalRoleInterface $role
      * @return bool
      */
-    public function delete(Role $role)
+    public function delete(HierarchicalRoleInterface $role)
     {
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
         $this->getObjectManager()->remove($role);
