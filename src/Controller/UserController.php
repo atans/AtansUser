@@ -22,7 +22,6 @@ class UserController extends AbstractActionController
     const ROUTE_REGISTER                           = 'atansuser/register';
     const ROUTE_CHANGE_EMAIL                       = 'atansuser/change-email';
     const ROUTE_CHANGE_PASSWORD                    = 'atansuser/change-password';
-    const CONTROLLER_NAME                          = 'AtansUser\Controller\User';
     const FLASHMESSENGER_LOGIN_NAMESPACE           = 'atansuser-user-login';
     const FLASHMESSENGER_CHANGE_EMAIL_NAMESPACE    = 'atansuser-user-change-email';
     const FLASHMESSENGER_CHANGE_PASSWORD_NAMESPACE = 'atansuser-user-change-password';
@@ -69,6 +68,14 @@ class UserController extends AbstractActionController
      */
     protected $userService;
 
+    /**
+     * @param array $config
+     */
+    public function __construct($config)
+    {
+        $this->entities = $config['entities'];
+    }
+
     public function indexAction()
     {
         if (! $this->identity()) {
@@ -96,7 +103,7 @@ class UserController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $request->setPost(new Parameters($form->getData()));
-                return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
+                return $this->forward()->dispatch(UserController::class, array('action' => 'authenticate'));
             }
         }
 
@@ -163,7 +170,7 @@ class UserController extends AbstractActionController
             $post['credential'] = $prg['password'];
             $request->setPost(new Parameters($post));
 
-            return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
+            return $this->forward()->dispatch(UserController::class, array('action' => 'authenticate'));
         }
 
         $this->flashMessenger()

@@ -33,7 +33,7 @@ return array(
                 'options' => array(
                     'route' => '/user',
                     'defaults' => array(
-                        'controller' => 'AtansUser\Controller\User',
+                        'controller' => Controller\UserController::class,
                         'action'     => 'index',
                     ),
                 ),
@@ -93,7 +93,7 @@ return array(
                         'options' => array(
                             'route' => '/user',
                             'defaults' => array(
-                                'controller' => 'AtansUser\Controller\UserAdmin',
+                                'controller' => Controller\UserAdminController::class,
                                 'action' => 'index',
                             ),
                         ),
@@ -137,7 +137,7 @@ return array(
                                 'options' => array(
                                     'route' => '/permission',
                                     'defaults' => array(
-                                        'controller' => 'AtansUser\Controller\PermissionAdmin',
+                                        'controller' => Controller\PermissionAdminController::class,
                                         'action' => 'index',
                                     ),
                                 ),
@@ -183,7 +183,7 @@ return array(
                                 'options' => array(
                                     'route' => '/role',
                                     'defaults' => array(
-                                        'controller' => 'AtansUser\Controller\RoleAdmin',
+                                        'controller' => Controller\RoleAdminController::class,
                                         'action'     => 'index',
                                     ),
                                 ),
@@ -248,12 +248,12 @@ return array(
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            'AtansUser\Controller\PermissionAdmin' => 'AtansUser\Controller\PermissionAdminController',
-            'AtansUser\Controller\RoleAdmin'       => 'AtansUser\Controller\RoleAdminController',
-            'AtansUser\Controller\User'            => 'AtansUser\Controller\UserController',
-            'AtansUser\Controller\UserAdmin'       => 'AtansUser\Controller\UserAdminController',
-        ),
+        'factories' => array(
+            Controller\PermissionAdminController::class => Controller\PermissionAdminControllerFactory::class,
+            Controller\RoleAdminController::class       => Controller\RoleAdminControllerFactory::class,
+            Controller\UserAdminController::class       => Controller\UserAdminControllerFactory::class,
+            Controller\UserController::class            => Controller\UserControllerFactory::class,
+        )
     ),
     'view_manager' => array(
         'template_path_stack' => array(

@@ -51,6 +51,14 @@ class PermissionAdminController extends AbstractActionController
      */
     protected $permissionSearchForm;
 
+    /**
+     * @param array $config
+     */
+    public function __construct($config)
+    {
+        $this->entities = $config['entities'];
+    }
+    
     public function indexAction()
     {
         if (! $this->isGranted('atansuser.admin.permission.index')) {

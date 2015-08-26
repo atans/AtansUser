@@ -90,6 +90,17 @@ class ModuleOptions extends AbstractOptions implements
     protected $allowedLoginStatuses = array(User::STATUS_ACTIVE);
 
     /**
+     * default entities settings
+     *
+     * @var array
+     */
+    protected $entities = [
+        'User'       => 'AtansUser\Entity\User',
+        'Role'       => 'AtansUser\Entity\Role',
+        'Permission' => 'AtansUser\Entity\Permission',
+    ];
+
+    /**
      * Set objectManager
      *
      * @param  string $objectManagerName
@@ -302,6 +313,18 @@ class ModuleOptions extends AbstractOptions implements
     }
 
     /**
+     * Set entities
+     *
+     * @param  $entities
+     * @return ModuleOptions
+     */
+    public function setEntities($entities)
+    {
+        $this->entities = $entities;
+        return $this;
+    }
+
+    /**
      * Get login redirect route
      *
      * @return string
@@ -443,5 +466,15 @@ class ModuleOptions extends AbstractOptions implements
     public function getAllowedLoginStatuses()
     {
         return $this->allowedLoginStatuses;
+    }
+
+    /**
+     * Get entities
+     *
+     * @return array
+     */
+    public function getEntities()
+    {
+        return $this->entities;
     }
 }
