@@ -1,7 +1,7 @@
 <?php
 namespace AtansUser\Controller;
 
-use AtansUser\Entity\User;
+use AtansUser\Entity\UserInterface;
 use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\User as UserService;
@@ -205,7 +205,7 @@ class UserController extends AbstractActionController
 
         $adapter = $authService->getAdapter();
         $adapterOptions = $adapter->getOptions();
-        $adapterOptions->setCredentialCallable(function(User $user, $passwordGiven) use ($bcrypt) {
+        $adapterOptions->setCredentialCallable(function(UserInterface $user, $passwordGiven) use ($bcrypt) {
             return $bcrypt->verify($passwordGiven, $user->getPassword());
         });
 
