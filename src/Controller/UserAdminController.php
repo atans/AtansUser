@@ -1,7 +1,6 @@
 <?php
 namespace AtansUser\Controller;
 
-use AtansUser\Entity\User;
 use AtansUser\Module;
 use AtansUser\Options\ModuleOptions;
 use AtansUser\Service\UserAdmin as UserAdminService;
@@ -107,7 +106,7 @@ class UserAdminController extends AbstractActionController
         $request        = $this->getRequest();
         $translator     = $this->getServiceLocator()->get('Translator');
 
-        $user = new User();
+        $user = new $this->entities['User'];
         $user->setStatus($this->getOptions()->getUserDefaultStatus());
 
         $form = $this->getUserAddForm();

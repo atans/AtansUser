@@ -80,7 +80,7 @@ class UserAddForm extends ProvidesEventsForm implements InputFilterProviderInter
             ->setOptions(array(
                 'use_hidden_element' => true,
                 'object_manager'     => $objectManager,
-                'target_class'       => 'AtansUser\Entity\Role',
+                'target_class'       => $this->getEntities()['Role'],
                 'property'           => 'name',
                 'is_method'          => true,
                 'find_method'        => array(
