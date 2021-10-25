@@ -12,14 +12,19 @@
             "homepage": "https://github.com/atans"
         }
     ],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:financialsistemas/ZfcBase.git"
+		}		
+    ],
     "require": {
-        "php": ">=5.5",
-        "zendframework/zendframework": ">=2.2.1",
-        "doctrine/doctrine-module": "0.*",
-        "doctrine/doctrine-orm-module": "0.*",
-        "zf-commons/zfc-base": "~0.1",
-        "zf-commons/zfc-rbac": ">=2.1.2",
-        "zf-commons/zfc-admin": "~0.1",
+        "php": "^7.4 || ^8.0",
+        "doctrine/doctrine-module": "^4.2.0",
+        "doctrine/doctrine-orm-module": "^4.0",
+        "zf-commons/zfc-base": "dev-master",
+        "lm-commons/lmc-rbac-mvc": "^3.3",
+		"lm-commons/lmc-admin": "dev-master",
         "atans/atans-common" : "0.1.*"
     },
     "autoload": {
