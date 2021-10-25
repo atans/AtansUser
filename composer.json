@@ -24,7 +24,7 @@
         "doctrine/doctrine-orm-module": "^4.0",
         "zf-commons/zfc-base": "dev-master",
         "lm-commons/lmc-rbac-mvc": "^3.3",
-		"lm-commons/lmc-admin": "dev-master",
+		"lm-commons/lmc-admin": "dev-master"
         "atans/atans-common" : "0.1.*"
     },
     "autoload": {
