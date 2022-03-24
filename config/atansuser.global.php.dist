@@ -67,5 +67,14 @@ return array(
          * Allowed user statuses
          */
         // 'allowed_user_statuses' => array(User::STATUS_ACTIVE),
+
+        /**
+         * default Entities
+         */
+        'entities' => [
+            'User'       => 'AtansUser\Entity\User',
+            'Role'       => 'AtansUser\Entity\Role',
+            'Permission' => 'AtansUser\Entity\Permission',
+        ],
     ),
 );

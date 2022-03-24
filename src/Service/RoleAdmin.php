@@ -1,18 +1,17 @@
 <?php
 namespace AtansUser\Service;
 
-use AtansUser\Entity\Permission;
 use AtansUser\Options\ModuleOptions;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
+use Rbac\Role\HierarchicalRoleInterface;
 
-class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterface
+class RoleAdmin extends EventProvider implements ServiceLocatorAwareInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -27,49 +26,49 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
     protected $serviceLocator;
 
     /**
-     * Add permission
+     * Add role
      *
-     * @param Permission $permission
+     * @param Rbac\Role\HierarchicalRoleInterface $role
      * @return bool
      */
-    public function add(Permission $permission)
+    public function add(HierarchicalRoleInterface $role)
     {
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
-        $this->getObjectManager()->persist($permission);
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
+        $this->getObjectManager()->persist($role);
         $this->getObjectManager()->flush();
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('permission' => $permission));
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('role' => $role));
 
         return true;
     }
 
     /**
-     * Edit permission
+     * Edit role
      *
-     * @param Permission $permission
+     * @param Rbac\Role\HierarchicalRoleInterface $role
      * @return bool
      */
-    public function edit(Permission $permission)
+    public function edit(HierarchicalRoleInterface $role)
     {
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
-        $this->getObjectManager()->persist($permission);
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
+        $this->getObjectManager()->persist($role);
         $this->getObjectManager()->flush();
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('permission' => $permission));
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('role' => $role));
 
         return true;
     }
 
     /**
-     * Delete permission
+     * Delete role
      *
-     * @param Permission $permission
+     * @param  Rbac\Role\HierarchicalRoleInterface $role
      * @return bool
      */
-    public function delete(Permission $permission)
+    public function delete(HierarchicalRoleInterface $role)
     {
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('permission' => $permission));
-        $this->getObjectManager()->remove($permission);
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('role' => $role));
+        $this->getObjectManager()->remove($role);
         $this->getObjectManager()->flush();
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('permission' => $permission));
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('role' => $role));
 
         return true;
     }
@@ -116,7 +115,7 @@ class PermissionAdmin extends EventProvider implements ServiceLocatorAwareInterf
      * Set options
      *
      * @param  ModuleOptions $options
-     * @return PermissionAdmin
+     * @return RoleAdmin
      */
     public function setOptions(ModuleOptions $options)
     {
